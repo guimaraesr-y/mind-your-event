@@ -11,11 +11,13 @@ import { Loader2, Mail, KeyRound } from "lucide-react"
 import { toast } from "react-toastify"
 
 interface VerifyEmailFormProps {
-  initialEmail?: string
+  initialEmail?: string,
+  callback?: () => void
 }
 
 export function VerifyEmailForm({
   initialEmail="",
+  callback
 }: VerifyEmailFormProps) {
   const [step, setStep] = useState<"email" | "code">("email")
   const [email, setEmail] = useState(initialEmail)
@@ -71,10 +73,14 @@ export function VerifyEmailForm({
       localStorage.setItem("sessionToken", data.sessionToken)
       localStorage.setItem("userEmail", data.email)
 
-      toast("Verified! You are now authenticated.")
-
-      // Redirect to home or previous page
-      window.location.href = "/"
+      toast("Verified! You are now authenticated.", {
+        autoClose: 500,
+        onClose: () => {
+          if (callback) {
+            callback();
+          }
+        }
+      })
     } catch (error) {
       toast(error instanceof Error ? error.message : "Verification failed", {
         type: "error",
