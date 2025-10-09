@@ -1,0 +1,33 @@
+import { CreateEventForm } from "@/components/create-event-form"
+import { Calendar } from "lucide-react"
+import Link from "next/link"
+
+export default function CreateEventPage() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Calendar className="h-6 w-6 text-primary" />
+            <h1 className="text-xl font-semibold text-foreground">EventSync</h1>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 px-4 py-8 md:py-12">
+        <div className="max-w-2xl mx-auto">
+          <div className="space-y-2 mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Create an Event</h2>
+            <p className="text-muted-foreground">
+              Set up your event details and we'll generate a shareable link for participants
+            </p>
+          </div>
+
+          <CreateEventForm />
+        </div>
+      </main>
+    </div>
+  )
+}
