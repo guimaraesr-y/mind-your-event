@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { CheckCircle2, Loader2 } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 
 interface FinalizeEventDialogProps {
   eventId: string
@@ -31,7 +31,6 @@ export function FinalizeEventDialog({
   suggestedStartTime,
   suggestedEndTime,
 }: FinalizeEventDialogProps) {
-  const { toast } = useToast()
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -57,18 +56,13 @@ export function FinalizeEventDialog({
         throw new Error(error.error || "Failed to finalize event")
       }
 
-      toast({
-        title: "Event finalized!",
-        description: "All participants have been notified",
-      })
+      toast("Event finalized! All participants have been notified")
 
       setOpen(false)
       router.refresh()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to finalize event",
-        variant: "destructive",
+      toast(error instanceof Error ? error.message : "Failed to finalize event", {
+        type: "error",
       })
     } finally {
       setIsLoading(false)
