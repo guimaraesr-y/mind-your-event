@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2 } from "lucide-react"
+import { Loader2, Calendar, Clock, Users, User, Mail, ArrowRight } from "lucide-react"
 import { toast } from "react-toastify";
 
 export function CreateEventForm() {
@@ -44,7 +44,7 @@ export function CreateEventForm() {
       }
 
       const data = await response.json()
-      toast("Event created!")
+      toast("Event created successfully!")
       router.push(`/events/${data.eventId}`)
     } catch (error) {
       toast(error instanceof Error ? error.message : "Failed to create event", {
@@ -59,15 +59,15 @@ export function CreateEventForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Event Details</CardTitle>
-          <CardDescription>Basic information about your event</CardDescription>
+          <CardTitle>1. Event Details</CardTitle>
+          <CardDescription>Start with the basic information about your event.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Event Title *</Label>
             <Input
               id="title"
-              placeholder="Team Meeting"
+              placeholder="e.g., Team Meeting, Birthday Party"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
@@ -75,7 +75,7 @@ export function CreateEventForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Description (Optional)</Label>
             <Textarea
               id="description"
               placeholder="What's this event about?"
@@ -89,10 +89,10 @@ export function CreateEventForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Information</CardTitle>
-          <CardDescription>We'll use this to identify you as the organizer</CardDescription>
+          <CardTitle>2. Your Information</CardTitle>
+          <CardDescription>This will identify you as the event organizer.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="creatorName">Your Name *</Label>
             <Input
@@ -120,7 +120,7 @@ export function CreateEventForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Date Range</CardTitle>
+          <CardTitle>3. Date & Time Range</CardTitle>
           <CardDescription>When could this event potentially happen?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -174,22 +174,22 @@ export function CreateEventForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Invite Participants</CardTitle>
-          <CardDescription>Enter email addresses separated by commas</CardDescription>
+          <CardTitle>4. Invite Participants</CardTitle>
+          <CardDescription>Enter email addresses separated by commas.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="participantEmails">Participant Emails *</Label>
             <Textarea
               id="participantEmails"
-              placeholder="alice@example.com, bob@example.com, charlie@example.com"
+              placeholder="alice@example.com, bob@example.com"
               value={formData.participantEmails}
               onChange={(e) => setFormData({ ...formData, participantEmails: e.target.value })}
               rows={3}
               required
             />
             <p className="text-xs text-muted-foreground">
-              Each participant will receive a unique link to submit their availability
+              Each participant will receive a unique link to submit their availability.
             </p>
           </div>
         </CardContent>
@@ -202,7 +202,10 @@ export function CreateEventForm() {
             Creating Event...
           </>
         ) : (
-          "Create Event"
+          <>
+            Create Event & Get Shareable Links
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </>
         )}
       </Button>
     </form>

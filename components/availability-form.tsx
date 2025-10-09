@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useMemo, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, User, Loader2, Check, Shield } from "lucide-react"
+import { Calendar, Clock, User, Loader2, Check, Shield, Plus, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
 
@@ -79,7 +79,7 @@ export function AvailabilityForm({
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
-      weekday: "short",
+      weekday: "long",
       month: "short",
       day: "numeric",
     })
@@ -152,18 +152,18 @@ export function AvailabilityForm({
   if (!isAuthenticated) {
     return (
       <div className="max-w-2xl mx-auto">
-        <Card className="bg-primary/5 border-primary/20">
+        <Card className="bg-primary/5 border-primary/20 text-center">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 justify-center">
+              <Shield className="h-6 w-6" />
               Email Verification Required
             </CardTitle>
-            <CardDescription>Please verify your email address to submit your availability</CardDescription>
+            <CardDescription>Please verify your email address to submit your availability.</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              To ensure security and prevent unauthorized submissions, we need to verify your email address (
-              {requiredEmail || "your email"}).
+              To ensure security and prevent unauthorized submissions, we need to verify your email address{" "}
+              <strong>({requiredEmail || "your email"})</strong>.
             </p>
             <Button onClick={handleVerifyEmail} className="w-full">
               Verify Email
@@ -175,11 +175,11 @@ export function AvailabilityForm({
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-8">
       {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">{event.title}</h1>
-        {event.description && <p className="text-muted-foreground">{event.description}</p>}
+      <div className="space-y-2 text-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title}</h1>
+        {event.description && <p className="text-muted-foreground max-w-2xl mx-auto">{event.description}</p>}
       </div>
 
       {/* Event Info */}
@@ -187,16 +187,16 @@ export function AvailabilityForm({
         <CardHeader>
           <CardTitle>Event Information</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center gap-3">
-            <User className="h-5 w-5 text-muted-foreground" />
+        <CardContent className="grid sm:grid-cols-2 gap-4">
+          <div className="flex items-start gap-3">
+            <User className="h-5 w-5 text-muted-foreground mt-1" />
             <div>
               <p className="text-sm font-medium text-foreground">Organized by</p>
               <p className="text-sm text-muted-foreground">{creator?.name}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <Calendar className="h-5 w-5 text-muted-foreground" />
+          <div className="flex items-start gap-3">
+            <Calendar className="h-5 w-5 text-muted-foreground mt-1" />
             <div>
               <p className="text-sm font-medium text-foreground">Date Range</p>
               <p className="text-sm text-muted-foreground">
@@ -205,8 +205,8 @@ export function AvailabilityForm({
             </div>
           </div>
           {event.start_time && event.end_time && (
-            <div className="flex items-center gap-3">
-              <Clock className="h-5 w-5 text-muted-foreground" />
+            <div className="flex items-start gap-3 col-span-full">
+              <Clock className="h-5 w-5 text-muted-foreground mt-1" />
               <div>
                 <p className="text-sm font-medium text-foreground">Preferred Time Range</p>
                 <p className="text-sm text-muted-foreground">
@@ -221,19 +221,19 @@ export function AvailabilityForm({
       {/* Availability Submission */}
       {participant.has_submitted ? (
         <Card className="bg-accent/10 border-accent/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center gap-2 justify-center">
               <Check className="h-5 w-5 text-accent" />
               Availability Submitted
             </CardTitle>
-            <CardDescription>You can update your availability below if needed</CardDescription>
+            <CardDescription>You can update your availability below if needed.</CardDescription>
           </CardHeader>
         </Card>
       ) : (
         <Card className="bg-primary/5 border-primary/20">
-          <CardHeader>
+          <CardHeader className="text-center">
             <CardTitle>Submit Your Availability</CardTitle>
-            <CardDescription>Select the dates and times when you're available</CardDescription>
+            <CardDescription>Select the dates and times when you're available.</CardDescription>
           </CardHeader>
         </Card>
       )}
@@ -243,7 +243,7 @@ export function AvailabilityForm({
         <Card>
           <CardHeader>
             <CardTitle>Select Your Available Times</CardTitle>
-            <CardDescription>Click on a date to add your availability for that day</CardDescription>
+            <CardDescription>Click on a date to add your availability for that day.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {dateRange.map((date) => {
@@ -252,26 +252,26 @@ export function AvailabilityForm({
               const hasSlots = slotsForDate.length > 0
 
               return (
-                <div key={dateISO} className="space-y-3">
+                <div key={dateISO} className="space-y-3 p-4 rounded-lg border">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium text-foreground">{formatDate(date)}</p>
-                      <p className="text-xs text-muted-foreground">{date.toLocaleDateString("en-US")}</p>
                     </div>
                     <Button type="button" variant="outline" size="sm" onClick={() => addTimeSlot(dateISO)}>
+                      <Plus className="h-4 w-4 mr-2" />
                       Add Time
                     </Button>
                   </div>
 
                   {hasSlots && (
-                    <div className="space-y-2 pl-4 border-l-2 border-primary/20">
+                    <div className="space-y-2 pt-4 border-t">
                       {slotsForDate.map((slot) => (
                         <div key={slot.index} className="flex items-center gap-2">
                           <input
                             type="time"
                             value={slot.startTime}
                             onChange={(e) => updateTimeSlot(slot.index, "startTime", e.target.value)}
-                            className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+                            className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full"
                             required
                           />
                           <span className="text-muted-foreground">to</span>
@@ -279,17 +279,17 @@ export function AvailabilityForm({
                             type="time"
                             value={slot.endTime}
                             onChange={(e) => updateTimeSlot(slot.index, "endTime", e.target.value)}
-                            className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+                            className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full"
                             required
                           />
                           <Button
                             type="button"
                             variant="ghost"
-                            size="sm"
+                            size="icon"
                             onClick={() => removeTimeSlot(slot.index)}
                             className="text-destructive hover:text-destructive"
                           >
-                            Remove
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       ))}

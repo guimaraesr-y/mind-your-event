@@ -34,19 +34,19 @@ export default async function EventPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card">
+      <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Calendar className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-semibold text-foreground">EventSync</h1>
+            <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
           </Link>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 px-4 py-8">
+      <main className="flex-1 px-4 py-8 md:py-12">
         <EventDashboard event={event} participants={participants || []} />
       </main>
     </div>

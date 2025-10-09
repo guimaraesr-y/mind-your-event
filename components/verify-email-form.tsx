@@ -8,10 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2, Mail, KeyRound } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "react-toastify"
 
 export function VerifyEmailForm() {
-  const { toast } = useToast()
   const [step, setStep] = useState<"email" | "code">("email")
   const [email, setEmail] = useState("")
   const [code, setCode] = useState("")
@@ -33,16 +32,11 @@ export function VerifyEmailForm() {
         throw new Error(error.error || "Failed to send verification code")
       }
 
-      toast({
-        title: "Code sent!",
-        description: "Check your email for the verification code",
-      })
+      toast("Code sent! Check your email for the verification code.")
       setStep("code")
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send code",
-        variant: "destructive",
+      toast(error instanceof Error ? error.message : "Failed to send code", {
+        type: "error",
       })
     } finally {
       setIsLoading(false)
@@ -71,18 +65,13 @@ export function VerifyEmailForm() {
       localStorage.setItem("sessionToken", data.sessionToken)
       localStorage.setItem("userEmail", data.email)
 
-      toast({
-        title: "Verified!",
-        description: "You are now authenticated",
-      })
+      toast("Verified! You are now authenticated.")
 
       // Redirect to home or previous page
       window.location.href = "/"
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Verification failed",
-        variant: "destructive",
+      toast(error instanceof Error ? error.message : "Verification failed", {
+        type: "error",
       })
     } finally {
       setIsLoading(false)
@@ -91,17 +80,21 @@ export function VerifyEmailForm() {
 
   return (
     <Card className="w-full max-w-md">
-      <CardHeader>
+      <CardHeader className="text-center">
         <CardTitle>Email Verification</CardTitle>
         <CardDescription>
-          {step === "email" ? "Enter your email to receive a verification code" : "Enter the code sent to your email"}
+          {step === "email"
+            ? "Enter your email to receive a one-time verification code."
+            : "Enter the 6-digit code sent to your email."}
         </CardDescription>
       </CardHeader>
       <CardContent>
         {step === "email" ? (
           <form onSubmit={handleSendCode} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email" className="sr-only">
+                Email Address
+              </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -130,7 +123,9 @@ export function VerifyEmailForm() {
         ) : (
           <form onSubmit={handleVerifyCode} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="code">Verification Code</Label>
+              <Label htmlFor="code" className="sr-only">
+                Verification Code
+              </Label>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -139,12 +134,12 @@ export function VerifyEmailForm() {
                   placeholder="123456"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-center tracking-[0.5em]"
                   maxLength={6}
                   required
                 />
               </div>
-              <p className="text-xs text-muted-foreground">Code sent to {email}</p>
+              <p className="text-xs text-muted-foreground text-center">A 6-digit code was sent to {email}</p>
             </div>
 
             <div className="space-y-2">
@@ -159,8 +154,8 @@ export function VerifyEmailForm() {
                 )}
               </Button>
 
-              <Button type="button" variant="ghost" className="w-full" onClick={() => setStep("email")}>
-                Use Different Email
+              <Button type="button" variant="link" className="w-full" onClick={() => setStep("email")}>
+                Use a different email address
               </Button>
             </div>
           </form>

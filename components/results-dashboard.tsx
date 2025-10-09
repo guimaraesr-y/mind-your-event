@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Users, TrendingUp, ArrowLeft } from "lucide-react"
+import { Calendar, Users, TrendingUp, ArrowLeft, Trophy } from "lucide-react"
 import Link from "next/link"
 import { useMemo } from "react"
 import { AvailabilityHeatmap } from "@/components/availability-heatmap"
@@ -68,7 +68,6 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
       weekday: "long",
       month: "long",
       day: "numeric",
-      year: "numeric",
     })
   }
 
@@ -81,20 +80,18 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href={`/events/${event.id}`}>
-                <ArrowLeft className="h-4 w-4 mr-1" />
-                Back to Event
-              </Link>
-            </Button>
-          </div>
-          <h1 className="text-3xl font-bold text-foreground">{event.title} - Results</h1>
-          <p className="text-muted-foreground">Availability analysis and optimal time slots</p>
+      <div className="space-y-2">
+        <Button variant="ghost" size="sm" asChild className="-ml-2">
+          <Link href={`/events/${event.id}`}>
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            Back to Event Dashboard
+          </Link>
+        </Button>
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title} - Results</h1>
+          <p className="text-muted-foreground">Availability analysis and optimal time slots.</p>
         </div>
       </div>
 
@@ -110,44 +107,37 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
       {/* Stats */}
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Participants</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-primary" />
-              <span className="text-2xl font-bold text-foreground">{totalParticipants}</span>
-            </div>
+            <div className="text-2xl font-bold text-foreground">{totalParticipants}</div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Responses</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-accent" />
-              <span className="text-2xl font-bold text-foreground">
-                {submittedCount} / {totalParticipants}
-              </span>
+            <div className="text-2xl font-bold text-foreground">
+              {submittedCount} / {totalParticipants}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {Math.round((submittedCount / totalParticipants) * 100)}% response rate
+            <p className="text-xs text-muted-foreground">
+              {totalParticipants > 0 ? Math.round((submittedCount / totalParticipants) * 100) : 0}% response rate
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Time Slots</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Time Slots Submitted</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-chart-3" />
-              <span className="text-2xl font-bold text-foreground">{availabilitySlots.length}</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">Total availability slots submitted</p>
+            <div className="text-2xl font-bold text-foreground">{availabilitySlots.length}</div>
           </CardContent>
         </Card>
       </div>
@@ -156,15 +146,18 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
       {bestSlots.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Best Time Slots</CardTitle>
-            <CardDescription>Times when the most participants are available</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-primary" />
+              Best Time Slots
+            </CardTitle>
+            <CardDescription>Times when the most participants are available, sorted by popularity.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {bestSlots.map((slot, index) => (
                 <div
                   key={`${slot.date}-${slot.startTime}-${slot.endTime}`}
-                  className="flex items-center justify-between p-4 rounded-lg border border-border bg-muted/30"
+                  className="flex items-center justify-between p-4 rounded-lg border bg-background"
                 >
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     <div
@@ -173,7 +166,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
                           ? "bg-primary text-primary-foreground"
                           : index === 1
                             ? "bg-accent text-accent-foreground"
-                            : "bg-muted-foreground/20 text-foreground"
+                            : "bg-muted"
                       }`}
                     >
                       <span className="font-bold text-sm">#{index + 1}</span>
@@ -209,7 +202,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground text-center">
               Waiting for {totalParticipants - submittedCount} more{" "}
-              {totalParticipants - submittedCount === 1 ? "participant" : "participants"} to submit availability
+              {totalParticipants - submittedCount === 1 ? "participant" : "participants"} to submit availability.
             </p>
           </CardContent>
         </Card>

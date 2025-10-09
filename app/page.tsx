@@ -4,13 +4,13 @@ import { Calendar, Users, Clock, Sparkles } from "lucide-react"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col animated-gradient">
       {/* Header */}
-      <header className="border-b border-border bg-card">
+      <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-lg">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-semibold text-foreground">EventSync</h1>
+            <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
           </div>
         </div>
       </header>
@@ -33,14 +33,14 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-base">
+            <Button asChild size="lg" className="text-base transition-transform duration-300 ease-in-out hover:scale-105">
               <Link href="/create">Create an Event</Link>
             </Button>
           </div>
 
           {/* Features */}
           <div className="grid md:grid-cols-3 gap-6 pt-12">
-            <div className="flex flex-col items-center gap-3 p-6 rounded-lg bg-card border border-border">
+            <div className="flex flex-col items-center gap-3 p-6 rounded-lg bg-card/60 border border-border/40 backdrop-blur-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
@@ -50,7 +50,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-3 p-6 rounded-lg bg-card border border-border">
+            <div className="flex flex-col items-center gap-3 p-6 rounded-lg bg-card/60 border border-border/40 backdrop-blur-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
               <div className="h-12 w-12 rounded-full bg-accent/20 flex items-center justify-center">
                 <Users className="h-6 w-6 text-accent" />
               </div>
@@ -60,7 +60,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-3 p-6 rounded-lg bg-card border border-border">
+            <div className="flex flex-col items-center gap-3 p-6 rounded-lg bg-card/60 border border-border/40 backdrop-blur-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
               <div className="h-12 w-12 rounded-full bg-chart-3/20 flex items-center justify-center">
                 <Clock className="h-6 w-6 text-chart-3" />
               </div>
@@ -74,9 +74,9 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-6">
+      <footer className="border-t border-border/40 bg-background/80 backdrop-blur-lg py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>EventSync - Making scheduling simple</p>
+          <p>MindYourEvent - Making scheduling simple</p>
         </div>
       </footer>
     </div>

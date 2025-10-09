@@ -53,28 +53,28 @@ export default async function InvitePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card">
+      <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Calendar className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-semibold text-foreground">EventSync</h1>
+            <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
           </Link>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 px-4 py-8">
+      <main className="flex-1 px-4 py-8 md:py-12">
         {isFinalized ? (
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-6 w-6 text-accent" />
-                <span className="text-sm font-medium text-accent">Event Finalized</span>
+            <div className="space-y-2 text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium">
+                <CheckCircle2 className="h-4 w-4" />
+                <span>Event Finalized</span>
               </div>
-              <h1 className="text-3xl font-bold text-foreground">{event.title}</h1>
-              {event.description && <p className="text-muted-foreground">{event.description}</p>}
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title}</h1>
+              {event.description && <p className="text-muted-foreground max-w-2xl mx-auto">{event.description}</p>}
             </div>
 
             <Card className="bg-primary/5 border-primary/20">
