@@ -1,8 +1,15 @@
+'use client'
+
 import { VerifyEmailForm } from "@/components/verify-email-form"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
 
+import { useSearchParams } from 'next/navigation'
+
 export default function VerifyPage() {
+  const searchParams = useSearchParams()
+  const email = searchParams.get("email")
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
@@ -17,7 +24,7 @@ export default function VerifyPage() {
 
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 py-12 md:py-20">
-        <VerifyEmailForm />
+        <VerifyEmailForm initialEmail={email || ""} />
       </main>
     </div>
   )

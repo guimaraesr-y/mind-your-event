@@ -62,7 +62,7 @@ export function AvailabilityForm({
   }, [requiredEmail])
 
   const handleVerifyEmail = () => {
-    router.push("/verify")
+    router.push("/verify?email=" + requiredEmail)
   }
 
   // Generate date range

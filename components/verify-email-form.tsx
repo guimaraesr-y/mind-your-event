@@ -10,9 +10,15 @@ import { Label } from "@/components/ui/label"
 import { Loader2, Mail, KeyRound } from "lucide-react"
 import { toast } from "react-toastify"
 
-export function VerifyEmailForm() {
+interface VerifyEmailFormProps {
+  initialEmail?: string
+}
+
+export function VerifyEmailForm({
+  initialEmail="",
+}: VerifyEmailFormProps) {
   const [step, setStep] = useState<"email" | "code">("email")
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState(initialEmail)
   const [code, setCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
