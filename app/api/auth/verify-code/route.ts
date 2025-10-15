@@ -42,7 +42,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate session token
-    const sessionToken = randomBytes(32).toString("hex")
+    const sessionToken = randomBytes(32).toString("hex");
+
+    // Store session token in database
+    const { error: insertError } = await supabase.from("users").update({
+      session_token: sessionToken,
+    }).eq("email", email)
+
+    if (insertError) {
+      console.error("[v0] Error storing session token:", insertError)
+      return NextResponse.json({ error: "Failed to generate session token" }, { status: 500 })
+    }
 
     return NextResponse.json({
       success: true,
