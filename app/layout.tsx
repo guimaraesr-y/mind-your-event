@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   description: "Schedule events without the back-and-forth",
 };
 
+import { AuthProvider } from "@/contexts/auth-context";
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,11 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <ToastContainer
-          position="bottom-right"
-          stacked={true}
-        />
+        <AuthProvider>
+          {children}
+          <ToastContainer
+            position="bottom-right"
+            stacked={true}
+          />
+        </AuthProvider>
       </body>
     </html>
   );

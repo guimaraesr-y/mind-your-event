@@ -59,6 +59,9 @@ export default function HomePage() {
             <Calendar className="h-6 w-6 text-primary" />
             <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
           </div>
+          <Button asChild variant="secondary">
+            <Link href="/dashboard">Go to Dashboard</Link>
+          </Button>
         </div>
       </header>
 
