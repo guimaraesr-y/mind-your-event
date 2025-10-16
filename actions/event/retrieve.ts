@@ -3,9 +3,9 @@
 import { getSupabaseServerClient } from "@/lib/server";
 import { EventInterface } from "@/modules/events/event";
 
-export async function retrieveEventById(eventId: string): Promise<EventInterface> {
+export async function retrieveEventById(eventId: string): Promise<EventInterface | null> {
     const supabase = await getSupabaseServerClient();
-    const { data: event } = await supabase
+    const { data: event, error } = await supabase
         .from("events")
         .select("*")
         .eq("id", eventId)
@@ -32,4 +32,14 @@ export async function retrieveParticipatingEventsByUserId(userId: string): Promi
         .eq("user_id", userId);
 
     return participating || [];
+}
+
+export async function retrieveEventParticipants(eventId: string): Promise<any[]> {
+    const supabase = await getSupabaseServerClient();
+    const { data: participants } = await supabase
+        .from("event_participants")
+        .select("*, users(name, email)")
+        .eq("event_id", eventId)
+
+    return participants || [];
 }

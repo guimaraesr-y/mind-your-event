@@ -1,8 +1,8 @@
-import { getSupabaseServerClient } from "@/lib/server"
 import { notFound } from "next/navigation"
 import { EventDashboard } from "@/components/event-dashboard"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
+import { retrieveEventById, retrieveEventParticipants } from "@/actions/event/retrieve"
 
 interface PageProps {
   params: Promise<{ eventId: string }>
@@ -10,28 +10,13 @@ interface PageProps {
 
 export default async function EventPage({ params }: PageProps) {
   const { eventId } = await params
-  const supabase = await getSupabaseServerClient()
 
-  // Fetch event details
-  const { data: event, error: eventError } = await supabase
-    .from("events")
-    .select("*, users!events_creator_id_fkey(name, email)")
-    .eq("id", eventId)
-    .single()
-
-  if (eventError || !event) {
+  const event = await retrieveEventById(eventId);
+  if (!event) {
     notFound()
   }
 
-  // Fetch participants
-  const { data: participants, error: participantsError } = await supabase
-    .from("event_participants")
-    .select("*, users(name, email)")
-    .eq("event_id", eventId)
-
-  if (participantsError) {
-    console.error("[v0] Error fetching participants:", participantsError)
-  }
+  const participants = await retrieveEventParticipants(eventId);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
