@@ -9,9 +9,10 @@ import {
 } from "react";
 import { Loader2 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/client";
+import { UserInterface } from "@/modules/user/user";
 
 interface AuthContextType {
-  user: { email: string } | null;
+  user: UserInterface | null;
   isLoading: boolean;
 }
 
