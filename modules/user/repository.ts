@@ -14,10 +14,6 @@ export default class UserRepository {
             .eq("email", email)
             .single();
 
-        if (error) {
-        throw error;
-        }
-
         return data;
     }
 
@@ -29,9 +25,17 @@ export default class UserRepository {
             .eq("session_token", sessionToken)
             .single();
 
-        if (error) {
-        throw error;
-        }
+        return data;
+    }
+
+    async getUserByEmailAndSessionToken(email: string, sessionToken: string): Promise<UserInterface | null> {
+        const supabase = await this.getSupabase();
+        const { data, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq('email', email)
+            .eq('session_token', sessionToken)
+            .single();
 
         return data;
     }
@@ -39,13 +43,9 @@ export default class UserRepository {
     async updateSessionToken(email: string, sessionToken: string): Promise<void> {
         const supabase = await this.getSupabase();
         const { error } = await supabase
-        .from("users")
-        .update({ session_token: sessionToken })
-        .eq("email", email);
-
-        if (error) {
-        throw error;
-        }
+            .from("users")
+            .update({ session_token: sessionToken })
+            .eq("email", email);
     }
 
   private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {

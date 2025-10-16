@@ -8,8 +8,8 @@ import {
   ReactNode,
 } from "react";
 import { Loader2 } from "lucide-react";
-import { getSupabaseBrowserClient } from "@/lib/client";
 import { UserInterface } from "@/modules/user/user";
+import { retrieveUserByEmailAndSessionToken } from "@/actions/user/retrieve";
 
 interface AuthContextType {
   user: UserInterface | null;
@@ -19,22 +19,12 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [user, setUser] = useState<UserInterface | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async (email: string, sessionToken: string) => {
-      const supabase = getSupabaseBrowserClient();
-
-      const { data: user, error: userError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("email", email)
-        .eq("session_token", sessionToken)
-        .single();
-
-      // console.log(user)
-      return user;
+      return await retrieveUserByEmailAndSessionToken(email, sessionToken);
     };
 
     const userEmail = localStorage.getItem("userEmail");
