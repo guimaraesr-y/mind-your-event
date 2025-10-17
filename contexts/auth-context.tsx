@@ -9,7 +9,8 @@ import {
 } from "react";
 import { Loader2 } from "lucide-react";
 import { UserInterface } from "@/modules/user/user";
-import { retrieveUserByEmailAndSessionToken } from "@/actions/user/retrieve";
+import { retrieveUserBySessionToken } from "@/actions/user/retrieve";
+import Cookies from "js-cookie";
 
 interface AuthContextType {
   user: UserInterface | null;
@@ -23,19 +24,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async (email: string, sessionToken: string) => {
-      return await retrieveUserByEmailAndSessionToken(email, sessionToken);
+    const fetchUser = async (sessionToken: string) => {
+      return await retrieveUserBySessionToken(sessionToken);
     };
 
-    const userEmail = localStorage.getItem("userEmail");
-    const sessionToken = localStorage.getItem("sessionToken");
+    const sessionToken = Cookies.get("session_token")
 
-    if (!userEmail || !sessionToken) {
+    if (!sessionToken) {
       setIsLoading(false);
       return;
     }
 
-    fetchUser(userEmail, sessionToken)
+    fetchUser(sessionToken)
       .then((user: any) => {
         setUser(user);
       })
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => {
         setIsLoading(false);
       })
-  }, []);
+  }, [Cookies]);
 
   if (isLoading) {
     return (

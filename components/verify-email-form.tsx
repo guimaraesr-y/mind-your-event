@@ -70,8 +70,8 @@ export function VerifyEmailForm({
       const data = await response.json()
 
       // Store session token in localStorage
-      localStorage.setItem("sessionToken", data.sessionToken)
-      localStorage.setItem("userEmail", data.email)
+      // localStorage.setItem("sessionToken", data.sessionToken)
+      // localStorage.setItem("userEmail", data.email)
 
       toast("Verified! You are now authenticated.", {
         autoClose: 500,
