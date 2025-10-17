@@ -60,7 +60,7 @@ export function ParticipatingEvents({ events }: ParticipatingEventsProps) {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Users className="h-4 w-4" />
-                      <span>{p.events.event_participants.length} participants</span>
+                      <span>{p.events.event_participants[0].count} participants</span>
                     </div>
                   </div>
                 </div>

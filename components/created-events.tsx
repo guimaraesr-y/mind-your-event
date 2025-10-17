@@ -52,7 +52,7 @@ export function CreatedEvents({ events }: CreatedEventsProps) {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Users className="h-4 w-4" />
-                      <span>{event.event_participants.length} participants</span>
+                      <span>{event.event_participants[0].count} participants</span>
                     </div>
                   </div>
                 </div>
