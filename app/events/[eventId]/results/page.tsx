@@ -1,8 +1,9 @@
-import { getSupabaseServerClient } from "@/lib/server"
 import { notFound } from "next/navigation"
 import { ResultsDashboard } from "@/components/results-dashboard"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
+import { getCurrentUser } from "@/actions/user/get-current-user"
+import { retrieveEventAvailabilities, retrieveEventById, retrieveEventParticipants } from "@/actions/event/retrieve"
 
 interface PageProps {
   params: Promise<{ eventId: string }>
@@ -10,38 +11,15 @@ interface PageProps {
 
 export default async function ResultsPage({ params }: PageProps) {
   const { eventId } = await params
-  const supabase = await getSupabaseServerClient()
+  const user = await getCurrentUser();
+  const event = await retrieveEventById(eventId);
 
-  // Fetch event details
-  const { data: event, error: eventError } = await supabase
-    .from("events")
-    .select("*, users!events_creator_id_fkey(name, email)")
-    .eq("id", eventId)
-    .single()
-
-  if (eventError || !event) {
-    notFound()
+  if (!user || !event || event?.creator_id !== user.id) {
+    notFound();
   }
 
-  // Fetch participants
-  const { data: participants, error: participantsError } = await supabase
-    .from("event_participants")
-    .select("*, users(name, email)")
-    .eq("event_id", eventId)
-
-  if (participantsError) {
-    console.error("[v0] Error fetching participants:", participantsError)
-  }
-
-  // Fetch all availability slots
-  const { data: availabilitySlots, error: slotsError } = await supabase
-    .from("availability_slots")
-    .select("*, users(name, email)")
-    .eq("event_id", eventId)
-
-  if (slotsError) {
-    console.error("[v0] Error fetching availability:", slotsError)
-  }
+  const participants = await retrieveEventParticipants(eventId);
+  const availabilitySlots = await retrieveEventAvailabilities(eventId);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

@@ -1,19 +1,29 @@
-import { notFound } from "next/navigation"
-import { EventDashboard } from "@/components/event-dashboard"
-import { Calendar } from "lucide-react"
-import Link from "next/link"
-import { retrieveEventById, retrieveEventParticipants } from "@/actions/event/retrieve"
+import { notFound, redirect } from "next/navigation";
+import { EventDashboard } from "@/components/event-dashboard";
+import { Calendar } from "lucide-react";
+import Link from "next/link";
+import { retrieveEventById, retrieveEventParticipants } from "@/actions/event/retrieve";
+import { getCurrentUser } from "@/actions/user/get-current-user";
 
 interface PageProps {
-  params: Promise<{ eventId: string }>
+  params: Promise<{ eventId: string }>;
 }
 
 export default async function EventPage({ params }: PageProps) {
-  const { eventId } = await params
+  const { eventId } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect("/verify");
+  }
 
   const event = await retrieveEventById(eventId);
   if (!event) {
-    notFound()
+    notFound();
+  }
+
+  if (event.creator_id !== user.id) {
+    notFound();
   }
 
   const participants = await retrieveEventParticipants(eventId);
@@ -35,5 +45,5 @@ export default async function EventPage({ params }: PageProps) {
         <EventDashboard event={event} participants={participants || []} />
       </main>
     </div>
-  )
+  );
 }
