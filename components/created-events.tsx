@@ -27,7 +27,12 @@ export function CreatedEvents({ events }: CreatedEventsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Events Created By You</CardTitle>
+        <CardTitle className="flex items-center justify-between">
+          Events Created By You
+          <Button asChild>
+            <Link href="/create">New Event</Link>
+          </Button>
+        </CardTitle>
         <CardDescription>
           Manage and view the events you have organized.
         </CardDescription>
