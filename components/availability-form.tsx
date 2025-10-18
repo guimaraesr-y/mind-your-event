@@ -33,7 +33,6 @@ export function AvailabilityForm({
 }: AvailabilityFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [selectedSlots, setSelectedSlots] = useState<TimeSlot[]>(
     existingAvailability.map((slot) => ({
       date: slot.date,
@@ -41,26 +40,6 @@ export function AvailabilityForm({
       endTime: slot.end_time,
     })),
   )
-
-  useEffect(() => {
-    const sessionToken = localStorage.getItem("sessionToken")
-    const userEmail = localStorage.getItem("userEmail")
-
-    if (!sessionToken || !userEmail) {
-      setIsAuthenticated(false)
-      return
-    }
-
-    if (requiredEmail && userEmail !== requiredEmail) {
-      setIsAuthenticated(false)
-      toast(`Authentication required! Please verify your email ${requiredEmail} to continue`, {
-        type: "error",
-      })
-      return
-    }
-
-    setIsAuthenticated(true)
-  }, [requiredEmail])
 
   // Generate date range
   const dateRange = useMemo(() => {
@@ -144,14 +123,6 @@ export function AvailabilityForm({
 
   const getSlotsForDate = (date: string) => {
     return selectedSlots.map((slot, index) => ({ ...slot, index })).filter((slot) => slot.date === date)
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <EmailVerificationRequiredCard
-        requiredEmail={requiredEmail}
-      />
-    )
   }
 
   return (

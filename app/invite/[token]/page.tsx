@@ -1,10 +1,12 @@
-import { getSupabaseServerClient } from "@/lib/server"
 import { notFound } from "next/navigation"
 import { AvailabilityForm } from "@/components/availability-form"
 import { RsvpCard } from "@/components/rsvp-card"
 import { Calendar, CheckCircle2, Clock } from "lucide-react"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getCurrentUser } from "@/actions/user/get-current-user"
+import { retrieveEventCreator, retrieveEventParticipantByInviteToken, retrieveUserAvailabilitiesForEvent } from "@/actions/event/retrieve"
+import { EmailVerificationRequiredCard } from "@/components/email-verification-card"
 
 interface PageProps {
   params: Promise<{ token: string }>
@@ -12,32 +14,28 @@ interface PageProps {
 
 export default async function InvitePage({ params }: PageProps) {
   const { token } = await params
-  const supabase = await getSupabaseServerClient()
+  const user = await getCurrentUser();
+  const participant = await retrieveEventParticipantByInviteToken(token);
 
-  // Fetch participant and event details
-  const { data: participant, error: participantError } = await supabase
-    .from("event_participants")
-    .select("*, events(*), users(name, email)")
-    .eq("invite_token", token)
-    .single()
-
-  if (participantError || !participant) {
-    notFound()
+  if (!user || participant.user_id !== user.id) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <EmailVerificationRequiredCard
+          requiredEmail={participant.users.email}
+        />
+      </div>
+    )
   }
 
-  // Fetch creator info
-  const { data: creator } = await supabase
-    .from("users")
-    .select("name, email")
-    .eq("id", participant.events.creator_id)
-    .single()
+  if (!participant) {
+    notFound();
+  }
 
-  // Fetch existing availability if already submitted
-  const { data: existingAvailability } = await supabase
-    .from("availability_slots")
-    .select("*")
-    .eq("event_id", participant.event_id)
-    .eq("user_id", participant.user_id)
+  const creator = await retrieveEventCreator(participant.event_id)
+  const existingAvailability = await retrieveUserAvailabilitiesForEvent(
+    user.id,
+    participant.event_id,
+  );
 
   const event = participant.events
   const isFinalized = event.is_finalized
