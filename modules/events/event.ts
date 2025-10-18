@@ -1,3 +1,5 @@
+import { UserInterface } from "../user/user";
+
 export interface EventInterface {
     id: string;
     title: string;
@@ -25,4 +27,5 @@ export interface CreateEventDto {
     participantEmails: string[];
     creatorName: string;
     creatorEmail: string;
+    authenticatedUser?: UserInterface;
 }

@@ -3,10 +3,11 @@ import { getSupabaseServerClient } from "@/lib/server";
 import { randomBytes } from "crypto";
 import { UserInterface } from "@/modules/user/user";
 import { CreateEventDto, EventInterface } from "../event";
+import { ApiException } from "@/lib/exceptions/api";
 
 export default class CreateEventUseCase {
 
-    private async findOrCreateUser(email: string, name: string): Promise<UserInterface> {
+    private async findOrCreateUser(email: string, name: string): Promise<{user: UserInterface, created: boolean}> {
         const supabase = await this.getSupabase();
         const { data: user, error } = await supabase
             .from("users")
@@ -24,9 +25,9 @@ export default class CreateEventUseCase {
             if (insertError) {
                 throw new Error("Failed to create user");
             }
-            return newUser;
+            return { user: newUser, created: true };
         }
-        return user;
+        return { user, created: false };
     }
 
     private async createEventRecord(
@@ -49,7 +50,7 @@ export default class CreateEventUseCase {
     private async createEventParticipants(eventId: string, emails: string[]): Promise<void> {
         const supabase = await this.getSupabase();
         for (const email of emails) {
-            const user = await this.findOrCreateUser(email, email.split("@")[0]);
+            const { user } = await this.findOrCreateUser(email, email.split("@")[0]);
             const inviteToken = randomBytes(32).toString("hex");
 
             const { error } = await supabase.from("event_participants").insert({
@@ -65,9 +66,14 @@ export default class CreateEventUseCase {
     }
 
     public async execute(eventData: CreateEventDto): Promise<EventInterface> {
-        const { participantEmails, creatorEmail, creatorName, ...rest } = eventData;
+        const { participantEmails, creatorEmail, creatorName, authenticatedUser, ...rest } = eventData;
         
-        const creator = await this.findOrCreateUser(creatorEmail, creatorName);
+        const { user: creator, created } = await this.findOrCreateUser(creatorEmail, creatorName);
+
+        if ((!authenticatedUser && !created) || (authenticatedUser && !created && authenticatedUser.id !== creator.id)) {
+            throw new ApiException("This user already exists. Please, verify your email.", 400);
+        }
+
         const event = await this.createEventRecord({
             title: rest.title,
             description: rest.description,

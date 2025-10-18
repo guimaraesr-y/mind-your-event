@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { retrieveUserBySessionToken } from "@/actions/user/retrieve";
 import CreateEventUseCase from "@/modules/events/use-cases/createEventUseCase";
+import { ApiException } from "@/lib/exceptions/api";
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,10 +52,14 @@ export async function POST(request: NextRequest) {
       participantEmails: emails,
       creatorEmail,
       creatorName,
+      authenticatedUser: currentUser || undefined,
     });
 
     return NextResponse.json({ eventId: event.id, success: true });
   } catch (error) {
+    if (error instanceof ApiException) {
+      return NextResponse.json({ error: error.message }, { status: error.httpCode });
+    }
     console.error("[v0] Error in POST /api/events:", error);
     const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json({ error: errorMessage }, { status: 500 });
