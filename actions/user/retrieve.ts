@@ -10,7 +10,11 @@ export async function retrieveUserByEmail(email: string): Promise<UserInterface 
     return user;
 }
 
-export async function retrieveUserBySessionToken(sessionToken: string): Promise<UserInterface | null> {
+export async function retrieveUserBySessionToken(sessionToken?: string): Promise<UserInterface | null> {
+    if (!sessionToken) {
+        return null;
+    }
+
     const user = await repository.getUserBySessionToken(sessionToken);
     return user;
 }

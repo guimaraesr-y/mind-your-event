@@ -14,3 +14,15 @@ export interface EventInterface {
     created_at: string;
     updated_at: string;
 }
+
+export interface CreateEventDto {
+    title: string;
+    description?: string;
+    start_date: string;
+    end_date: string;
+    start_time?: string;
+    end_time?: string;
+    participantEmails: string[];
+    creatorName: string;
+    creatorEmail: string;
+}

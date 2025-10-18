@@ -34,7 +34,7 @@ export default function DashboardPage() {
       setCreatedEvents([]);
       setParticipatingEvents([]);
     }
-  }, [isLoading])
+  }, [isLoading, user])
 
   return (
     <AuthGuard>
