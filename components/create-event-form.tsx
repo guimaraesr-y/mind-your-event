@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Calendar, Clock, Users, User, Mail, ArrowRight } from "lucide-react"
+import { Loader2, ArrowRight } from "lucide-react"
 import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/auth-context"
 
