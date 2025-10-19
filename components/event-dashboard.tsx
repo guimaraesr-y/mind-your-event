@@ -48,11 +48,20 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
       </div>
 
       {/* View Results Button */}
-      {submittedCount > 0 && (
+      {submittedCount > 0 && !event.is_finalized && (
         <Button asChild size="lg" className="w-full">
           <Link href={`/events/${event.id}/results`}>
             <BarChart3 className="mr-2 h-5 w-5" />
             View Results & Finalize Event
+          </Link>
+        </Button>
+      )}
+
+      {event.is_finalized && (
+        <Button asChild size="lg" className="w-full">
+          <Link href={`/events/${event.id}/rsvps`}>
+            <Users className="mr-2 h-5 w-5" />
+            View RSVPs
           </Link>
         </Button>
       )}
