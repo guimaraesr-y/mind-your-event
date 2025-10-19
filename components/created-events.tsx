@@ -13,9 +13,11 @@ import Link from "next/link";
 
 interface CreatedEventsProps {
   events: any[];
+  title: string;
+  description: string;
 }
 
-export function CreatedEvents({ events }: CreatedEventsProps) {
+export function CreatedEvents({ events, title, description }: CreatedEventsProps) {
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString("en-US", {
       month: "short",
@@ -27,14 +29,9 @@ export function CreatedEvents({ events }: CreatedEventsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          Events Created By You
-          <Button asChild>
-            <Link href="/create">New Event</Link>
-          </Button>
-        </CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>
-          Manage and view the events you have organized.
+          {description}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -73,11 +70,8 @@ export function CreatedEvents({ events }: CreatedEventsProps) {
         ) : (
           <div className="text-center py-8">
             <p className="text-muted-foreground">
-              You haven't created any events yet.
+              No events to show in this category.
             </p>
-            <Button asChild className="mt-4">
-              <Link href="/create">Create Your First Event</Link>
-            </Button>
           </div>
         )}
       </CardContent>

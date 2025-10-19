@@ -47,11 +47,19 @@ export async function retrieveEventsByCreatorId(userId: string): Promise<EventIn
     return created || [];
 }
 
-export async function retrieveParticipatingEventsByUserId(userId: string): Promise<EventInterface[]> {
+export interface EventWithAvailabilitySlotsInterface extends EventInterface {
+    availability_slots: AvailabilitySlot[]
+}
+
+export interface EventParticipantWithEvent extends EventParticipant {
+    events: EventWithAvailabilitySlotsInterface
+}
+
+export async function retrieveParticipatingEventsByUserId(userId: string): Promise<EventParticipantWithEvent[]> {
     const supabase = await getSupabaseServerClient();
     const { data: participating } = await supabase
         .from("event_participants")
-        .select("*, events(*, users!events_creator_id_fkey(name, email), event_participants(count))")
+        .select("*, events(*, users!events_creator_id_fkey(name, email), event_participants(count), availability_slots!inner(user_id))")
         .eq("user_id", userId);
 
     return participating || [];

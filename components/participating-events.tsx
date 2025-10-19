@@ -8,16 +8,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight, Users } from "lucide-react";
+import { Calendar, User, ArrowRight, Users, Clock, CircleCheck, Circle } from "lucide-react";
 import Link from "next/link";
+import { EventParticipantWithEvent } from "@/actions/event/retrieve";
 
 interface ParticipatingEventsProps {
   events: any[];
+  title: string;
+  description: string;
+  participationConfirmMethod: (participation: EventParticipantWithEvent) => boolean;
 }
 
-export function ParticipatingEvents({ events }: ParticipatingEventsProps) {
+export function ParticipatingEvents({ events, title, description, participationConfirmMethod }: ParticipatingEventsProps) {
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
+    return new Date(date).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -27,9 +31,9 @@ export function ParticipatingEvents({ events }: ParticipatingEventsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Events You Are Participating In</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>
-          Events you have been invited to.
+          {description}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -41,7 +45,12 @@ export function ParticipatingEvents({ events }: ParticipatingEventsProps) {
                 className="flex items-center justify-between p-4 rounded-lg border"
               >
                 <div className="space-y-1">
-                  <p className="font-semibold text-foreground">
+                  <p className="font-semibold text-foreground inline-flex items-center justify-center gap-2">
+                    {participationConfirmMethod(p) ? (
+                      <CircleCheck className="text-accent/50" />
+                    ) : (
+                      <Clock className="text-primary/50" />
+                    )}
                     {p.events.title}
                   </p>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -76,7 +85,7 @@ export function ParticipatingEvents({ events }: ParticipatingEventsProps) {
         ) : (
           <div className="text-center py-8">
             <p className="text-muted-foreground">
-              You haven't been invited to any events yet.
+              No events to show in this category.
             </p>
           </div>
         )}
