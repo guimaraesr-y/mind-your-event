@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,10 +11,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Calendar, Clock, Users, User, Mail, ArrowRight } from "lucide-react"
 import { toast } from "react-toastify";
+import { useAuth } from "@/contexts/auth-context"
 
 export function CreateEventForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const { user, isLoading: isUserLoading } = useAuth()
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -27,7 +29,16 @@ export function CreateEventForm() {
     participantEmails: "",
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!user) return
+    setFormData({
+      ...formData,
+      creatorName: user.name,
+      creatorEmail: user.email,
+    })
+  }, [user])
+
+  const handleSubmit = async (e: React.FormEvent) => { // TODO: add redirect to event after email verification
     e.preventDefault()
     setIsLoading(true)
 
@@ -101,6 +112,7 @@ export function CreateEventForm() {
               value={formData.creatorName}
               onChange={(e) => setFormData({ ...formData, creatorName: e.target.value })}
               required
+              disabled={Boolean(user)}
             />
           </div>
 
@@ -113,6 +125,7 @@ export function CreateEventForm() {
               value={formData.creatorEmail}
               onChange={(e) => setFormData({ ...formData, creatorEmail: e.target.value })}
               required
+              disabled={Boolean(user)}
             />
           </div>
         </CardContent>
