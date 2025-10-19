@@ -107,3 +107,19 @@ export async function retrieveEventParticipantByInviteToken(token: string): Prom
 
     return participant || [];
 }
+
+export async function isEventOwner(userId?: string, eventId?: string): Promise<boolean> {
+    if (!userId || !eventId) {
+        return false;
+    }
+
+    const supabase = await getSupabaseServerClient();
+    const { data: event } = await supabase
+        .from("events")
+        .select("id", { count: "exact" })
+        .eq("id", eventId)
+        .eq("creator_id", userId)
+        .limit(1);
+    
+    return Boolean(event && event.length > 0);
+}
