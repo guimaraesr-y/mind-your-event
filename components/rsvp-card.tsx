@@ -9,11 +9,11 @@ import { toast } from "react-toastify"
 
 interface RsvpCardProps {
   eventId: string
-  participantId: string
+  inviteToken: string
   currentRsvp: boolean | null
 }
 
-export function RsvpCard({ eventId, participantId, currentRsvp }: RsvpCardProps) {
+export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -24,7 +24,7 @@ export function RsvpCard({ eventId, participantId, currentRsvp }: RsvpCardProps)
       const response = await fetch(`/api/events/${eventId}/rsvp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ participantId, willAttend }),
+        body: JSON.stringify({ inviteToken, willAttend }),
       })
 
       if (!response.ok) {

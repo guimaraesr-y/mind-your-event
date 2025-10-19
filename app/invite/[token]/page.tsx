@@ -12,7 +12,7 @@ interface PageProps {
   params: Promise<{ token: string }>
 }
 
-export default async function InvitePage({ params }: PageProps) {
+export default async function InvitePage({ params }: PageProps) { // TODO: remove auth. this route should be accessible through the invite link without auth
   const { token } = await params
   const user = await getCurrentUser();
   const participant = await retrieveEventParticipantByInviteToken(token);
@@ -100,7 +100,11 @@ export default async function InvitePage({ params }: PageProps) {
               </CardContent>
             </Card>
 
-            <RsvpCard eventId={event.id} participantId={participant.id} currentRsvp={participant.will_attend} />
+            <RsvpCard
+              eventId={event.id}
+              inviteToken={token}
+              currentRsvp={participant.will_attend}
+            />
           </div>
         ) : (
           <AvailabilityForm
