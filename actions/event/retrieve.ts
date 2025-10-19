@@ -51,7 +51,7 @@ export async function retrieveParticipatingEventsByUserId(userId: string): Promi
     const supabase = await getSupabaseServerClient();
     const { data: participating } = await supabase
         .from("event_participants")
-        .select("*, events(*, users!events_creator_id_fkey(name, email), event_participants!inner(*))")
+        .select("*, events(*, users!events_creator_id_fkey(name, email), event_participants(count))")
         .eq("user_id", userId);
 
     return participating || [];
