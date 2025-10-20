@@ -112,7 +112,6 @@ export default async function InvitePage({ params }: PageProps) { // TODO: remov
             participant={participant}
             creator={creator}
             existingAvailability={existingAvailability || []}
-            requiredEmail={participant.users.email}
           />
         )}
       </main>

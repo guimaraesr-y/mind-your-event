@@ -40,6 +40,19 @@ export default class UserRepository {
         return data;
     }
 
+    async getUserByInviteToken(inviteToken: string): Promise<UserInterface | null> {
+        const supabase = await this.getSupabase();
+        const { data, error } = await supabase
+            .from("users")
+            .select("*,event_participants!inner(invite_token)")
+            .eq("event_participants.invite_token", inviteToken)
+            .single();
+        
+        console.log('get user by invite token', data)
+        
+        return data;
+    }
+
     async updateSessionToken(email: string, sessionToken: string): Promise<void> {
         const supabase = await this.getSupabase();
         const { error } = await supabase

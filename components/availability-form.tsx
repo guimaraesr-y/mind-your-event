@@ -15,7 +15,6 @@ interface AvailabilityFormProps {
   participant: any
   creator: any
   existingAvailability: any[]
-  requiredEmail?: string
 }
 
 interface TimeSlot {
@@ -29,7 +28,6 @@ export function AvailabilityForm({
   participant,
   creator,
   existingAvailability,
-  requiredEmail,
 }: AvailabilityFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -98,8 +96,7 @@ export function AvailabilityForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           eventId: event.id,
-          userId: participant.user_id,
-          participantId: participant.id,
+          inviteToken: participant.invite_token,
           slots: selectedSlots,
         }),
       })
