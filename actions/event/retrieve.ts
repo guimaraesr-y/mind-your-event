@@ -12,7 +12,7 @@ interface EventWithCreator extends EventInterface {
 
 export async function retrieveEventById(eventId: string): Promise<EventWithCreator | null> {
     const supabase = await getSupabaseServerClient();
-    const { data: event, error } = await supabase
+    const { data: event } = await supabase
         .from("events")
         .select("*, users!events_creator_id_fkey(name, email)")
         .eq("id", eventId)
@@ -107,7 +107,7 @@ interface EventParticipantWithUserAndEvent extends EventParticipantWithUser {
 
 export async function retrieveEventParticipantByInviteToken(token: string): Promise<EventParticipantWithUserAndEvent> {
     const supabase = await getSupabaseServerClient();
-    const { data: participant, error: participantError } = await supabase
+    const { data: participant } = await supabase
         .from("event_participants")
         .select("*, events(*), users(name, email)")
         .eq("invite_token", token)

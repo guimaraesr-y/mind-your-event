@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, User, Link as LinkIcon, Copy, Check, BarChart3, Users, Send } from "lucide-react"
+import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"

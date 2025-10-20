@@ -16,7 +16,7 @@ import { useAuth } from "@/contexts/auth-context"
 export function CreateEventForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const { user, isLoading: isUserLoading } = useAuth()
+  const { user } = useAuth()
   const [formData, setFormData] = useState({
     title: "",
     description: "",

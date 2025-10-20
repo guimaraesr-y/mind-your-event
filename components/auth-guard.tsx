@@ -7,10 +7,9 @@ import { Loader2 } from "lucide-react";
 
 interface AuthGuardProps {
   children: React.ReactNode;
-  requiredEmail?: string;
 }
 
-export function AuthGuard({ children, requiredEmail }: AuthGuardProps) {
+export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
   const { user, isLoading } = useAuth();
 

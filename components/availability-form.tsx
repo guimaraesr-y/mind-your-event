@@ -2,13 +2,12 @@
 
 import type React from "react"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, User, Loader2, Check, Shield, Plus, Trash2 } from "lucide-react"
+import { Calendar, Clock, User, Loader2, Check, Plus, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
-import { EmailVerificationRequiredCard } from "./email-verification-card"
 
 interface AvailabilityFormProps {
   event: any

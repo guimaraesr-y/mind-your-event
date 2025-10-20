@@ -8,7 +8,7 @@ export default class UserRepository {
 
     async getUserByEmail(email: string): Promise<UserInterface | null> {
         const supabase = await this.getSupabase();
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("users")
             .select("*")
             .eq("email", email)
@@ -19,7 +19,7 @@ export default class UserRepository {
 
     async getUserBySessionToken(sessionToken: string): Promise<UserInterface | null> {
         const supabase = await this.getSupabase();
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("users")
             .select("*")
             .eq("session_token", sessionToken)
@@ -30,7 +30,7 @@ export default class UserRepository {
 
     async getUserByEmailAndSessionToken(email: string, sessionToken: string): Promise<UserInterface | null> {
         const supabase = await this.getSupabase();
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("users")
             .select("*")
             .eq('email', email)
@@ -42,7 +42,7 @@ export default class UserRepository {
 
     async getUserByInviteToken(inviteToken: string): Promise<UserInterface | null> {
         const supabase = await this.getSupabase();
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from("users")
             .select("*,event_participants!inner(invite_token)")
             .eq("event_participants.invite_token", inviteToken)
@@ -59,6 +59,10 @@ export default class UserRepository {
             .from("users")
             .update({ session_token: sessionToken })
             .eq("email", email);
+
+        if (error) {
+            throw new Error(error.message);
+        }
     }
 
   private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {

@@ -67,12 +67,6 @@ export function VerifyEmailForm({
         throw new Error(error.error || "Invalid verification code")
       }
 
-      const data = await response.json()
-
-      // Store session token in localStorage
-      // localStorage.setItem("sessionToken", data.sessionToken)
-      // localStorage.setItem("userEmail", data.email)
-
       toast("Verified! You are now authenticated.", {
         autoClose: 500,
         onClose: () => {

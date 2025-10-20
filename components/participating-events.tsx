@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight, Users, Clock, CircleCheck, Circle } from "lucide-react";
+import { Calendar, User, ArrowRight, Users, Clock, CircleCheck } from "lucide-react";
 import Link from "next/link";
 import { EventParticipantWithEvent } from "@/actions/event/retrieve";
 
