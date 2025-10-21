@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Calendar, Users, Clock, Sparkles, BarChart3, CheckCircle, LinkIcon, Mail, Shield, Smartphone } from "lucide-react"
 import { Card } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 const features = [
   {
@@ -50,6 +51,8 @@ const colorClasses = {
 };
 
 export default function HomePage() {
+  const t = useTranslations('HomePage');
+
   return (
     <div className="min-h-screen flex flex-col animated-gradient">
       {/* Header */}
@@ -60,7 +63,7 @@ export default function HomePage() {
             <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
           </div>
           <Button asChild variant="secondary">
-            <Link href="/dashboard">Go to Dashboard</Link>
+            <Link href="/dashboard">{t("goToDashboard")}</Link>
           </Button>
         </div>
       </header>
@@ -71,7 +74,7 @@ export default function HomePage() {
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
               <Sparkles className="h-4 w-4" />
-              Find the perfect time, together
+              {t('tagline')}
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-balance text-foreground">
               Schedule events without the back-and-forth
