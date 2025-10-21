@@ -1,0 +1,44 @@
+{
+  "HomePage": {
+    "goToDashboard": "Go to Dashboard",
+    "tagline": "Find the perfect time, together",
+    "title": "Schedule events without the back-and-forth",
+    "description": "Create an event, share a link, and let everyone pick their available times. We'll show you when most people can make it.",
+    "createEvent": "Create an Event",
+    "easySetupTitle": "Easy Setup",
+    "easySetupDescription": "Create an event in seconds with a date range and optional time preferences",
+    "collaborativeTitle": "Collaborative",
+    "collaborativeDescription": "Share a unique link with participants to collect their availability",
+    "smartResultsTitle": "Smart Results",
+    "smartResultsDescription": "Visualize overlapping availability and find the best time for everyone",
+    "everythingYouNeedTitle": "Everything You Need",
+    "everythingYouNeedDescription": "Powerful features designed to make event scheduling simple and enjoyable",
+    "footer": "MindYourEvent - Making scheduling simple",
+    "features": {
+      "visualAvailability": {
+        "title": "Visual Availability",
+        "description": "Beautiful graphs and heatmaps show when most people are free"
+      },
+      "easySharing": {
+        "title": "Easy Sharing",
+        "description": "Share a unique link - no account needed for guests"
+      },
+      "emailVerification": {
+        "title": "Email Verification",
+        "description": "Secure access with email-based authentication"
+      },
+      "smartNotifications": {
+        "title": "Smart Notifications",
+        "description": "Automatic emails when the event time is finalized"
+      },
+      "mobileOptimized": {
+        "title": "Mobile Optimized",
+        "description": "Perfect experience on any device, anywhere"
+      },
+      "rsvpTracking": {
+        "title": "RSVP Tracking",
+        "description": "See who's attending after the time is set"
+      }
+    }
+  }
+}

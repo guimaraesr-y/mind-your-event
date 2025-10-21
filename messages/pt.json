@@ -1,0 +1,44 @@
+{
+  "HomePage": {
+    "goToDashboard": "Ir para o Painel",
+    "tagline": "Encontre o momento perfeito, juntos",
+    "title": "Agende eventos sem o vai e vem",
+    "description": "Crie um evento, compartilhe um link e deixe que todos escolham seus horários disponíveis. Mostraremos quando a maioria das pessoas pode comparecer.",
+    "createEvent": "Criar um Evento",
+    "easySetupTitle": "Configuração Fácil",
+    "easySetupDescription": "Crie um evento em segundos com um intervalo de datas e preferências de horário opcionais",
+    "collaborativeTitle": "Colaborativo",
+    "collaborativeDescription": "Compartilhe um link exclusivo com os participantes para coletar a disponibilidade deles",
+    "smartResultsTitle": "Resultados Inteligentes",
+    "smartResultsDescription": "Visualize a disponibilidade sobreposta e encontre o melhor horário para todos",
+    "everythingYouNeedTitle": "Tudo o que Você Precisa",
+    "everythingYouNeedDescription": "Recursos poderosos projetados para tornar o agendamento de eventos simples e agradável",
+    "footer": "MindYourEvent - Simplificando o agendamento",
+    "features": {
+      "visualAvailability": {
+        "title": "Disponibilidade Visual",
+        "description": "Gráficos e mapas de calor bonitos mostram quando a maioria das pessoas está livre"
+      },
+      "easySharing": {
+        "title": "Compartilhamento Fácil",
+        "description": "Compartilhe um link exclusivo - não é necessário ter uma conta para os convidados"
+      },
+      "emailVerification": {
+        "title": "Verificação de E-mail",
+        "description": "Acesso seguro com autenticação baseada em e-mail"
+      },
+      "smartNotifications": {
+        "title": "Notificações Inteligentes",
+        "description": "E-mails automáticos quando o horário do evento é finalizado"
+      },
+      "mobileOptimized": {
+        "title": "Otimizado para Celular",
+        "description": "Experiência perfeita em qualquer dispositivo, em qualquer lugar"
+      },
+      "rsvpTracking": {
+        "title": "Acompanhamento de RSVP",
+        "description": "Veja quem vai comparecer depois que o horário for definido"
+      }
+    }
+  }
+}
