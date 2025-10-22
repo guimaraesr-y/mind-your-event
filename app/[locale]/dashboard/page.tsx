@@ -10,8 +10,10 @@ import { CreatedEvents } from "@/components/created-events";
 import { ParticipatingEvents } from "@/components/participating-events";
 import { EventInterface } from "@/modules/events/event";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export default function DashboardPage() {
+  const t = useTranslations("DashboardPage");
   const { user, isLoading } = useAuth();
   const [pendingCreatedEvents, setPendingCreatedEvents] = useState<EventInterface[]>([]);
   const [finalizedCreatedEvents, setFinalizedCreatedEvents] = useState<EventInterface[]>([]);
@@ -68,7 +70,7 @@ export default function DashboardPage() {
               </h1>
             </Link>
             <Button asChild>
-              <Link href="/create">Create Event</Link>
+              <Link href="/create">{t("createEvent")}</Link>
             </Button>
           </div>
         </header>
@@ -76,25 +78,25 @@ export default function DashboardPage() {
           <div className="max-w-6xl mx-auto space-y-8">
             <div className="space-y-2">
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                Dashboard
+                {t("title")}
               </h1>
               <p className="text-muted-foreground">
-                An overview of your created events and participations.
+                {t("description")}
               </p>
             </div>
 
             <div className="space-y-12">
               <div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">Events Pending Action</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
                 <div className="space-y-6">
                   <CreatedEvents 
-                    title="Events You Created"
-                    description="These events are awaiting participant availability for you to finalize."
+                    title={t("pendingEvents.createdEvents.title")}
+                    description={t("pendingEvents.createdEvents.description")}
                     events={pendingCreatedEvents} 
                   />
                   <ParticipatingEvents 
-                    title="Events You're Invited To"
-                    description="Submit your availability for these events."
+                    title={t("pendingEvents.invitedToEvents.title")}
+                    description={t("pendingEvents.invitedToEvents.description")}
                     events={pendingParticipatingEvents}
                     participationConfirmMethod={eventHasAvailability}
                   />
@@ -102,16 +104,16 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">Finalized Events</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
                 <div className="space-y-6">
                   <CreatedEvents 
-                    title="Events You Created"
-                    description="These events are waiting for RSVPs."
+                    title={t("finalizedEvents.createdEvents.title")}
+                    description={t("finalizedEvents.createdEvents.description")}
                     events={finalizedCreatedEvents}
                   />
                   <ParticipatingEvents 
-                    title="Events You're Invited To"
-                    description="These events are waiting for your RSVP confirmation."
+                    title={t("finalizedEvents.invitedToEvents.title")}
+                    description={t("finalizedEvents.invitedToEvents.description")}
                     events={finalizedParticipatingEvents}
                     participationConfirmMethod={participantWillAtted}
                   />

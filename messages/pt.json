@@ -40,5 +40,63 @@
         "description": "Veja quem vai comparecer depois que o horário for definido"
       }
     }
+  },
+  "CreateEventPage": {
+    "title": "Criar um Novo Evento",
+    "description": "Preencha o formulário abaixo para começar."
+  },
+  "DashboardPage": {
+    "createEvent": "Criar Evento",
+    "title": "Painel",
+    "description": "Uma visão geral dos seus eventos criados e participações.",
+    "pendingEvents": {
+      "title": "Eventos com Ação Pendente",
+      "createdEvents": {
+        "title": "Eventos que Você Criou",
+        "description": "Estes eventos estão aguardando a disponibilidade dos participantes para você finalizar."
+      },
+      "invitedToEvents": {
+        "title": "Eventos para os Quais Você Foi Convidado",
+        "description": "Envie sua disponibilidade para estes eventos."
+      }
+    },
+    "finalizedEvents": {
+      "title": "Eventos Finalizados",
+      "createdEvents": {
+        "title": "Eventos que Você Criou",
+        "description": "Estes eventos estão aguardando as confirmações de presença (RSVPs)."
+      },
+      "invitedToEvents": {
+        "title": "Eventos para os Quais Você Foi Convidado",
+        "description": "Estes eventos estão aguardando sua confirmação de presença (RSVP)."
+      }
+    }
+  },
+  "InvitePage": {
+    "finalized": {
+      "banner": "Evento Finalizado",
+      "cardTitle": "Detalhes Finais do Evento",
+      "dateLabel": "Data",
+      "timeLabel": "Hora"
+    }
+  },
+  "EmailVerificationCard": {
+    "title": "Verificação de E-mail Necessária",
+    "description": "Por favor, verifique seu endereço de e-mail para enviar sua disponibilidade.",
+    "content": "Para garantir a segurança e evitar envios não autorizados, precisamos verificar seu endereço de e-mail <strong_email></strong_email>.",
+    
+    "defaultEmail": "seu e-mail",
+    "button": "Verificar E-mail"
+  },
+  "RsvpCard": {
+    "title": "RSVP",
+    "description": "Você vai comparecer a este evento?",
+    "attendButton": "Sim, vou comparecer",
+    "declineButton": "Não, não posso comparecer",
+    "toast": {
+      "attending": "Você vai comparecer a este evento",
+      "declined": "Você recusou este evento",
+      "error": "Falha ao atualizar o RSVP"
+    }
   }
 }

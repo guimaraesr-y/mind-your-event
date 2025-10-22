@@ -40,5 +40,62 @@
         "description": "See who's attending after the time is set"
       }
     }
+  },
+  "CreateEventPage": {
+    "title": "Create a New Event",
+    "description": "Fill out the form below to get started."
+  },
+  "DashboardPage": {
+    "createEvent": "Create Event",
+    "title": "Dashboard",
+    "description": "An overview of your created events and participations.",
+    "pendingEvents": {
+      "title": "Events Pending Action",
+      "createdEvents": {
+        "title": "Events You Created",
+        "description": "These events are awaiting participant availability for you to finalize."
+      },
+      "invitedToEvents": {
+        "title": "Events You're Invited To",
+        "description": "Submit your availability for these events."
+      }
+    },
+    "finalizedEvents": {
+      "title": "Finalized Events",
+      "createdEvents": {
+        "title": "Events You Created",
+        "description": "These events are waiting for RSVPs."
+      },
+      "invitedToEvents": {
+        "title": "Events You're Invited To",
+        "description": "These events are waiting for your RSVP confirmation."
+      }
+    }
+  },
+  "InvitePage": {
+    "finalized": {
+      "banner": "Event Finalized",
+      "cardTitle": "Final Event Details",
+      "dateLabel": "Date",
+      "timeLabel": "Time"
+    }
+  },
+  "EmailVerificationCard": {
+    "title": "Email Verification Required",
+    "description": "Please verify your email address to submit your availability.",
+    "content": "To ensure security and prevent unauthorized submissions, we need to verify your email address <strong_email><strong_email>.",
+    "defaultEmail": "your email",
+    "button": "Verify Email"
+  },
+  "RsvpCard": {
+    "title": "RSVP",
+    "description": "Will you be attending this event?",
+    "attendButton": "Yes, I'll attend",
+    "declineButton": "No, I can't attend",
+    "toast": {
+      "attending": "You're attending this event",
+      "declined": "You've declined this event",
+      "error": "Failed to update RSVP"
+    }
   }
 }
