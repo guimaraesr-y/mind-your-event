@@ -83,7 +83,7 @@
   "EmailVerificationCard": {
     "title": "Email Verification Required",
     "description": "Please verify your email address to submit your availability.",
-    "content": "To ensure security and prevent unauthorized submissions, we need to verify your email address <strong_email><strong_email>.",
+    "content": "To ensure security and prevent unauthorized submissions, we need to verify your email address <strong_email></strong_email>.",
     "defaultEmail": "your email",
     "button": "Verify Email"
   },
@@ -96,6 +96,53 @@
       "attending": "You're attending this event",
       "declined": "You've declined this event",
       "error": "Failed to update RSVP"
+    }
+  },
+  "VerifyEmailForm": {
+    "title": "Email Verification",
+    "description": {
+      "email": "Enter your email to receive a one-time verification code.",
+      "code": "Enter the 6-digit code sent to your email."
+    },
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "sendCodeButton": "Send Verification Code",
+    "sendingCodeButton": "Sending Code...",
+    "codeLabel": "Verification Code",
+    "codePlaceholder": "123456",
+    "codeSentTo": "A 6-digit code was sent to {email}",
+    "verifyCodeButton": "Verify Code",
+    "verifyingButton": "Verifying...",
+    "differentEmailButton": "Use a different email address",
+    "toast": {
+      "sendSuccess": "Code sent! Check your email for the verification code.",
+      "sendError": "Failed to send verification code",
+      "sendErrorFallback": "Failed to send code",
+      "verifySuccess": "Verified! You are now authenticated.",
+      "verifyError": "Invalid verification code",
+      "verifyErrorFallback": "Verification failed"
+    }
+  },
+  "AvailabilityForm": {
+    "eventInfo": "Event Information",
+    "organizedBy": "Organized by",
+    "dateRange": "Date Range",
+    "preferredTime": "Preferred Time Range",
+    "submittedTitle": "Availability Submitted",
+    "submittedDescription": "You can update your availability below if needed.",
+    "submitTitle": "Submit Your Availability",
+    "submitDescription": "Select the dates and times when you're available.",
+    "selectTitle": "Select Your Available Times",
+    "selectDescription": "Click on a date to add your availability for that day.",
+    "addTime": "Add Time",
+    "to": "to",
+    "submitting": "Submitting...",
+    "updateButton": "Update Availability",
+    "submitButton": "Submit Availability",
+    "toast": {
+      "atLeastOne": "Please add at least one time slot",
+      "submitError": "Failed to submit availability",
+      "submitSuccess": "Thank you for submitting your availability!"
     }
   }
 }

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, Clock, User, Loader2, Check, Plus, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
+import { useTranslations, useFormatter } from "next-intl"
 
 interface AvailabilityFormProps {
   event: any
@@ -29,6 +30,8 @@ export function AvailabilityForm({
   existingAvailability,
 }: AvailabilityFormProps) {
   const router = useRouter()
+  const t = useTranslations("AvailabilityForm")
+  const format = useFormatter()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedSlots, setSelectedSlots] = useState<TimeSlot[]>(
     existingAvailability.map((slot) => ({
@@ -51,9 +54,9 @@ export function AvailabilityForm({
   }, [event.start_date, event.end_date])
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       weekday: "long",
-      month: "short",
+      month: "long",
       day: "numeric",
     })
   }
@@ -83,7 +86,7 @@ export function AvailabilityForm({
     e.preventDefault()
 
     if (selectedSlots.length === 0) {
-      toast("Please add at least one time slot", { type: "error" })
+      toast(t("toast.atLeastOne"), { type: "error" })
       return
     }
 
@@ -102,14 +105,14 @@ export function AvailabilityForm({
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to submit availability")
+        throw new Error(error.error || t("toast.submitError"))
       }
 
-      toast("Thank you for submitting your availability!")
+      toast(t("toast.submitSuccess"))
 
       router.refresh()
     } catch (error) {
-      toast(error instanceof Error ? error.message : "Failed to submit availability", {
+      toast(error instanceof Error ? error.message : t("toast.submitError"), {
         type: "error",
       })
     } finally {
@@ -132,20 +135,20 @@ export function AvailabilityForm({
       {/* Event Info */}
       <Card>
         <CardHeader>
-          <CardTitle>Event Information</CardTitle>
+          <CardTitle>{t("eventInfo")}</CardTitle>
         </CardHeader>
         <CardContent className="grid sm:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <User className="h-5 w-5 text-muted-foreground mt-1" />
             <div>
-              <p className="text-sm font-medium text-foreground">Organized by</p>
+              <p className="text-sm font-medium text-foreground">{t("organizedBy")}</p>
               <p className="text-sm text-muted-foreground">{creator?.name}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Calendar className="h-5 w-5 text-muted-foreground mt-1" />
             <div>
-              <p className="text-sm font-medium text-foreground">Date Range</p>
+              <p className="text-sm font-medium text-foreground">{t("dateRange")}</p>
               <p className="text-sm text-muted-foreground">
                 {formatDate(new Date(event.start_date))} - {formatDate(new Date(event.end_date))}
               </p>
@@ -155,7 +158,7 @@ export function AvailabilityForm({
             <div className="flex items-start gap-3 col-span-full">
               <Clock className="h-5 w-5 text-muted-foreground mt-1" />
               <div>
-                <p className="text-sm font-medium text-foreground">Preferred Time Range</p>
+                <p className="text-sm font-medium text-foreground">{t("preferredTime")}</p>
                 <p className="text-sm text-muted-foreground">
                   {event.start_time} - {event.end_time}
                 </p>
@@ -171,16 +174,16 @@ export function AvailabilityForm({
           <CardHeader className="text-center">
             <CardTitle className="flex items-center gap-2 justify-center">
               <Check className="h-5 w-5 text-accent" />
-              Availability Submitted
+              {t("submittedTitle")}
             </CardTitle>
-            <CardDescription>You can update your availability below if needed.</CardDescription>
+            <CardDescription>{t("submittedDescription")}</CardDescription>
           </CardHeader>
         </Card>
       ) : (
         <Card className="bg-primary/5 border-primary/20">
           <CardHeader className="text-center">
-            <CardTitle>Submit Your Availability</CardTitle>
-            <CardDescription>Select the dates and times when you're available.</CardDescription>
+            <CardTitle>{t("submitTitle")}</CardTitle>
+            <CardDescription>{t("submitDescription")}</CardDescription>
           </CardHeader>
         </Card>
       )}
@@ -189,8 +192,8 @@ export function AvailabilityForm({
         {/* Date Selection */}
         <Card>
           <CardHeader>
-            <CardTitle>Select Your Available Times</CardTitle>
-            <CardDescription>Click on a date to add your availability for that day.</CardDescription>
+            <CardTitle>{t("selectTitle")}</CardTitle>
+            <CardDescription>{t("selectDescription")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {dateRange.map((date) => {
@@ -206,7 +209,7 @@ export function AvailabilityForm({
                     </div>
                     <Button type="button" variant="outline" size="sm" onClick={() => addTimeSlot(dateISO)}>
                       <Plus className="h-4 w-4 mr-2" />
-                      Add Time
+                      {t("addTime")}
                     </Button>
                   </div>
 
@@ -221,9 +224,10 @@ export function AvailabilityForm({
                             className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full"
                             required
                           />
-                          <span className="text-muted-foreground">to</span>
+                          <span className="text-muted-foreground">{t("to")}</span>
                           <input
                             type="time"
+                            lang="pt"
                             value={slot.endTime}
                             onChange={(e) => updateTimeSlot(slot.index, "endTime", e.target.value)}
                             className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full"
@@ -252,12 +256,12 @@ export function AvailabilityForm({
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Submitting...
+              {t("submitting")}
             </>
           ) : participant.has_submitted ? (
-            "Update Availability"
+            t("updateButton")
           ) : (
-            "Submit Availability"
+            t("submitButton")
           )}
         </Button>
       </form>

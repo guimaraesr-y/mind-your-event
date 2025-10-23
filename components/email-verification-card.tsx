@@ -40,7 +40,7 @@ export function EmailVerificationRequiredCard({
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
             {t.rich("content", {
-              strong_email: (chunks) => <strong>({requiredEmail || t("defaultEmail")})</strong>,
+              strong_email: () => <strong>({requiredEmail || t("defaultEmail")})</strong>,
             })}
             {/* {t("content", { email: requiredEmail || t("defaultEmail") })} */}
           </p>

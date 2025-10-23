@@ -84,7 +84,6 @@
     "title": "Verificação de E-mail Necessária",
     "description": "Por favor, verifique seu endereço de e-mail para enviar sua disponibilidade.",
     "content": "Para garantir a segurança e evitar envios não autorizados, precisamos verificar seu endereço de e-mail <strong_email></strong_email>.",
-    
     "defaultEmail": "seu e-mail",
     "button": "Verificar E-mail"
   },
@@ -97,6 +96,53 @@
       "attending": "Você vai comparecer a este evento",
       "declined": "Você recusou este evento",
       "error": "Falha ao atualizar o RSVP"
+    }
+  },
+  "VerifyEmailForm": {
+    "title": "Verificação de E-mail",
+    "description": {
+      "email": "Digite seu e-mail para receber um código de verificação de uso único.",
+      "code": "Digite o código de 6 dígitos enviado para o seu e-mail."
+    },
+    "emailLabel": "Endereço de E-mail",
+    "emailPlaceholder": "voce@exemplo.com",
+    "sendCodeButton": "Enviar Código de Verificação",
+    "sendingCodeButton": "Enviando Código...",
+    "codeLabel": "Código de Verificação",
+    "codePlaceholder": "123456",
+    "codeSentTo": "Um código de 6 dígitos foi enviado para {email}",
+    "verifyCodeButton": "Verificar Código",
+    "verifyingButton": "Verificando...",
+    "differentEmailButton": "Usar um endereço de e-mail diferente",
+    "toast": {
+      "sendSuccess": "Código enviado! Verifique seu e-mail para o código de verificação.",
+      "sendError": "Falha ao enviar o código de verificação",
+      "sendErrorFallback": "Falha ao enviar o código",
+      "verifySuccess": "Verificado! Você agora está autenticado.",
+      "verifyError": "Código de verificação inválido",
+      "verifyErrorFallback": "A verificação falhou"
+    }
+  },
+  "AvailabilityForm": {
+    "eventInfo": "Informações do Evento",
+    "organizedBy": "Organizado por",
+    "dateRange": "Intervalo de Datas",
+    "preferredTime": "Intervalo de Horário Preferencial",
+    "submittedTitle": "Disponibilidade Enviada",
+    "submittedDescription": "Você pode atualizar sua disponibilidade abaixo, se necessário.",
+    "submitTitle": "Envie Sua Disponibilidade",
+    "submitDescription": "Selecione as datas e horários em que você está disponível.",
+    "selectTitle": "Selecione Seus Horários Disponíveis",
+    "selectDescription": "Clique em uma data para adicionar sua disponibilidade para aquele dia.",
+    "addTime": "Adicionar Horário",
+    "to": "até",
+    "submitting": "Enviando...",
+    "updateButton": "Atualizar Disponibilidade",
+    "submitButton": "Enviar Disponibilidade",
+    "toast": {
+      "atLeastOne": "Por favor, adicione pelo menos um horário",
+      "submitError": "Falha ao enviar a disponibilidade",
+      "submitSuccess": "Obrigado por enviar sua disponibilidade!"
     }
   }
 }
