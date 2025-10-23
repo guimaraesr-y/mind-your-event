@@ -48,8 +48,6 @@ export default class UserRepository {
             .eq("event_participants.invite_token", inviteToken)
             .single();
         
-        console.log('get user by invite token', data)
-        
         return data;
     }
 

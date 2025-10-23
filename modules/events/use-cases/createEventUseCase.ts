@@ -34,7 +34,6 @@ export default class CreateEventUseCase {
         eventData: Partial<EventInterface>
     ): Promise<EventInterface> {
         const supabase = await this.getSupabase();
-        console.log(eventData)
         const { data: event, error } = await supabase
             .from("events")
             .insert(eventData)
