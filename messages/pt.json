@@ -144,5 +144,25 @@
       "submitError": "Falha ao enviar a disponibilidade",
       "submitSuccess": "Obrigado por enviar sua disponibilidade!"
     }
+  },
+  "EventDashboard": {
+    "viewResultsButton": "Ver Resultados e Finalizar Evento",
+    "viewRsvpsButton": "Ver RSVPs",
+    "detailsTitle": "Detalhes do Evento",
+    "organizerLabel": "Organizador",
+    "dateRangeLabel": "Intervalo de Datas",
+    "preferredTimeLabel": "Intervalo de Horário Preferencial",
+    "participantsTitle": "Participantes",
+    "participantsDescription": "Compartilhe estes links exclusivos com cada participante para coletar suas disponibilidades.",
+    "responded": "{submittedCount}/{totalCount} responderam",
+    "submitted": "Enviado",
+    "copyLink": "Copiar Link",
+    "nextStepsTitle": "Próximos Passos",
+    "step1": "Copie e compartilhe os links de convite exclusivos com cada participante.",
+    "step2": "Os participantes usarão seus links para enviar seus horários disponíveis.",
+    "step3": "Assim que as respostas chegarem, clique no botão \"Ver Resultados\" para ver as sobreposições de disponibilidade e encontrar o melhor horário para todos.",
+    "toast": {
+      "copySuccess": "Link de convite copiado para a área de transferência!"
+    }
   }
 }

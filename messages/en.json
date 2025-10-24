@@ -144,5 +144,25 @@
       "submitError": "Failed to submit availability",
       "submitSuccess": "Thank you for submitting your availability!"
     }
+  },
+  "EventDashboard": {
+    "viewResultsButton": "View Results & Finalize Event",
+    "viewRsvpsButton": "View RSVPs",
+    "detailsTitle": "Event Details",
+    "organizerLabel": "Organizer",
+    "dateRangeLabel": "Date Range",
+    "preferredTimeLabel": "Preferred Time Range",
+    "participantsTitle": "Participants",
+    "participantsDescription": "Share these unique links with each participant to collect their availability.",
+    "responded": "{submittedCount}/{totalCount} responded",
+    "submitted": "Submitted",
+    "copyLink": "Copy Link",
+    "nextStepsTitle": "Next Steps",
+    "step1": "Copy and share the unique invite links with each participant.",
+    "step2": "Participants will use their links to submit their available times.",
+    "step3": "Once responses are in, click the \"View Results\" button to see availability overlaps and find the best time for everyone.",
+    "toast": {
+      "copySuccess": "Invite link copied to clipboard!"
+    }
   }
 }
