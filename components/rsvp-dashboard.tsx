@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Check, X, Clock, User, ArrowLeft, Calendar } from "lucide-react"
 import Link from "next/link"
 import { useMemo } from "react"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 
 interface RsvpDashboardProps {
   event: any
@@ -14,6 +14,7 @@ interface RsvpDashboardProps {
 
 export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
   const t = useTranslations("RsvpDashboard")
+  const format = useFormatter()
   const totalParticipants = participants.length
 
   const attending = useMemo(() => participants.filter(p => p.will_attend === true), [participants])
@@ -22,7 +23,7 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       weekday: "long",
       month: "long",
       day: "numeric",
