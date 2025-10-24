@@ -216,5 +216,22 @@
     "timeSlots": "{count, plural, one {# time slot} other {# time slots}}",
     "days": "{count, plural, one {# day} other {# days}}",
     "pending": "Pending"
+  },
+  "ResultsDashboard": {
+    "backLink": "Back to Event Dashboard",
+    "title": "{eventTitle} - Results",
+    "description": "Availability analysis and optimal time slots.",
+    "stats": {
+      "participants": "Total Participants",
+      "responses": "Responses",
+      "responseRate": "{rate}% response rate",
+      "slots": "Time Slots Submitted"
+    },
+    "bestSlots": {
+      "title": "Best Time Slots",
+      "description": "Times when the most participants are available, sorted by popularity."
+    },
+    "available": "{percentage}% available",
+    "waiting": "Waiting for {count} more {count, plural, one {participant} other {participants}} to submit availability."
   }
 }

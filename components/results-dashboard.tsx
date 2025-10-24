@@ -8,6 +8,7 @@ import { useMemo } from "react"
 import { AvailabilityHeatmap } from "@/components/availability-heatmap"
 import { ParticipantsList } from "@/components/participants-list"
 import { FinalizeEventDialog } from "@/components/finalize-event-dialog"
+import { useTranslations } from "next-intl"
 
 interface ResultsDashboardProps {
   event: any
@@ -25,6 +26,7 @@ interface TimeSlotOverlap {
 }
 
 export function ResultsDashboard({ event, participants, availabilitySlots }: ResultsDashboardProps) {
+  const t = useTranslations("ResultsDashboard")
   const totalParticipants = participants.length
   const submittedCount = participants.filter((p) => p.has_submitted).length
 
@@ -86,12 +88,12 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
         <Button variant="ghost" size="sm" asChild className="-ml-2">
           <Link href={`/events/${event.id}`}>
             <ArrowLeft className="h-4 w-4 mr-1" />
-            Back to Event Dashboard
+            {t("backLink")}
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title} - Results</h1>
-          <p className="text-muted-foreground">Availability analysis and optimal time slots.</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{t("title", { eventTitle: event.title })}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
       </div>
 
@@ -108,7 +110,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Participants</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t("stats.participants")}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -118,7 +120,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Responses</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t("stats.responses")}</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -126,14 +128,14 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
               {submittedCount} / {totalParticipants}
             </div>
             <p className="text-xs text-muted-foreground">
-              {totalParticipants > 0 ? Math.round((submittedCount / totalParticipants) * 100) : 0}% response rate
+              {t("stats.responseRate", { rate: totalParticipants > 0 ? Math.round((submittedCount / totalParticipants) * 100) : 0 })}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Time Slots Submitted</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t("stats.slots")}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -148,9 +150,9 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-primary" />
-              Best Time Slots
+              {t("bestSlots.title")}
             </CardTitle>
-            <CardDescription>Times when the most participants are available, sorted by popularity.</CardDescription>
+            <CardDescription>{t("bestSlots.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -182,7 +184,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
                     <p className="text-lg font-bold text-foreground">
                       {slot.count}/{totalParticipants}
                     </p>
-                    <p className="text-xs text-muted-foreground">{Math.round(slot.percentage)}% available</p>
+                    <p className="text-xs text-muted-foreground">{t("available", { percentage: Math.round(slot.percentage) })}</p>
                   </div>
                 </div>
               ))}
@@ -201,8 +203,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
         <Card className="bg-muted/50">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground text-center">
-              Waiting for {totalParticipants - submittedCount} more{" "}
-              {totalParticipants - submittedCount === 1 ? "participant" : "participants"} to submit availability.
+              {t("waiting", { count: totalParticipants - submittedCount })}
             </p>
           </CardContent>
         </Card>

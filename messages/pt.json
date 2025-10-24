@@ -216,5 +216,22 @@
     "timeSlots": "{count, plural, one {# horário} other {# horários}}",
     "days": "{count, plural, one {# dia} other {# dias}}",
     "pending": "Pendente"
+  },
+  "ResultsDashboard": {
+    "backLink": "Voltar para o Painel do Evento",
+    "title": "{eventTitle} - Resultados",
+    "description": "Análise de disponibilidade e horários ideais.",
+    "stats": {
+      "participants": "Total de Participantes",
+      "responses": "Respostas",
+      "responseRate": "taxa de resposta de {rate}%",
+      "slots": "Horários Enviados"
+    },
+    "bestSlots": {
+      "title": "Melhores Horários",
+      "description": "Horários em que a maioria dos participantes está disponível, ordenados por popularidade."
+    },
+    "available": "{percentage}% disponível",
+    "waiting": "Aguardando {count} {count, plural, one {participante} other {participantes}} enviarem a disponibilidade."
   }
 }
