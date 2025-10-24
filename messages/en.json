@@ -164,5 +164,50 @@
     "toast": {
       "copySuccess": "Invite link copied to clipboard!"
     }
+  },
+  "CreateEventForm": {
+    "sections": {
+      "details": {
+        "title": "1. Event Details",
+        "description": "Start with the basic information about your event."
+      },
+      "creator": {
+        "title": "2. Your Information",
+        "description": "This will identify you as the event organizer."
+      },
+      "dateTime": {
+        "title": "3. Date & Time Range",
+        "description": "When could this event potentially happen?"
+      },
+      "participants": {
+        "title": "4. Invite Participants",
+        "description": "Enter email addresses separated by commas."
+      }
+    },
+    "labels": {
+      "title": "Event Title *",
+      "description": "Description (Optional)",
+      "creatorName": "Your Name *",
+      "creatorEmail": "Your Email *",
+      "startDate": "Start Date *",
+      "endDate": "End Date *",
+      "startTime": "Preferred Start Time (Optional)",
+      "endTime": "Preferred End Time (Optional)",
+      "participantEmails": "Participant Emails *"
+    },
+    "placeholders": {
+      "title": "e.g., Team Meeting, Birthday Party",
+      "description": "What's this event about?",
+      "creatorName": "John Doe",
+      "creatorEmail": "john@example.com",
+      "participantEmails": "alice@example.com, bob@example.com"
+    },
+    "participantInfo": "Each participant will receive a unique link to submit their availability.",
+    "creatingButton": "Creating Event...",
+    "createButton": "Create Event & Get Shareable Links",
+    "toast": {
+      "createSuccess": "Event created successfully!",
+      "createError": "Failed to create event"
+    }
   }
 }

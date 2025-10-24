@@ -164,5 +164,50 @@
     "toast": {
       "copySuccess": "Link de convite copiado para a área de transferência!"
     }
+  },
+  "CreateEventForm": {
+    "sections": {
+      "details": {
+        "title": "1. Detalhes do Evento",
+        "description": "Comece com as informações básicas sobre o seu evento."
+      },
+      "creator": {
+        "title": "2. Suas Informações",
+        "description": "Isso identificará você como o organizador do evento."
+      },
+      "dateTime": {
+        "title": "3. Intervalo de Data e Hora",
+        "description": "Quando este evento poderia acontecer?"
+      },
+      "participants": {
+        "title": "4. Convidar Participantes",
+        "description": "Digite os endereços de e-mail separados por vírgulas."
+      }
+    },
+    "labels": {
+      "title": "Título do Evento *",
+      "description": "Descrição (Opcional)",
+      "creatorName": "Seu Nome *",
+      "creatorEmail": "Seu E-mail *",
+      "startDate": "Data de Início *",
+      "endDate": "Data de Término *",
+      "startTime": "Horário de Início Preferencial (Opcional)",
+      "endTime": "Horário de Término Preferencial (Opcional)",
+      "participantEmails": "E-mails dos Participantes *"
+    },
+    "placeholders": {
+      "title": "ex: Reunião de Equipe, Festa de Aniversário",
+      "description": "Sobre o que é este evento?",
+      "creatorName": "João Silva",
+      "creatorEmail": "joao@exemplo.com",
+      "participantEmails": "alice@exemplo.com, bob@exemplo.com"
+    },
+    "participantInfo": "Cada participante receberá um link exclusivo para enviar sua disponibilidade.",
+    "creatingButton": "Criando Evento...",
+    "createButton": "Criar Evento e Obter Links Compartilháveis",
+    "toast": {
+      "createSuccess": "Evento criado com sucesso!",
+      "createError": "Falha ao criar o evento"
+    }
   }
 }
