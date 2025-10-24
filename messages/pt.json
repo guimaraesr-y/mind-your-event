@@ -233,5 +233,16 @@
     },
     "available": "{percentage}% disponível",
     "waiting": "Aguardando {count} {count, plural, one {participante} other {participantes}} enviarem a disponibilidade."
+  },
+  "RsvpDashboard": {
+    "backLink": "Voltar para o Painel do Evento",
+    "title": "{eventTitle} - RSVPs",
+    "description": "Veja quem vai comparecer ao seu evento.",
+    "finalDetails": "Detalhes Finais do Evento",
+    "date": "Data",
+    "time": "Hora",
+    "attending": "Comparecerão",
+    "notAttending": "Não Comparecerão",
+    "pending": "Pendente"
   }
 }

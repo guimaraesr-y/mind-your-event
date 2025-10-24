@@ -233,5 +233,16 @@
     },
     "available": "{percentage}% available",
     "waiting": "Waiting for {count} more {count, plural, one {participant} other {participants}} to submit availability."
+  },
+  "RsvpDashboard": {
+    "backLink": "Back to Event Dashboard",
+    "title": "{eventTitle} - RSVPs",
+    "description": "See who is attending your event.",
+    "finalDetails": "Final Event Details",
+    "date": "Date",
+    "time": "Time",
+    "attending": "Attending",
+    "notAttending": "Not Attending",
+    "pending": "Pending"
   }
 }
