@@ -1,8 +1,11 @@
 import { CreateEventForm } from "@/components/create-event-form"
 import { Calendar } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 
 export default function CreateEventPage() {
+  const t = useTranslations("CreateEventPage");
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
@@ -19,9 +22,9 @@ export default function CreateEventPage() {
       <main className="flex-1 px-4 py-8 md:py-12">
         <div className="max-w-2xl mx-auto">
           <div className="space-y-2 mb-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Create a New Event</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">{t("title")}</h2>
             <p className="text-muted-foreground">
-              Fill out the form below to get started.
+              {t("description")}
             </p>
           </div>
 

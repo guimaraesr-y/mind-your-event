@@ -1,0 +1,259 @@
+{
+  "HomePage": {
+    "goToDashboard": "Ir para o Painel",
+    "tagline": "Encontre o momento perfeito, juntos",
+    "title": "Agende eventos sem o vai e vem",
+    "description": "Crie um evento, compartilhe um link e deixe que todos escolham seus horários disponíveis. Mostraremos quando a maioria das pessoas pode comparecer.",
+    "createEvent": "Criar um Evento",
+    "easySetupTitle": "Configuração Fácil",
+    "easySetupDescription": "Crie um evento em segundos com um intervalo de datas e preferências de horário opcionais",
+    "collaborativeTitle": "Colaborativo",
+    "collaborativeDescription": "Compartilhe um link exclusivo com os participantes para coletar a disponibilidade deles",
+    "smartResultsTitle": "Resultados Inteligentes",
+    "smartResultsDescription": "Visualize a disponibilidade sobreposta e encontre o melhor horário para todos",
+    "everythingYouNeedTitle": "Tudo o que Você Precisa",
+    "everythingYouNeedDescription": "Recursos poderosos projetados para tornar o agendamento de eventos simples e agradável",
+    "footer": "MindYourEvent - Simplificando o agendamento",
+    "features": {
+      "visualAvailability": {
+        "title": "Disponibilidade Visual",
+        "description": "Gráficos e mapas de calor bonitos mostram quando a maioria das pessoas está livre"
+      },
+      "easySharing": {
+        "title": "Compartilhamento Fácil",
+        "description": "Compartilhe um link exclusivo - não é necessário ter uma conta para os convidados"
+      },
+      "emailVerification": {
+        "title": "Verificação de E-mail",
+        "description": "Acesso seguro com autenticação baseada em e-mail"
+      },
+      "smartNotifications": {
+        "title": "Notificações Inteligentes",
+        "description": "E-mails automáticos quando o horário do evento é finalizado"
+      },
+      "mobileOptimized": {
+        "title": "Otimizado para Celular",
+        "description": "Experiência perfeita em qualquer dispositivo, em qualquer lugar"
+      },
+      "rsvpTracking": {
+        "title": "Acompanhamento de RSVP",
+        "description": "Veja quem vai comparecer depois que o horário for definido"
+      }
+    }
+  },
+  "CreateEventPage": {
+    "title": "Criar um Novo Evento",
+    "description": "Preencha o formulário abaixo para começar."
+  },
+  "DashboardPage": {
+    "createEvent": "Criar Evento",
+    "title": "Painel",
+    "description": "Uma visão geral dos seus eventos criados e participações.",
+    "pendingEvents": {
+      "title": "Eventos com Ação Pendente",
+      "createdEvents": {
+        "title": "Eventos que Você Criou",
+        "description": "Estes eventos estão aguardando a disponibilidade dos participantes para você finalizar."
+      },
+      "invitedToEvents": {
+        "title": "Eventos para os Quais Você Foi Convidado",
+        "description": "Envie sua disponibilidade para estes eventos."
+      }
+    },
+    "finalizedEvents": {
+      "title": "Eventos Finalizados",
+      "createdEvents": {
+        "title": "Eventos que Você Criou",
+        "description": "Estes eventos estão aguardando as confirmações de presença (RSVPs)."
+      },
+      "invitedToEvents": {
+        "title": "Eventos para os Quais Você Foi Convidado",
+        "description": "Estes eventos estão aguardando sua confirmação de presença (RSVP)."
+      }
+    }
+  },
+  "InvitePage": {
+    "finalized": {
+      "banner": "Evento Finalizado",
+      "cardTitle": "Detalhes Finais do Evento",
+      "dateLabel": "Data",
+      "timeLabel": "Hora"
+    }
+  },
+  "EmailVerificationCard": {
+    "title": "Verificação de E-mail Necessária",
+    "description": "Por favor, verifique seu endereço de e-mail para enviar sua disponibilidade.",
+    "content": "Para garantir a segurança e evitar envios não autorizados, precisamos verificar seu endereço de e-mail <strong_email></strong_email>.",
+    "defaultEmail": "seu e-mail",
+    "button": "Verificar E-mail"
+  },
+  "RsvpCard": {
+    "title": "RSVP",
+    "description": "Você vai comparecer a este evento?",
+    "attendButton": "Sim, vou comparecer",
+    "declineButton": "Não, não posso comparecer",
+    "toast": {
+      "attending": "Você vai comparecer a este evento",
+      "declined": "Você recusou este evento",
+      "error": "Falha ao atualizar o RSVP"
+    }
+  },
+  "VerifyEmailForm": {
+    "title": "Verificação de E-mail",
+    "description": {
+      "email": "Digite seu e-mail para receber um código de verificação de uso único.",
+      "code": "Digite o código de 6 dígitos enviado para o seu e-mail."
+    },
+    "emailLabel": "Endereço de E-mail",
+    "emailPlaceholder": "voce@exemplo.com",
+    "sendCodeButton": "Enviar Código de Verificação",
+    "sendingCodeButton": "Enviando Código...",
+    "codeLabel": "Código de Verificação",
+    "codePlaceholder": "123456",
+    "codeSentTo": "Um código de 6 dígitos foi enviado para {email}",
+    "verifyCodeButton": "Verificar Código",
+    "verifyingButton": "Verificando...",
+    "differentEmailButton": "Usar um endereço de e-mail diferente",
+    "toast": {
+      "sendSuccess": "Código enviado! Verifique seu e-mail para o código de verificação.",
+      "sendError": "Falha ao enviar o código de verificação",
+      "sendErrorFallback": "Falha ao enviar o código",
+      "verifySuccess": "Verificado! Você agora está autenticado.",
+      "verifyError": "Código de verificação inválido",
+      "verifyErrorFallback": "A verificação falhou"
+    }
+  },
+  "AvailabilityForm": {
+    "eventInfo": "Informações do Evento",
+    "organizedBy": "Organizado por",
+    "dateRange": "Intervalo de Datas",
+    "preferredTime": "Intervalo de Horário Preferencial",
+    "submittedTitle": "Disponibilidade Enviada",
+    "submittedDescription": "Você pode atualizar sua disponibilidade abaixo, se necessário.",
+    "submitTitle": "Envie Sua Disponibilidade",
+    "submitDescription": "Selecione as datas e horários em que você está disponível.",
+    "selectTitle": "Selecione Seus Horários Disponíveis",
+    "selectDescription": "Clique em uma data para adicionar sua disponibilidade para aquele dia.",
+    "addTime": "Adicionar Horário",
+    "to": "até",
+    "submitting": "Enviando...",
+    "updateButton": "Atualizar Disponibilidade",
+    "submitButton": "Enviar Disponibilidade",
+    "toast": {
+      "atLeastOne": "Por favor, adicione pelo menos um horário",
+      "submitError": "Falha ao enviar a disponibilidade",
+      "submitSuccess": "Obrigado por enviar sua disponibilidade!"
+    }
+  },
+  "EventDashboard": {
+    "viewResultsButton": "Ver Resultados e Finalizar Evento",
+    "viewRsvpsButton": "Ver RSVPs",
+    "detailsTitle": "Detalhes do Evento",
+    "organizerLabel": "Organizador",
+    "dateRangeLabel": "Intervalo de Datas",
+    "preferredTimeLabel": "Intervalo de Horário Preferencial",
+    "participantsTitle": "Participantes",
+    "participantsDescription": "Compartilhe estes links exclusivos com cada participante para coletar suas disponibilidades.",
+    "responded": "{submittedCount}/{totalCount} responderam",
+    "submitted": "Enviado",
+    "copyLink": "Copiar Link",
+    "nextStepsTitle": "Próximos Passos",
+    "step1": "Copie e compartilhe os links de convite exclusivos com cada participante.",
+    "step2": "Os participantes usarão seus links para enviar seus horários disponíveis.",
+    "step3": "Assim que as respostas chegarem, clique no botão \"Ver Resultados\" para ver as sobreposições de disponibilidade e encontrar o melhor horário para todos.",
+    "toast": {
+      "copySuccess": "Link de convite copiado para a área de transferência!"
+    }
+  },
+  "CreateEventForm": {
+    "sections": {
+      "details": {
+        "title": "1. Detalhes do Evento",
+        "description": "Comece com as informações básicas sobre o seu evento."
+      },
+      "creator": {
+        "title": "2. Suas Informações",
+        "description": "Isso identificará você como o organizador do evento."
+      },
+      "dateTime": {
+        "title": "3. Intervalo de Data e Hora",
+        "description": "Quando este evento poderia acontecer?"
+      },
+      "participants": {
+        "title": "4. Convidar Participantes",
+        "description": "Digite os endereços de e-mail separados por vírgulas."
+      }
+    },
+    "labels": {
+      "title": "Título do Evento *",
+      "description": "Descrição (Opcional)",
+      "creatorName": "Seu Nome *",
+      "creatorEmail": "Seu E-mail *",
+      "startDate": "Data de Início *",
+      "endDate": "Data de Término *",
+      "startTime": "Horário de Início Preferencial (Opcional)",
+      "endTime": "Horário de Término Preferencial (Opcional)",
+      "participantEmails": "E-mails dos Participantes *"
+    },
+    "placeholders": {
+      "title": "ex: Reunião de Equipe, Festa de Aniversário",
+      "description": "Sobre o que é este evento?",
+      "creatorName": "João Silva",
+      "creatorEmail": "joao@exemplo.com",
+      "participantEmails": "alice@exemplo.com, bob@exemplo.com"
+    },
+    "participantInfo": "Cada participante receberá um link exclusivo para enviar sua disponibilidade.",
+    "creatingButton": "Criando Evento...",
+    "createButton": "Criar Evento e Obter Links Compartilháveis",
+    "toast": {
+      "createSuccess": "Evento criado com sucesso!",
+      "createError": "Falha ao criar o evento"
+    }
+  },
+  "ParticipantsList": {
+    "title": "Detalhes dos Participantes",
+    "description": "Envios de disponibilidade individuais",
+    "timeSlots": "{count, plural, one {# horário} other {# horários}}",
+    "days": "{count, plural, one {# dia} other {# dias}}",
+    "pending": "Pendente"
+  },
+  "ResultsDashboard": {
+    "backLink": "Voltar para o Painel do Evento",
+    "title": "{eventTitle} - Resultados",
+    "description": "Análise de disponibilidade e horários ideais.",
+    "stats": {
+      "participants": "Total de Participantes",
+      "responses": "Respostas",
+      "responseRate": "taxa de resposta de {rate}%",
+      "slots": "Horários Enviados"
+    },
+    "bestSlots": {
+      "title": "Melhores Horários",
+      "description": "Horários em que a maioria dos participantes está disponível, ordenados por popularidade."
+    },
+    "available": "{percentage}% disponível",
+    "waiting": "Aguardando {count} {count, plural, one {participante} other {participantes}} enviarem a disponibilidade."
+  },
+  "RsvpDashboard": {
+    "backLink": "Voltar para o Painel do Evento",
+    "title": "{eventTitle} - RSVPs",
+    "description": "Veja quem vai comparecer ao seu evento.",
+    "finalDetails": "Detalhes Finais do Evento",
+    "date": "Data",
+    "time": "Hora",
+    "attending": "Comparecerão",
+    "notAttending": "Não Comparecerão",
+    "pending": "Pendente"
+  },
+  "AvailabilityHeatmap": {
+    "title": "Disponibilidade por Data",
+    "description": "Representação visual da disponibilidade dos participantes nas datas",
+    "legend": "Legenda",
+    "legendItems": {
+      "high": "75-100% disponível",
+      "medium": "50-74% disponível",
+      "low": "25-49% disponível",
+      "veryLow": "1-24% disponível"
+    }
+  }
+}

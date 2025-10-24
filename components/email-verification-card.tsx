@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Shield } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl";
 
 interface EmailVerificationRequiredCardProps {
   requiredEmail?: string
@@ -14,6 +15,7 @@ interface EmailVerificationRequiredCardProps {
 export function EmailVerificationRequiredCard({
   requiredEmail,
 }: EmailVerificationRequiredCardProps) {
+  const t = useTranslations("EmailVerificationCard");
   const router = useRouter()
   const pathname = usePathname()
 
@@ -31,17 +33,19 @@ export function EmailVerificationRequiredCard({
         <CardHeader>
           <CardTitle className="flex items-center gap-2 justify-center">
             <Shield className="h-6 w-6" />
-            Email Verification Required
+            {t("title")}
           </CardTitle>
-          <CardDescription>Please verify your email address to submit your availability.</CardDescription>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
-            To ensure security and prevent unauthorized submissions, we need to verify your email address{" "}
-            <strong>({requiredEmail || "your email"})</strong>.
+            {t.rich("content", {
+              strong_email: () => <strong>({requiredEmail || t("defaultEmail")})</strong>,
+            })}
+            {/* {t("content", { email: requiredEmail || t("defaultEmail") })} */}
           </p>
           <Button onClick={handleVerifyEmail} className="w-full">
-            Verify Email
+            {t("button")}
           </Button>
         </CardContent>
       </Card>

@@ -6,6 +6,7 @@ import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send } from "luci
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface EventDashboardProps {
   event: any
@@ -13,13 +14,14 @@ interface EventDashboardProps {
 }
 
 export function EventDashboard({ event, participants }: EventDashboardProps) {
+  const t = useTranslations("EventDashboard")
   const [copiedTokens, setCopiedTokens] = useState<Set<string>>(new Set())
 
   const copyInviteLink = (token: string) => {
     const link = `${window.location.origin}/invite/${token}`
     navigator.clipboard.writeText(link)
     setCopiedTokens(new Set(copiedTokens).add(token))
-    toast("Invite link copied to clipboard!")
+    toast(t("toast.copySuccess"))
     setTimeout(() => {
       setCopiedTokens((prev) => {
         const next = new Set(prev)
@@ -52,7 +54,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
         <Button asChild size="lg" className="w-full">
           <Link href={`/events/${event.id}/results`}>
             <BarChart3 className="mr-2 h-5 w-5" />
-            View Results & Finalize Event
+            {t("viewResultsButton")}
           </Link>
         </Button>
       )}
@@ -61,7 +63,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
         <Button asChild size="lg" className="w-full">
           <Link href={`/events/${event.id}/rsvps`}>
             <Users className="mr-2 h-5 w-5" />
-            View RSVPs
+            {t("viewRsvpsButton")}
           </Link>
         </Button>
       )}
@@ -69,13 +71,13 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
       {/* Event Details */}
       <Card>
         <CardHeader>
-          <CardTitle>Event Details</CardTitle>
+          <CardTitle>{t("detailsTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="grid sm:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <User className="h-5 w-5 text-muted-foreground mt-1" />
             <div>
-              <p className="text-sm font-medium text-foreground">Organizer</p>
+              <p className="text-sm font-medium text-foreground">{t("organizerLabel")}</p>
               <p className="text-sm text-muted-foreground">
                 {event.users.name} ({event.users.email})
               </p>
@@ -85,7 +87,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
           <div className="flex items-start gap-3">
             <Calendar className="h-5 w-5 text-muted-foreground mt-1" />
             <div>
-              <p className="text-sm font-medium text-foreground">Date Range</p>
+              <p className="text-sm font-medium text-foreground">{t("dateRangeLabel")}</p>
               <p className="text-sm text-muted-foreground">
                 {formatDate(event.start_date)} - {formatDate(event.end_date)}
               </p>
@@ -96,7 +98,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
             <div className="flex items-start gap-3 col-span-full">
               <Clock className="h-5 w-5 text-muted-foreground mt-1" />
               <div>
-                <p className="text-sm font-medium text-foreground">Preferred Time Range</p>
+                <p className="text-sm font-medium text-foreground">{t("preferredTimeLabel")}</p>
                 <p className="text-sm text-muted-foreground">
                   {event.start_time} - {event.end_time}
                 </p>
@@ -111,9 +113,9 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Participants ({submittedCount}/{participants.length} responded)
+            {t("participantsTitle")} ({t("responded", { submittedCount: submittedCount, totalCount: participants.length })})
           </CardTitle>
-          <CardDescription>Share these unique links with each participant to collect their availability.</CardDescription>
+          <CardDescription>{t("participantsDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -132,7 +134,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
                   </div>
                   {participant.has_submitted && (
                     <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full flex-shrink-0">
-                      Submitted
+                      {t("submitted")}
                     </span>
                   )}
                 </div>
@@ -147,7 +149,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
-                  <span className="ml-2 hidden sm:inline">Copy Link</span>
+                  <span className="ml-2 hidden sm:inline">{t("copyLink")}</span>
                 </Button>
               </div>
             ))}
@@ -160,21 +162,21 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Send className="h-5 w-5" />
-            Next Steps
+            {t("nextStepsTitle")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-foreground">
           <div className="flex items-start gap-3">
             <div className="h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</div>
-            <p>Copy and share the unique invite links with each participant.</p>
+            <p>{t("step1")}</p>
           </div>
           <div className="flex items-start gap-3">
             <div className="h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</div>
-            <p>Participants will use their links to submit their available times.</p>
+            <p>{t("step2")}</p>
           </div>
           <div className="flex items-start gap-3">
             <div className="h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</div>
-            <p>Once responses are in, click the "View Results" button to see availability overlaps and find the best time for everyone.</p>
+            <p>{t("step3")}</p>
           </div>
         </CardContent>
       </Card>

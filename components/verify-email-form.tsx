@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,6 +20,7 @@ export function VerifyEmailForm({
   initialEmail="",
   callback
 }: VerifyEmailFormProps) {
+  const t = useTranslations("VerifyEmailForm")
   const [step, setStep] = useState<"email" | "code">("email")
   const [email, setEmail] = useState(initialEmail)
   const [code, setCode] = useState("")
@@ -37,13 +39,13 @@ export function VerifyEmailForm({
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to send verification code")
+        throw new Error(error.error || t("toast.sendError"))
       }
 
-      toast("Code sent! Check your email for the verification code.")
+      toast(t("toast.sendSuccess"))
       setStep("code")
     } catch (error) {
-      toast(error instanceof Error ? error.message : "Failed to send code", {
+      toast(error instanceof Error ? error.message : t("toast.sendErrorFallback"), {
         type: "error",
       })
     } finally {
@@ -64,10 +66,10 @@ export function VerifyEmailForm({
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Invalid verification code")
+        throw new Error(error.error || t("toast.verifyError"))
       }
 
-      toast("Verified! You are now authenticated.", {
+      toast(t("toast.verifySuccess"), {
         autoClose: 500,
         onClose: () => {
           if (callback) {
@@ -76,7 +78,7 @@ export function VerifyEmailForm({
         }
       })
     } catch (error) {
-      toast(error instanceof Error ? error.message : "Verification failed", {
+      toast(error instanceof Error ? error.message : t("toast.verifyErrorFallback"), {
         type: "error",
       })
     } finally {
@@ -87,11 +89,11 @@ export function VerifyEmailForm({
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle>Email Verification</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
           {step === "email"
-            ? "Enter your email to receive a one-time verification code."
-            : "Enter the 6-digit code sent to your email."}
+            ? t("description.email")
+            : t("description.code")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -99,14 +101,14 @@ export function VerifyEmailForm({
           <form onSubmit={handleSendCode} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="sr-only">
-                Email Address
+                {t("emailLabel")}
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
@@ -119,10 +121,10 @@ export function VerifyEmailForm({
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Sending Code...
+                  {t("sendingCodeButton")}
                 </>
               ) : (
-                "Send Verification Code"
+                t("sendCodeButton")
               )}
             </Button>
           </form>
@@ -130,14 +132,14 @@ export function VerifyEmailForm({
           <form onSubmit={handleVerifyCode} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="code" className="sr-only">
-                Verification Code
+                {t("codeLabel")}
               </Label>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="code"
                   type="text"
-                  placeholder="123456"
+                  placeholder={t("codePlaceholder")}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   className="pl-10 text-center tracking-[0.5em]"
@@ -145,7 +147,7 @@ export function VerifyEmailForm({
                   required
                 />
               </div>
-              <p className="text-xs text-muted-foreground text-center">A 6-digit code was sent to {email}</p>
+              <p className="text-xs text-muted-foreground text-center">{t("codeSentTo", { email })}</p>
             </div>
 
             <div className="space-y-2">
@@ -153,15 +155,15 @@ export function VerifyEmailForm({
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Verifying...
+                    {t("verifyingButton")}
                   </>
                 ) : (
-                  "Verify Code"
+                  t("verifyCodeButton")
                 )}
               </Button>
 
               <Button type="button" variant="link" className="w-full" onClick={() => setStep("email")}>
-                Use a different email address
+                {t("differentEmailButton")}
               </Button>
             </div>
           </form>

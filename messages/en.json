@@ -1,0 +1,259 @@
+{
+  "HomePage": {
+    "goToDashboard": "Go to Dashboard",
+    "tagline": "Find the perfect time, together",
+    "title": "Schedule events without the back-and-forth",
+    "description": "Create an event, share a link, and let everyone pick their available times. We'll show you when most people can make it.",
+    "createEvent": "Create an Event",
+    "easySetupTitle": "Easy Setup",
+    "easySetupDescription": "Create an event in seconds with a date range and optional time preferences",
+    "collaborativeTitle": "Collaborative",
+    "collaborativeDescription": "Share a unique link with participants to collect their availability",
+    "smartResultsTitle": "Smart Results",
+    "smartResultsDescription": "Visualize overlapping availability and find the best time for everyone",
+    "everythingYouNeedTitle": "Everything You Need",
+    "everythingYouNeedDescription": "Powerful features designed to make event scheduling simple and enjoyable",
+    "footer": "MindYourEvent - Making scheduling simple",
+    "features": {
+      "visualAvailability": {
+        "title": "Visual Availability",
+        "description": "Beautiful graphs and heatmaps show when most people are free"
+      },
+      "easySharing": {
+        "title": "Easy Sharing",
+        "description": "Share a unique link - no account needed for guests"
+      },
+      "emailVerification": {
+        "title": "Email Verification",
+        "description": "Secure access with email-based authentication"
+      },
+      "smartNotifications": {
+        "title": "Smart Notifications",
+        "description": "Automatic emails when the event time is finalized"
+      },
+      "mobileOptimized": {
+        "title": "Mobile Optimized",
+        "description": "Perfect experience on any device, anywhere"
+      },
+      "rsvpTracking": {
+        "title": "RSVP Tracking",
+        "description": "See who's attending after the time is set"
+      }
+    }
+  },
+  "CreateEventPage": {
+    "title": "Create a New Event",
+    "description": "Fill out the form below to get started."
+  },
+  "DashboardPage": {
+    "createEvent": "Create Event",
+    "title": "Dashboard",
+    "description": "An overview of your created events and participations.",
+    "pendingEvents": {
+      "title": "Events Pending Action",
+      "createdEvents": {
+        "title": "Events You Created",
+        "description": "These events are awaiting participant availability for you to finalize."
+      },
+      "invitedToEvents": {
+        "title": "Events You're Invited To",
+        "description": "Submit your availability for these events."
+      }
+    },
+    "finalizedEvents": {
+      "title": "Finalized Events",
+      "createdEvents": {
+        "title": "Events You Created",
+        "description": "These events are waiting for RSVPs."
+      },
+      "invitedToEvents": {
+        "title": "Events You're Invited To",
+        "description": "These events are waiting for your RSVP confirmation."
+      }
+    }
+  },
+  "InvitePage": {
+    "finalized": {
+      "banner": "Event Finalized",
+      "cardTitle": "Final Event Details",
+      "dateLabel": "Date",
+      "timeLabel": "Time"
+    }
+  },
+  "EmailVerificationCard": {
+    "title": "Email Verification Required",
+    "description": "Please verify your email address to submit your availability.",
+    "content": "To ensure security and prevent unauthorized submissions, we need to verify your email address <strong_email></strong_email>.",
+    "defaultEmail": "your email",
+    "button": "Verify Email"
+  },
+  "RsvpCard": {
+    "title": "RSVP",
+    "description": "Will you be attending this event?",
+    "attendButton": "Yes, I'll attend",
+    "declineButton": "No, I can't attend",
+    "toast": {
+      "attending": "You're attending this event",
+      "declined": "You've declined this event",
+      "error": "Failed to update RSVP"
+    }
+  },
+  "VerifyEmailForm": {
+    "title": "Email Verification",
+    "description": {
+      "email": "Enter your email to receive a one-time verification code.",
+      "code": "Enter the 6-digit code sent to your email."
+    },
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "sendCodeButton": "Send Verification Code",
+    "sendingCodeButton": "Sending Code...",
+    "codeLabel": "Verification Code",
+    "codePlaceholder": "123456",
+    "codeSentTo": "A 6-digit code was sent to {email}",
+    "verifyCodeButton": "Verify Code",
+    "verifyingButton": "Verifying...",
+    "differentEmailButton": "Use a different email address",
+    "toast": {
+      "sendSuccess": "Code sent! Check your email for the verification code.",
+      "sendError": "Failed to send verification code",
+      "sendErrorFallback": "Failed to send code",
+      "verifySuccess": "Verified! You are now authenticated.",
+      "verifyError": "Invalid verification code",
+      "verifyErrorFallback": "Verification failed"
+    }
+  },
+  "AvailabilityForm": {
+    "eventInfo": "Event Information",
+    "organizedBy": "Organized by",
+    "dateRange": "Date Range",
+    "preferredTime": "Preferred Time Range",
+    "submittedTitle": "Availability Submitted",
+    "submittedDescription": "You can update your availability below if needed.",
+    "submitTitle": "Submit Your Availability",
+    "submitDescription": "Select the dates and times when you're available.",
+    "selectTitle": "Select Your Available Times",
+    "selectDescription": "Click on a date to add your availability for that day.",
+    "addTime": "Add Time",
+    "to": "to",
+    "submitting": "Submitting...",
+    "updateButton": "Update Availability",
+    "submitButton": "Submit Availability",
+    "toast": {
+      "atLeastOne": "Please add at least one time slot",
+      "submitError": "Failed to submit availability",
+      "submitSuccess": "Thank you for submitting your availability!"
+    }
+  },
+  "EventDashboard": {
+    "viewResultsButton": "View Results & Finalize Event",
+    "viewRsvpsButton": "View RSVPs",
+    "detailsTitle": "Event Details",
+    "organizerLabel": "Organizer",
+    "dateRangeLabel": "Date Range",
+    "preferredTimeLabel": "Preferred Time Range",
+    "participantsTitle": "Participants",
+    "participantsDescription": "Share these unique links with each participant to collect their availability.",
+    "responded": "{submittedCount}/{totalCount} responded",
+    "submitted": "Submitted",
+    "copyLink": "Copy Link",
+    "nextStepsTitle": "Next Steps",
+    "step1": "Copy and share the unique invite links with each participant.",
+    "step2": "Participants will use their links to submit their available times.",
+    "step3": "Once responses are in, click the \"View Results\" button to see availability overlaps and find the best time for everyone.",
+    "toast": {
+      "copySuccess": "Invite link copied to clipboard!"
+    }
+  },
+  "CreateEventForm": {
+    "sections": {
+      "details": {
+        "title": "1. Event Details",
+        "description": "Start with the basic information about your event."
+      },
+      "creator": {
+        "title": "2. Your Information",
+        "description": "This will identify you as the event organizer."
+      },
+      "dateTime": {
+        "title": "3. Date & Time Range",
+        "description": "When could this event potentially happen?"
+      },
+      "participants": {
+        "title": "4. Invite Participants",
+        "description": "Enter email addresses separated by commas."
+      }
+    },
+    "labels": {
+      "title": "Event Title *",
+      "description": "Description (Optional)",
+      "creatorName": "Your Name *",
+      "creatorEmail": "Your Email *",
+      "startDate": "Start Date *",
+      "endDate": "End Date *",
+      "startTime": "Preferred Start Time (Optional)",
+      "endTime": "Preferred End Time (Optional)",
+      "participantEmails": "Participant Emails *"
+    },
+    "placeholders": {
+      "title": "e.g., Team Meeting, Birthday Party",
+      "description": "What's this event about?",
+      "creatorName": "John Doe",
+      "creatorEmail": "john@example.com",
+      "participantEmails": "alice@example.com, bob@example.com"
+    },
+    "participantInfo": "Each participant will receive a unique link to submit their availability.",
+    "creatingButton": "Creating Event...",
+    "createButton": "Create Event & Get Shareable Links",
+    "toast": {
+      "createSuccess": "Event created successfully!",
+      "createError": "Failed to create event"
+    }
+  },
+  "ParticipantsList": {
+    "title": "Participant Details",
+    "description": "Individual availability submissions",
+    "timeSlots": "{count, plural, one {# time slot} other {# time slots}}",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "pending": "Pending"
+  },
+  "ResultsDashboard": {
+    "backLink": "Back to Event Dashboard",
+    "title": "{eventTitle} - Results",
+    "description": "Availability analysis and optimal time slots.",
+    "stats": {
+      "participants": "Total Participants",
+      "responses": "Responses",
+      "responseRate": "{rate}% response rate",
+      "slots": "Time Slots Submitted"
+    },
+    "bestSlots": {
+      "title": "Best Time Slots",
+      "description": "Times when the most participants are available, sorted by popularity."
+    },
+    "available": "{percentage}% available",
+    "waiting": "Waiting for {count} more {count, plural, one {participant} other {participants}} to submit availability."
+  },
+  "RsvpDashboard": {
+    "backLink": "Back to Event Dashboard",
+    "title": "{eventTitle} - RSVPs",
+    "description": "See who is attending your event.",
+    "finalDetails": "Final Event Details",
+    "date": "Date",
+    "time": "Time",
+    "attending": "Attending",
+    "notAttending": "Not Attending",
+    "pending": "Pending"
+  },
+  "AvailabilityHeatmap": {
+    "title": "Availability by Date",
+    "description": "Visual representation of participant availability across dates",
+    "legend": "Legend",
+    "legendItems": {
+      "high": "75-100% available",
+      "medium": "50-74% available",
+      "low": "25-49% available",
+      "veryLow": "1-24% available"
+    }
+  }
+}
