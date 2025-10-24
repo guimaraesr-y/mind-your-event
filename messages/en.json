@@ -244,5 +244,16 @@
     "attending": "Attending",
     "notAttending": "Not Attending",
     "pending": "Pending"
+  },
+  "AvailabilityHeatmap": {
+    "title": "Availability by Date",
+    "description": "Visual representation of participant availability across dates",
+    "legend": "Legend",
+    "legendItems": {
+      "high": "75-100% available",
+      "medium": "50-74% available",
+      "low": "25-49% available",
+      "veryLow": "1-24% available"
+    }
   }
 }
