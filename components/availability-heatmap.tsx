@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useMemo } from "react"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 
 interface AvailabilityHeatmapProps {
   event: any
@@ -12,6 +12,7 @@ interface AvailabilityHeatmapProps {
 
 export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipants }: AvailabilityHeatmapProps) {
   const t = useTranslations("AvailabilityHeatmap")
+  const format = useFormatter()
 
   // Generate date range
   const dateRange = useMemo(() => {
@@ -38,7 +39,7 @@ export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipant
   }, [availabilitySlots])
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       weekday: "short",
       month: "short",
       day: "numeric",

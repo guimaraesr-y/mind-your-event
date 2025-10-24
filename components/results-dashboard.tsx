@@ -8,7 +8,7 @@ import { useMemo } from "react"
 import { AvailabilityHeatmap } from "@/components/availability-heatmap"
 import { ParticipantsList } from "@/components/participants-list"
 import { FinalizeEventDialog } from "@/components/finalize-event-dialog"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations, Locale } from "next-intl"
 
 interface ResultsDashboardProps {
   event: any
@@ -27,6 +27,7 @@ interface TimeSlotOverlap {
 
 export function ResultsDashboard({ event, participants, availabilitySlots }: ResultsDashboardProps) {
   const t = useTranslations("ResultsDashboard")
+  const format = useFormatter()
   const totalParticipants = participants.length
   const submittedCount = participants.filter((p) => p.has_submitted).length
 
@@ -66,7 +67,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       weekday: "long",
       month: "long",
       day: "numeric",
@@ -74,11 +75,11 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
   }
 
   const formatTime = (time: string) => {
-    const [hours, minutes] = time.split(":")
-    const hour = Number.parseInt(hours)
-    const ampm = hour >= 12 ? "PM" : "AM"
-    const displayHour = hour % 12 || 12
-    return `${displayHour}:${minutes} ${ampm}`
+    const [hours, minutes] = time.split(":").map(Number)
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+
+    return format.dateTime(date, { hour: "numeric", minute: "2-digit" })
   }
 
   return (
