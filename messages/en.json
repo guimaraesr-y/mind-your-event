@@ -209,5 +209,12 @@
       "createSuccess": "Event created successfully!",
       "createError": "Failed to create event"
     }
+  },
+  "ParticipantsList": {
+    "title": "Participant Details",
+    "description": "Individual availability submissions",
+    "timeSlots": "{count, plural, one {# time slot} other {# time slots}}",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "pending": "Pending"
   }
 }

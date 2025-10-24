@@ -209,5 +209,12 @@
       "createSuccess": "Evento criado com sucesso!",
       "createError": "Falha ao criar o evento"
     }
+  },
+  "ParticipantsList": {
+    "title": "Detalhes dos Participantes",
+    "description": "Envios de disponibilidade individuais",
+    "timeSlots": "{count, plural, one {# horário} other {# horários}}",
+    "days": "{count, plural, one {# dia} other {# dias}}",
+    "pending": "Pendente"
   }
 }

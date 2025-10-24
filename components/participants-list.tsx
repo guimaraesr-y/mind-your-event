@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { User, Check, Clock } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface ParticipantsListProps {
   participants: any[]
@@ -9,6 +10,8 @@ interface ParticipantsListProps {
 }
 
 export function ParticipantsList({ participants, availabilitySlots }: ParticipantsListProps) {
+  const t = useTranslations("ParticipantsList")
+
   const getParticipantSlots = (userId: string) => {
     return availabilitySlots.filter((slot) => slot.user_id === userId)
   }
@@ -16,8 +19,8 @@ export function ParticipantsList({ participants, availabilitySlots }: Participan
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Participant Details</CardTitle>
-        <CardDescription>Individual availability submissions</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -43,8 +46,8 @@ export function ParticipantsList({ participants, availabilitySlots }: Participan
                   {participant.has_submitted ? (
                     <>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-foreground">{slots.length} time slots</p>
-                        <p className="text-xs text-muted-foreground">{uniqueDates} days</p>
+                        <p className="text-sm font-medium text-foreground">{t("timeSlots", { count: slots.length })}</p>
+                        <p className="text-xs text-muted-foreground">{t("days", { count: uniqueDates })}</p>
                       </div>
                       <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center">
                         <Check className="h-4 w-4 text-accent" />
@@ -52,7 +55,7 @@ export function ParticipantsList({ participants, availabilitySlots }: Participan
                     </>
                   ) : (
                     <>
-                      <p className="text-sm text-muted-foreground">Pending</p>
+                      <p className="text-sm text-muted-foreground">{t("pending")}</p>
                       <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                       </div>
