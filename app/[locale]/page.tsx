@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, Users, Clock, Sparkles, BarChart3, CheckCircle, LinkIcon, Mail, Shield, Smartphone } from "lucide-react"
 import { Card } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 const featureDetails: Record<string, { icon: React.ElementType; color: string }> = {
   visualAvailability: { icon: BarChart3, color: "primary" },
@@ -34,9 +35,12 @@ export default function HomePage() {
             <Calendar className="h-6 w-6 text-primary" />
             <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
           </div>
-          <Button asChild variant="secondary">
-            <Link href="/dashboard">{t("goToDashboard")}</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="secondary">
+              <Link href="/dashboard">{t("goToDashboard")}</Link>
+            </Button>
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 

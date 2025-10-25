@@ -8,7 +8,7 @@ import { useMemo } from "react"
 import { AvailabilityHeatmap } from "@/components/availability-heatmap"
 import { ParticipantsList } from "@/components/participants-list"
 import { FinalizeEventDialog } from "@/components/finalize-event-dialog"
-import { useFormatter, useTranslations, Locale } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 
 interface ResultsDashboardProps {
   event: any

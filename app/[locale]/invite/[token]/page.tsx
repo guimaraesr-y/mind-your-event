@@ -2,12 +2,12 @@ import { notFound } from "next/navigation"
 import { AvailabilityForm } from "@/components/availability-form"
 import { RsvpCard } from "@/components/rsvp-card"
 import { Calendar, CheckCircle2, Clock } from "lucide-react"
-import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getCurrentUser } from "@/actions/user/get-current-user"
 import { retrieveEventCreator, retrieveEventParticipantByInviteToken, retrieveUserAvailabilitiesForEvent } from "@/actions/event/retrieve"
 import { EmailVerificationRequiredCard } from "@/components/email-verification-card"
 import { getLocale, getTranslations } from "next-intl/server"
+import { Header } from "@/components/header"
 
 interface PageProps {
   params: Promise<{ token: string }>
@@ -55,15 +55,7 @@ export default async function InvitePage({ params }: PageProps) { // TODO: remov
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Calendar className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="flex-1 px-4 py-8 md:py-12">
