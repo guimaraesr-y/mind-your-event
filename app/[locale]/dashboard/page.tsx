@@ -1,7 +1,6 @@
 'use client';
 
 import { AuthGuard } from "@/components/auth-guard";
-import { Calendar } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
 import { EventParticipantWithEvent, retrieveEventsByCreatorId, retrieveParticipatingEventsByUserId } from "@/actions/event/retrieve";
@@ -10,8 +9,11 @@ import { CreatedEvents } from "@/components/created-events";
 import { ParticipatingEvents } from "@/components/participating-events";
 import { EventInterface } from "@/modules/events/event";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+import { Header } from "@/components/header";
 
 export default function DashboardPage() {
+  const t = useTranslations("DashboardPage");
   const { user, isLoading } = useAuth();
   const [pendingCreatedEvents, setPendingCreatedEvents] = useState<EventInterface[]>([]);
   const [finalizedCreatedEvents, setFinalizedCreatedEvents] = useState<EventInterface[]>([]);
@@ -56,45 +58,37 @@ export default function DashboardPage() {
   return (
     <AuthGuard>
       <div className="min-h-screen flex flex-col bg-background">
-        <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm border-b">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <Calendar className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-semibold text-foreground">
-                MindYourEvent
-              </h1>
-            </Link>
-            <Button asChild>
-              <Link href="/create">Create Event</Link>
-            </Button>
-          </div>
-        </header>
+        <Header />
         <main className="flex-1 px-4 py-8 md:py-12">
           <div className="max-w-6xl mx-auto space-y-8">
-            <div className="space-y-2">
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                Dashboard
-              </h1>
-              <p className="text-muted-foreground">
-                An overview of your created events and participations.
-              </p>
+            <div className="w-full justify-between inline-flex items-center gap-2 px-4 py-2">
+              <div className="space-y-2">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                  {t("title")}
+                </h1>
+                <p className="text-muted-foreground">
+                  {t("description")}
+                </p>
+              </div>
+              <div>
+                <Button asChild>
+                  <Link href="/create">{t("createEvent")}</Link>
+                </Button>
+              </div>
             </div>
 
             <div className="space-y-12">
               <div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">Events Pending Action</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
                 <div className="space-y-6">
                   <CreatedEvents 
-                    title="Events You Created"
-                    description="These events are awaiting participant availability for you to finalize."
+                    title={t("pendingEvents.createdEvents.title")}
+                    description={t("pendingEvents.createdEvents.description")}
                     events={pendingCreatedEvents} 
                   />
                   <ParticipatingEvents 
-                    title="Events You're Invited To"
-                    description="Submit your availability for these events."
+                    title={t("pendingEvents.invitedToEvents.title")}
+                    description={t("pendingEvents.invitedToEvents.description")}
                     events={pendingParticipatingEvents}
                     participationConfirmMethod={eventHasAvailability}
                   />
@@ -102,16 +96,16 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">Finalized Events</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
                 <div className="space-y-6">
                   <CreatedEvents 
-                    title="Events You Created"
-                    description="These events are waiting for RSVPs."
+                    title={t("finalizedEvents.createdEvents.title")}
+                    description={t("finalizedEvents.createdEvents.description")}
                     events={finalizedCreatedEvents}
                   />
                   <ParticipatingEvents 
-                    title="Events You're Invited To"
-                    description="These events are waiting for your RSVP confirmation."
+                    title={t("finalizedEvents.invitedToEvents.title")}
+                    description={t("finalizedEvents.invitedToEvents.description")}
                     events={finalizedParticipatingEvents}
                     participationConfirmMethod={participantWillAtted}
                   />

@@ -12,8 +12,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, ArrowRight } from "lucide-react"
 import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/auth-context"
+import { useTranslations } from "next-intl"
 
 export function CreateEventForm() {
+  const t = useTranslations("CreateEventForm")
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
@@ -51,14 +53,14 @@ export function CreateEventForm() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to create event")
+        throw new Error(error.error || t("toast.createError"))
       }
 
       const data = await response.json()
-      toast("Event created successfully!")
+      toast(t("toast.createSuccess"))
       router.push(`/events/${data.eventId}`)
     } catch (error) {
-      toast(error instanceof Error ? error.message : "Failed to create event", {
+      toast(error instanceof Error ? error.message : t("toast.createError"), {
         type: "error",
       })
     } finally {
@@ -70,15 +72,15 @@ export function CreateEventForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>1. Event Details</CardTitle>
-          <CardDescription>Start with the basic information about your event.</CardDescription>
+          <CardTitle>{t("sections.details.title")}</CardTitle>
+          <CardDescription>{t("sections.details.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Event Title *</Label>
+            <Label htmlFor="title">{t("labels.title")}</Label>
             <Input
               id="title"
-              placeholder="e.g., Team Meeting, Birthday Party"
+              placeholder={t("placeholders.title")}
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
@@ -86,10 +88,10 @@ export function CreateEventForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description (Optional)</Label>
+            <Label htmlFor="description">{t("labels.description")}</Label>
             <Textarea
               id="description"
-              placeholder="What's this event about?"
+              placeholder={t("placeholders.description")}
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={3}
@@ -100,15 +102,15 @@ export function CreateEventForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>2. Your Information</CardTitle>
-          <CardDescription>This will identify you as the event organizer.</CardDescription>
+          <CardTitle>{t("sections.creator.title")}</CardTitle>
+          <CardDescription>{t("sections.creator.description")}</CardDescription>
         </CardHeader>
         <CardContent className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="creatorName">Your Name *</Label>
+            <Label htmlFor="creatorName">{t("labels.creatorName")}</Label>
             <Input
               id="creatorName"
-              placeholder="John Doe"
+              placeholder={t("placeholders.creatorName")}
               value={formData.creatorName}
               onChange={(e) => setFormData({ ...formData, creatorName: e.target.value })}
               required
@@ -117,11 +119,11 @@ export function CreateEventForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="creatorEmail">Your Email *</Label>
+            <Label htmlFor="creatorEmail">{t("labels.creatorEmail")}</Label>
             <Input
               id="creatorEmail"
               type="email"
-              placeholder="john@example.com"
+              placeholder={t("placeholders.creatorEmail")}
               value={formData.creatorEmail}
               onChange={(e) => setFormData({ ...formData, creatorEmail: e.target.value })}
               required
@@ -133,13 +135,13 @@ export function CreateEventForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>3. Date & Time Range</CardTitle>
-          <CardDescription>When could this event potentially happen?</CardDescription>
+          <CardTitle>{t("sections.dateTime.title")}</CardTitle>
+          <CardDescription>{t("sections.dateTime.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="startDate">Start Date *</Label>
+              <Label htmlFor="startDate">{t("labels.startDate")}</Label>
               <Input
                 id="startDate"
                 type="date"
@@ -150,7 +152,7 @@ export function CreateEventForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="endDate">End Date *</Label>
+              <Label htmlFor="endDate">{t("labels.endDate")}</Label>
               <Input
                 id="endDate"
                 type="date"
@@ -163,7 +165,7 @@ export function CreateEventForm() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="startTime">Preferred Start Time (Optional)</Label>
+              <Label htmlFor="startTime">{t("labels.startTime")}</Label>
               <Input
                 id="startTime"
                 type="time"
@@ -173,7 +175,7 @@ export function CreateEventForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="endTime">Preferred End Time (Optional)</Label>
+              <Label htmlFor="endTime">{t("labels.endTime")}</Label>
               <Input
                 id="endTime"
                 type="time"
@@ -187,22 +189,22 @@ export function CreateEventForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>4. Invite Participants</CardTitle>
-          <CardDescription>Enter email addresses separated by commas.</CardDescription>
+          <CardTitle>{t("sections.participants.title")}</CardTitle>
+          <CardDescription>{t("sections.participants.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="participantEmails">Participant Emails *</Label>
+            <Label htmlFor="participantEmails">{t("labels.participantEmails")}</Label>
             <Textarea
               id="participantEmails"
-              placeholder="alice@example.com, bob@example.com"
+              placeholder={t("placeholders.participantEmails")}
               value={formData.participantEmails}
               onChange={(e) => setFormData({ ...formData, participantEmails: e.target.value })}
               rows={3}
               required
             />
             <p className="text-xs text-muted-foreground">
-              Each participant will receive a unique link to submit their availability.
+              {t("participantInfo")}
             </p>
           </div>
         </CardContent>
@@ -212,11 +214,11 @@ export function CreateEventForm() {
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Creating Event...
+            {t("creatingButton")}
           </>
         ) : (
           <>
-            Create Event & Get Shareable Links
+            {t("createButton")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </>
         )}

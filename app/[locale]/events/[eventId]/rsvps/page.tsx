@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation"
-import { Calendar } from "lucide-react"
-import Link from "next/link"
 import { getCurrentUser } from "@/actions/user/get-current-user"
 import { retrieveEventById, retrieveEventParticipants } from "@/actions/event/retrieve"
 import { RsvpDashboard } from "@/components/rsvp-dashboard"
+import { Header } from "@/components/header"
 
 interface PageProps {
   params: Promise<{ eventId: string }>
@@ -28,15 +27,7 @@ export default async function RsvpsPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Calendar className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-semibold text-foreground">MindYourEvent</h1>
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="flex-1 px-4 py-8 md:py-12">

@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useMemo } from "react"
+import { useFormatter, useTranslations } from "next-intl"
 
 interface AvailabilityHeatmapProps {
   event: any
@@ -10,6 +11,9 @@ interface AvailabilityHeatmapProps {
 }
 
 export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipants }: AvailabilityHeatmapProps) {
+  const t = useTranslations("AvailabilityHeatmap")
+  const format = useFormatter()
+
   // Generate date range
   const dateRange = useMemo(() => {
     const dates: Date[] = []
@@ -35,7 +39,7 @@ export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipant
   }, [availabilitySlots])
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -59,8 +63,8 @@ export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipant
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Availability by Date</CardTitle>
-        <CardDescription>Visual representation of participant availability across dates</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -91,23 +95,23 @@ export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipant
         </div>
 
         <div className="mt-6 pt-6 border-t border-border">
-          <p className="text-xs font-medium text-muted-foreground mb-3">Legend</p>
+          <p className="text-xs font-medium text-muted-foreground mb-3">{t("legend")}</p>
           <div className="flex flex-wrap gap-4 text-xs">
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 rounded bg-primary" />
-              <span className="text-muted-foreground">75-100% available</span>
+              <span className="text-muted-foreground">{t("legendItems.high")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 rounded bg-accent" />
-              <span className="text-muted-foreground">50-74% available</span>
+              <span className="text-muted-foreground">{t("legendItems.medium")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 rounded bg-chart-4/60" />
-              <span className="text-muted-foreground">25-49% available</span>
+              <span className="text-muted-foreground">{t("legendItems.low")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 rounded bg-muted" />
-              <span className="text-muted-foreground">1-24% available</span>
+              <span className="text-muted-foreground">{t("legendItems.veryLow")}</span>
             </div>
           </div>
         </div>

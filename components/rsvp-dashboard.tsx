@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Check, X, Clock, User, ArrowLeft, Calendar } from "lucide-react"
 import Link from "next/link"
 import { useMemo } from "react"
+import { useFormatter, useTranslations } from "next-intl"
 
 interface RsvpDashboardProps {
   event: any
@@ -12,6 +13,8 @@ interface RsvpDashboardProps {
 }
 
 export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
+  const t = useTranslations("RsvpDashboard")
+  const format = useFormatter()
   const totalParticipants = participants.length
 
   const attending = useMemo(() => participants.filter(p => p.will_attend === true), [participants])
@@ -20,7 +23,7 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       weekday: "long",
       month: "long",
       day: "numeric",
@@ -42,32 +45,32 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
         <Button variant="ghost" size="sm" asChild className="-ml-2">
           <Link href={`/events/${event.id}`}>
             <ArrowLeft className="h-4 w-4 mr-1" />
-            Back to Event Dashboard
+            {t("backLink")}
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title} - RSVPs</h1>
-          <p className="text-muted-foreground">See who is attending your event.</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{t("title", { eventTitle: event.title })}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
       </div>
 
       {/* Finalized Details */}
       <Card className="bg-primary/5 border-primary/20">
         <CardHeader>
-          <CardTitle>Final Event Details</CardTitle>
+          <CardTitle>{t("finalDetails")}</CardTitle>
         </CardHeader>
         <CardContent className="grid sm:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <Calendar className="h-5 w-5 text-primary mt-1" />
             <div>
-              <p className="text-sm font-medium text-foreground">Date</p>
+              <p className="text-sm font-medium text-foreground">{t("date")}</p>
               <p className="text-lg font-semibold text-foreground">{formatDate(event.finalized_date)}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Clock className="h-5 w-5 text-primary mt-1" />
             <div>
-              <p className="text-sm font-medium text-foreground">Time</p>
+              <p className="text-sm font-medium text-foreground">{t("time")}</p>
               <p className="text-lg font-semibold text-foreground">
                 {formatTime(event.finalized_start_time)} - {formatTime(event.finalized_end_time)}
               </p>
@@ -80,7 +83,7 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Attending</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t("attending")}</CardTitle>
             <Check className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
@@ -90,7 +93,7 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Not Attending</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t("notAttending")}</CardTitle>
             <X className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
@@ -100,7 +103,7 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t("pending")}</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -111,9 +114,9 @@ export function RsvpDashboard({ event, participants }: RsvpDashboardProps) {
 
       {/* Participant Lists */}
       <div className="grid md:grid-cols-1 gap-6">
-        <ParticipantList title="Attending" participants={attending} icon={Check} iconClass="text-accent" />
-        <ParticipantList title="Not Attending" participants={notAttending} icon={X} iconClass="text-destructive" />
-        <ParticipantList title="Pending" participants={pending} icon={Clock} iconClass="text-muted-foreground" />
+        <ParticipantList title={t("attending")} participants={attending} icon={Check} iconClass="text-accent" />
+        <ParticipantList title={t("notAttending")} participants={notAttending} icon={X} iconClass="text-destructive" />
+        <ParticipantList title={t("pending")} participants={pending} icon={Clock} iconClass="text-muted-foreground" />
       </div>
     </div>
   )

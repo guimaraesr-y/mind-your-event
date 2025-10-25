@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Check, X, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
+import { useTranslations } from "next-intl"
 
 interface RsvpCardProps {
   eventId: string
@@ -14,6 +15,7 @@ interface RsvpCardProps {
 }
 
 export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
+  const t = useTranslations("RsvpCard");
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -29,14 +31,14 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to update RSVP")
+        throw new Error(error.error || t("toast.error"))
       }
 
-      toast(willAttend ? "You're attending this event" : "You've declined this event")
+      toast(willAttend ? t("toast.attending") : t("toast.declined"))
 
       router.refresh()
     } catch (error) {
-      toast(error instanceof Error ? error.message : "Failed to update RSVP", {
+      toast(error instanceof Error ? error.message : t("toast.error"), {
         type: "error",
       })
     } finally {
@@ -47,8 +49,8 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
   return (
     <Card className="bg-primary/5 border-primary/20">
       <CardHeader>
-        <CardTitle>RSVP</CardTitle>
-        <CardDescription>Will you be attending this event?</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex gap-3">
@@ -63,7 +65,7 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
             ) : (
               <Check className="mr-2 h-4 w-4" />
             )}
-            Yes, I'll attend
+            {t("attendButton")}
           </Button>
           <Button
             onClick={() => handleRsvp(false)}
@@ -76,7 +78,7 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
             ) : (
               <X className="mr-2 h-4 w-4" />
             )}
-            No, I can't attend
+            {t("declineButton")}
           </Button>
         </div>
       </CardContent>
