@@ -1,5 +1,8 @@
+'use server';
+
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
+import { ReactNode } from "react"
 
 export async function getSupabaseServerClient() {
   const cookieStore = await cookies()
@@ -20,4 +23,9 @@ export async function getSupabaseServerClient() {
       },
     },
   })
+}
+
+export async function renderComponent(component: ReactNode) {
+  const ReactDOMServer = await import("react-dom/server");
+  return ReactDOMServer.renderToString(component);
 }
