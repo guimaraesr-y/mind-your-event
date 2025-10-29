@@ -10,7 +10,7 @@ export class SendVerificationEmailUseCase {
 
     constructor(
         private emailService: EmailService = EmailServiceFactory.create(),
-        private translations = getTranslations("UserEmail.VerifyEmail"),
+        private translations = getTranslations("Email.User.VerifyEmail"),
         private tokenService = new GenerateEmailTokenUseCase(),
         private template = VerifyUserTemplate,
     ) {}

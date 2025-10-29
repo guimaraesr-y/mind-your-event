@@ -7,7 +7,7 @@ interface VerifyUserTemplateProps {
 }
 
 export const VerifyUserTemplate: React.FC<VerifyUserTemplateProps> = async ({ email, token }) => {
-  const t = await getTranslations('UserEmail.VerifyEmail');
+  const t = await getTranslations('Email.User.VerifyEmail');
 
   const containerStyle = {
     maxWidth: '600px',

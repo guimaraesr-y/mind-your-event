@@ -256,12 +256,27 @@
       "veryLow": "1-24% disponível"
     }
   },
-  "UserEmail": {
-    "VerifyEmail": {
-      "subject": "Verifique Seu Endereço de E-mail",
-      "hello": "Olá {name},",
-      "thanks": "Obrigado por se inscrever. Por favor, use o código de verificação abaixo para completar o seu cadastro. Este código é válido por 15 minutos.",
-      "ifFallback": "Se você não se inscreveu para esta conta, ignore este e-mail."
+  "Email": {
+    "Event": {
+      "InviteEmail": {
+        "title": "Você foi Convidado!",
+        "subtitle": "Um convite de evento do MindYourEvent",
+        "greeting": "Olá, você foi convidado por {authorName}!",
+        "youAreInvited": "Você foi convidado para o evento: {eventTitle}",
+        "eventDetails": "Detalhes do Evento",
+        "confirmPresence": "Clique no botão abaixo para ver os detalhes do evento e enviar sua disponibilidade.",
+        "rsvpButton": "Ver Evento e Confirmar Presença",
+        "linkNotWorking": "Se o botão acima não funcionar,",
+        "clickHere": "clique aqui."
+      }
+    },
+    "User": {
+      "VerifyEmail": {
+        "subject": "Verifique Seu Endereço de E-mail",
+        "hello": "Olá {name},",
+        "thanks": "Obrigado por se inscrever. Por favor, use o código de verificação abaixo para completar o seu cadastro. Este código é válido por 15 minutos.",
+        "ifFallback": "Se você não se inscreveu para esta conta, ignore este e-mail."
+      }
     }
   }
 }

@@ -6,7 +6,7 @@ export class EmailService {
         private readonly strategy: EmailStrategy
     ) { }
 
-    async sendMail(to: string, subject: string, html: string) {
+    async sendMail(to: string | string[], subject: string, html: string) {
         return this.strategy.sendMail({ to, subject, html });
     }
 

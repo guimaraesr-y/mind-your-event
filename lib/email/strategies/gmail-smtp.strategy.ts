@@ -26,6 +26,7 @@ export class GmailSMTPStrategy implements EmailStrategy {
 
       return true;
     } catch (err) {
+      console.error(err);
       throw new ApiException("Email sending failed", 500);
     }
   }

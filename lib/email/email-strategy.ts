@@ -1,7 +1,7 @@
 export interface EmailStrategy {
 
     sendMail(params: {
-        to: string;
+        to: string | string[];
         subject: string;
         html: string;
     }): Promise<boolean>;
