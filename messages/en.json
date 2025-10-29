@@ -255,5 +255,13 @@
       "low": "25-49% available",
       "veryLow": "1-24% available"
     }
+  },
+  "UserEmail": {
+    "VerifyEmail": {
+      "subject": "Verify Your Email Address",
+      "hello": "Hello {name},",
+      "thanks": "Thank you for signing up. Please use the following verification code to complete your registration. This code is valid for 15 minutes.",
+      "ifFallback": "If you did not sign up for this account, ignore this email."
+    }
   }
 }
