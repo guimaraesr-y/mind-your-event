@@ -255,5 +255,12 @@
       "low": "25-49% available",
       "veryLow": "1-24% available"
     }
+  },
+  "Modal": {
+    "AlreadyHaveAnAccountModal": {
+      "title": "Already Have an Account?",
+      "description": "If you've used our service before, sign in to create or manage your events using your email address.",
+      "login": "Verify my Email"
+    }
   }
 }
