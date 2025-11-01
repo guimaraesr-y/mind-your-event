@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 interface AuthContextType {
   user: UserInterface | null;
   isLoading: boolean;
+  updateUserStatus: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,11 +24,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUser = async (sessionToken: string) => {
-      return await retrieveUserBySessionToken(sessionToken);
-    };
+  const fetchUser = async (sessionToken: string) => {
+    return await retrieveUserBySessionToken(sessionToken);
+  };
 
+  const updateUserStatus = async () => {
     const sessionToken = Cookies.get("session_token")
 
     if (!sessionToken) {
@@ -45,6 +46,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => {
         setIsLoading(false);
       })
+  }
+
+  useEffect(() => {
+    updateUserStatus();
   }, [Cookies]);
 
   if (isLoading) {
@@ -56,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider value={{ user, isLoading, updateUserStatus }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,29 +1,27 @@
 "use client";
 
-import type React from "react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
-import { Loader2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-interface AuthGuardProps {
-  children: React.ReactNode;
-}
-
-export function AuthGuard({ children }: AuthGuardProps) {
-  const router = useRouter();
+export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
+  const path = usePathname();
+  const router = useRouter();
+  const [isVerified, setIsVerified] = useState(false);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        router.push("/verify?redirect=" + path);
+      } else {
+        setIsVerified(true);
+      }
+    }
+  }, [user, isLoading, router]);
 
-  if (!user) {
-    router.push("/verify");
-    return null;
+  if (!isVerified) {
+    return null; // Or a loading spinner
   }
 
   return <>{children}</>;
