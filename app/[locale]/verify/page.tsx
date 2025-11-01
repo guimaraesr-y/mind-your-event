@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header"
 import { VerifyEmailForm } from "@/components/verify-email-form"
+import { useAuth } from "@/contexts/auth-context"
 import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function VerifyPage() {
@@ -9,9 +10,13 @@ export default function VerifyPage() {
   const searchParams = useSearchParams()
   const email = searchParams.get("email");
   const redirect = searchParams.get("redirect");
+  const { updateUserStatus } = useAuth();
 
-  const redirectBack = () => {
-    router.push(redirect || "/");
+  const authenticateAndRedirectBack = () => {
+    updateUserStatus()
+      .then(() => {
+        router.push(redirect || "/");
+      })
   }
 
   return (
@@ -22,7 +27,7 @@ export default function VerifyPage() {
       <main className="flex-1 flex items-center justify-center px-4 py-12 md:py-20">
         <VerifyEmailForm
           initialEmail={email || ""}
-          callback={redirectBack}
+          callback={authenticateAndRedirectBack}
           />
       </main>
     </div>

@@ -1,3 +1,4 @@
+import { AlreadyHaveAnAccountModal } from "@/components/already-have-an-account-modal";
 import { CreateEventForm } from "@/components/create-event-form"
 import { Header } from "@/components/header";
 import { useTranslations } from "next-intl"
@@ -8,6 +9,7 @@ export default function CreateEventPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
+      <AlreadyHaveAnAccountModal />
 
       {/* Main Content */}
       <main className="flex-1 px-4 py-8 md:py-12">
