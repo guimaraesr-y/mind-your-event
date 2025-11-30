@@ -14,7 +14,7 @@ export async function retrieveEventById(eventId: string): Promise<EventWithCreat
     const supabase = await getSupabaseServerClient();
     const { data: event } = await supabase
         .from("events")
-        .select("*, users!events_creator_id_fkey(name, email)")
+        .select("*, creator:users!events_creator_id_fkey(name, email)")
         .eq("id", eventId)
         .single();
 

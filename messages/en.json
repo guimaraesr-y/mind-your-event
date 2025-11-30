@@ -163,7 +163,8 @@
     "step3": "Once responses are in, click the \"View Results\" button to see availability overlaps and find the best time for everyone.",
     "toast": {
       "copySuccess": "Invite link copied to clipboard!"
-    }
+    },
+    "sendInvitesEmailButton": "Send Unique Invite Links via Email"
   },
   "CreateEventForm": {
     "sections": {
@@ -261,6 +262,41 @@
       "title": "Already Have an Account?",
       "description": "If you've used our service before, sign in to create or manage your events using your email address.",
       "login": "Verify my Email"
+    }
+  },
+  "Email": {
+    "Event": {
+      "InviteEmail": {
+        "title": "You're Invited!",
+        "subtitle": "An event invitation from MindYourEvent",
+        "greeting": "Hello, you've been invited by {authorName}!",
+        "youAreInvited": "You are invited to the event: {eventTitle}",
+        "eventDetails": "Event Details",
+        "confirmPresence": "Click the button below to view the event details and submit your availability.",
+        "rsvpButton": "View Event & RSVP",
+        "linkNotWorking": "If the button above doesn't work,",
+        "clickHere": "click here."
+      },
+      "FinalizedEmail": {
+        "title": "Event Confirmed!",
+        "subtitle": "Your event has been confirmed by MindYourEvent",
+        "greeting": "Hello, {authorName}!",
+        "eventFinalized": "The event {eventTitle} has been confirmed.",
+        "finalizedDetails": "Event Details",
+        "finalizedDate": "Date: {finalizedDate}",
+        "viewEventDetails": "Click the button below to view the final event details.",
+        "viewEventButton": "View Event Details",
+        "linkNotWorking": "If the button above doesn't work,",
+        "clickHere": "click here."
+      }
+    },
+    "User": {
+      "VerifyEmail": {
+        "subject": "Verify Your Email Address",
+        "hello": "Hello {name},",
+        "thanks": "Thank you for signing up. Please use the following verification code to complete your registration. This code is valid for 15 minutes.",
+        "ifFallback": "If you did not sign up for this account, ignore this email."
+      }
     }
   }
 }
