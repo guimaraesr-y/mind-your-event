@@ -70,7 +70,7 @@ export default class AddUserAvailabilityUseCase {
             .from("event_participants")
             .update({ has_submitted: true })
             .eq("event_id", eventId)
-            .eq("id", userId)
+            .eq("user_id", userId)
 
         if (updateError) {
             console.error("[v0] Error updating participant:", updateError)

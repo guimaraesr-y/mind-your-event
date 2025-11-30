@@ -163,7 +163,8 @@
     "step3": "Assim que as respostas chegarem, clique no botão \"Ver Resultados\" para ver as sobreposições de disponibilidade e encontrar o melhor horário para todos.",
     "toast": {
       "copySuccess": "Link de convite copiado para a área de transferência!"
-    }
+    },
+    "sendInvitesEmailButton": "Enviar Links de Convite Únicos por E-mail"
   },
   "CreateEventForm": {
     "sections": {
@@ -261,6 +262,42 @@
       "title": "Já tem uma conta?",
       "description": "Se você já usou nosso serviço antes, autentique-se para criar ou gerenciar seus eventos utilizando seu endereço de email.",
       "login": "Verificar meu Email"
+    }
+  },
+  "Email": {
+    "Event": {
+      "InviteEmail": {
+        "title": "Você foi Convidado!",
+        "subtitle": "Um convite de evento do MindYourEvent",
+        "greeting": "Olá, você foi convidado por {authorName}!",
+        "youAreInvited": "Você foi convidado para o evento: {eventTitle}",
+        "eventDetails": "Detalhes do Evento",
+        "confirmPresence": "Clique no botão abaixo para ver os detalhes do evento e enviar sua disponibilidade.",
+        "rsvpButton": "Ver Evento e Confirmar Presença",
+        "linkNotWorking": "Se o botão acima não funcionar,",
+        "clickHere": "clique aqui."
+      },
+      "FinalizedEmail": {
+        "title": "Evento Confirmado!",
+        "subtitle": "Seu evento foi confirmado pelo MindYourEvent",
+        "greeting": "Olá, {authorName}!",
+        "eventFinalized": "O evento {eventTitle} foi confirmado.",
+        "finalizedDetails": "Detalhes do Evento",
+        "finalizedDate": "Data: {finalizedDate}",
+        "finalizedTime": "Hora: {finalizedTime}",
+        "viewEventDetails": "Clique no botão abaixo para ver os detalhes finais do evento.",
+        "viewEventButton": "Ver Detalhes do Evento",
+        "linkNotWorking": "Se o botão acima não funcionar,",
+        "clickHere": "clique aqui."
+      }
+    },
+    "User": {
+      "VerifyEmail": {
+        "subject": "Verifique Seu Endereço de E-mail",
+        "hello": "Olá {name},",
+        "thanks": "Obrigado por se inscrever. Por favor, use o código de verificação abaixo para completar o seu cadastro. Este código é válido por 15 minutos.",
+        "ifFallback": "Se você não se inscreveu para esta conta, ignore este e-mail."
+      }
     }
   }
 }
