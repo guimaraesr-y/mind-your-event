@@ -268,6 +268,18 @@
         "rsvpButton": "View Event & RSVP",
         "linkNotWorking": "If the button above doesn't work,",
         "clickHere": "click here."
+      },
+      "FinalizedEmail": {
+        "title": "Event Confirmed!",
+        "subtitle": "Your event has been confirmed by MindYourEvent",
+        "greeting": "Hello, {authorName}!",
+        "eventFinalized": "The event {eventTitle} has been confirmed.",
+        "finalizedDetails": "Event Details",
+        "finalizedDate": "Date: {finalizedDate}",
+        "viewEventDetails": "Click the button below to view the final event details.",
+        "viewEventButton": "View Event Details",
+        "linkNotWorking": "If the button above doesn't work,",
+        "clickHere": "click here."
       }
     },
     "User": {
