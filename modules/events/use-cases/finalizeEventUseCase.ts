@@ -61,20 +61,26 @@ export default class FinalizeEventUseCase {
             return;
         }
         
-        for (const participant of participants) {
+        const sendEventFinalizedEmail = new SendEventFinalizedEmailUseCase();
+        const emailPromises = participants.map(async (participant) => {
             const email = participant.users.email;
             const finalizedTime = `${event.finalized_start_time} - ${event.finalized_end_time}`;
+            
+            try {
+                await sendEventFinalizedEmail.execute({
+                    email,
+                    userName: participant.users.name,
+                    eventTitle: event.title,
+                    eventLink: this.getParticipantUrl(participant.invite_token),
+                    finalizedDate: event.finalized_date,
+                    finalizedTime,
+                });
+            } catch (error) {
+                console.error(`Failed to send finalization email to ${email}:`, error);
+            }
+        });
 
-            const sendEventFinalizedEmail = new SendEventFinalizedEmailUseCase();
-            sendEventFinalizedEmail.execute({
-                email,
-                userName: participant.users.name,
-                eventTitle: event.title,
-                eventLink: this.getParticipantUrl(participant.invite_token),
-                finalizedDate: event.finalized_date,
-                finalizedTime,
-            })
-        }
+        await Promise.all(emailPromises);
     }
 
     public async execute(payload: FinalizeEventDto) {
