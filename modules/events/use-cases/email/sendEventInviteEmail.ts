@@ -6,7 +6,7 @@ import { renderComponent } from "@/lib/server";
 import { EventInviteEmailTemplate } from "../../emails/invite-email";
 
 interface SendEventInviteEmailParams {
-  emails: string[];
+  email: string;
   eventTitle: string;
   eventDescription: string;
   authorName: string;
@@ -26,7 +26,7 @@ export class SendEventInviteEmailUseCase {
   ) {}
 
   public async execute(params: SendEventInviteEmailParams) {
-    const { emails, eventTitle, eventDescription, inviteLink, authorName } = params;
+    const { email, eventTitle, eventDescription, inviteLink, authorName } = params;
 
     const t = await this.translations;
 
@@ -38,7 +38,7 @@ export class SendEventInviteEmailUseCase {
     });
     const html = await this.getHtmlContent(component);
 
-    return this.emailService.sendMail(emails, t("title"), html);
+    return this.emailService.sendMail(email, t("title"), html);
   }
 
   private async getHtmlContent(component: ReactNode): Promise<string> {

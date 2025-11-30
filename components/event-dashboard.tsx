@@ -7,6 +7,7 @@ import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
+import { sendEventInviteLinkEmails } from "@/actions/event/send-event-invite-links"
 
 interface EventDashboardProps {
   event: any
@@ -79,7 +80,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
             <div>
               <p className="text-sm font-medium text-foreground">{t("organizerLabel")}</p>
               <p className="text-sm text-muted-foreground">
-                {event.users.name} ({event.users.email})
+                {event.creator.name} ({event.creator.email})
               </p>
             </div>
           </div>
@@ -118,6 +119,11 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
           <CardDescription>{t("participantsDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="flex justify-end mb-4">
+            <Button onClick={() => sendEventInviteLinkEmails(event.id)}>{t("sendInvitesEmailButton")}</Button>
+            {/* <Button onClick={() => setCopiedTokens(new Set())}>{t("copyUniqueInviteLinkButton")}</Button> */}
+          </div>
+
           <div className="space-y-3">
             {participants.map((participant) => (
               <div

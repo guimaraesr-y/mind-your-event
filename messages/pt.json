@@ -163,7 +163,8 @@
     "step3": "Assim que as respostas chegarem, clique no botão \"Ver Resultados\" para ver as sobreposições de disponibilidade e encontrar o melhor horário para todos.",
     "toast": {
       "copySuccess": "Link de convite copiado para a área de transferência!"
-    }
+    },
+    "sendInvitesEmailButton": "Enviar Links de Convite Únicos por E-mail"
   },
   "CreateEventForm": {
     "sections": {

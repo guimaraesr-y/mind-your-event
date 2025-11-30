@@ -101,7 +101,7 @@ export const EventInviteEmailTemplate: React.FC<EventInviteEmailTemplateProps> =
               {t('greeting', { authorName })}
             </h2>
             <p style={{ fontSize: '18px', marginBottom: '20px' }}>
-              {t('youAreInvited', { eventTitle: `<strong>${eventTitle}</strong>` })}
+              {t.rich('youAreInvited', { eventTitle: () => <strong>${eventTitle}</strong> })}
             </p>
             <div style={{
               padding: '20px',
