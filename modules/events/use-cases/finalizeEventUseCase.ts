@@ -1,8 +1,8 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseServerClient } from "@/lib/server";
 import { EventInterface } from "../event";
-import { sendEventFinalizedEmail } from "@/lib/email";
 import { ApiException } from "@/lib/exceptions/api";
+import { SendEventFinalizedEmailUseCase } from "./email/sendEventFinalizedEmail";
 
 interface FinalizeEventDto {
     eventId: string;
@@ -57,15 +57,23 @@ export default class FinalizeEventUseCase {
             .select("*, users(name, email)")
             .eq("event_id", event.id)
         
-        if (participants) {
-            for (const participant of participants) {
-                await sendEventFinalizedEmail(
-                    participant.users.email,
-                    event.title,
-                    event.finalized_date,
-                    `${event.finalized_start_time} - ${event.finalized_end_time}`,
-                )
-            }
+        if (!participants) {
+            return;
+        }
+        
+        for (const participant of participants) {
+            const email = participant.users.email;
+            const finalizedTime = `${event.finalized_start_time} - ${event.finalized_end_time}`;
+
+            const sendEventFinalizedEmail = new SendEventFinalizedEmailUseCase();
+            sendEventFinalizedEmail.execute({
+                email,
+                userName: participant.users.name,
+                eventTitle: event.title,
+                eventLink: this.getParticipantUrl(participant.invite_token),
+                finalizedDate: event.finalized_date,
+                finalizedTime,
+            })
         }
     }
 
@@ -83,6 +91,11 @@ export default class FinalizeEventUseCase {
 
         await this.notificateParticipants(event);
         return event;
+    }
+
+    private getParticipantUrl(token: string) {
+        const baseUrl = process.env.API_BASE_URL || "http://localhost:3000";
+        return `${baseUrl}/invite/${token}`;
     }
 
     private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {
