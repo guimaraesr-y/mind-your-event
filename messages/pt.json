@@ -6,7 +6,7 @@
     "description": "Crie um evento, compartilhe um link e deixe que todos escolham seus horários disponíveis. Mostraremos quando a maioria das pessoas pode comparecer.",
     "createEvent": "Criar um Evento",
     "howItWorks": {
-      "title": "Como Funciona",
+      "title": "Como Funciona?",
       "description": "Agendar um evento leva apenas alguns passos simples.",
       "step1": {
         "title": "1. Crie o Evento",
@@ -18,7 +18,7 @@
       },
       "step3": {
         "title": "3. Encontre o Melhor Horário",
-        "description": "Nosso painel visualiza os melhores horários. Finalize o evento e notifique a todos."
+        "description": "Nosso painel visualiza os melhores horários. Confirme o evento e notifique a todos."
       }
     },
     "everythingYouNeedTitle": "Tudo o que Você Precisa",
@@ -38,7 +38,7 @@
       },
       "smartNotifications": {
         "title": "Notificações Inteligentes",
-        "description": "Atualizações automáticas por e-mail quando o horário do evento é finalizado."
+        "description": "Atualizações automáticas por e-mail quando o horário do evento é confirmado."
       },
       "mobileOptimized": {
         "title": "Otimizado para Celular",
@@ -90,15 +90,15 @@
       "title": "Eventos com Ação Pendente",
       "createdEvents": {
         "title": "Eventos que Você Criou",
-        "description": "Estes eventos estão aguardando a disponibilidade dos participantes para você finalizar."
+        "description": "Estes eventos estão aguardando a disponibilidade dos participantes para você confirmar."
       },
       "invitedToEvents": {
         "title": "Eventos para os Quais Você Foi Convidado",
         "description": "Envie sua disponibilidade para estes eventos."
       }
     },
-    "finalizedEvents": {
-      "title": "Eventos Finalizados",
+    "confirmedEvents": {
+      "title": "Eventos Confirmados",
       "createdEvents": {
         "title": "Eventos que Você Criou",
         "description": "Estes eventos estão aguardando as confirmações de presença (RSVPs)."
@@ -111,7 +111,7 @@
   },
   "InvitePage": {
     "finalized": {
-      "banner": "Evento Finalizado",
+      "banner": "Evento Confirmado",
       "cardTitle": "Detalhes Finais do Evento",
       "dateLabel": "Data",
       "timeLabel": "Hora"
@@ -183,7 +183,7 @@
     }
   },
   "EventDashboard": {
-    "viewResultsButton": "Ver Resultados e Finalizar Evento",
+    "viewResultsButton": "Ver Resultados e Confirmar Evento",
     "viewRsvpsButton": "Ver RSVPs",
     "detailsTitle": "Detalhes do Evento",
     "organizerLabel": "Organizador",

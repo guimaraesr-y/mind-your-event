@@ -97,10 +97,10 @@ export default function DashboardPage() {
                       />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
+                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("confirmedEvents.title")}</h2>
                       <CreatedEvents
-                        title={t("finalizedEvents.createdEvents.title")}
-                        description={t("finalizedEvents.createdEvents.description")}
+                        title={t("confirmedEvents.createdEvents.title")}
+                        description={t("confirmedEvents.createdEvents.description")}
                         events={finalizedCreatedEvents}
                       />
                     </div>
@@ -121,10 +121,10 @@ export default function DashboardPage() {
                       />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
+                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("confirmedEvents.title")}</h2>
                       <ParticipatingEvents
-                        title={t("finalizedEvents.invitedToEvents.title")}
-                        description={t("finalizedEvents.invitedToEvents.description")}
+                        title={t("confirmedEvents.invitedToEvents.title")}
+                        description={t("confirmedEvents.invitedToEvents.description")}
                         events={finalizedParticipatingEvents}
                         participationConfirmMethod={participantWillAttend}
                       />
