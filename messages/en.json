@@ -82,6 +82,10 @@
     "createEvent": "Create Event",
     "title": "Dashboard",
     "description": "An overview of your created events and participations.",
+    "tabs": {
+      "myEvents": "My Events",
+      "invitations": "Invitations"
+    },
     "pendingEvents": {
       "title": "Events Pending Action",
       "createdEvents": {

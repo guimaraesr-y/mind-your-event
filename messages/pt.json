@@ -82,6 +82,10 @@
     "createEvent": "Criar Evento",
     "title": "Painel",
     "description": "Uma visão geral dos seus eventos criados e participações.",
+    "tabs": {
+      "myEvents": "Meus Eventos",
+      "invitations": "Convites"
+    },
     "pendingEvents": {
       "title": "Eventos com Ação Pendente",
       "createdEvents": {

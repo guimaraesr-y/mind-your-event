@@ -11,6 +11,8 @@ import { EventInterface } from "@/modules/events/event";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { Header } from "@/components/header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function DashboardPage() {
   const t = useTranslations("DashboardPage");
@@ -33,7 +35,7 @@ export default function DashboardPage() {
 
       setPendingCreatedEvents(created.filter(e => !e.is_finalized));
       setFinalizedCreatedEvents(created.filter(e => e.is_finalized));
-      
+
       setPendingParticipatingEvents(participating.filter(e => !e.events.is_finalized));
       setFinalizedParticipatingEvents(participating.filter(e => e.events.is_finalized));
     })();
@@ -51,7 +53,7 @@ export default function DashboardPage() {
     return Boolean(event?.availability_slots.length > 0)
   }
 
-  const participantWillAtted = (participant: EventParticipantWithEvent): boolean => {
+  const participantWillAttend = (participant: EventParticipantWithEvent): boolean => {
     return Boolean(participant.will_attend)
   }
 
@@ -77,41 +79,60 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="space-y-12">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
-                <div className="space-y-6">
-                  <CreatedEvents 
-                    title={t("pendingEvents.createdEvents.title")}
-                    description={t("pendingEvents.createdEvents.description")}
-                    events={pendingCreatedEvents} 
-                  />
-                  <ParticipatingEvents 
-                    title={t("pendingEvents.invitedToEvents.title")}
-                    description={t("pendingEvents.invitedToEvents.description")}
-                    events={pendingParticipatingEvents}
-                    participationConfirmMethod={eventHasAvailability}
-                  />
-                </div>
-              </div>
+            <Tabs defaultValue="my-events">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger className="cursor-pointer" value="my-events">{t("tabs.myEvents")}</TabsTrigger>
+                <TabsTrigger className="cursor-pointer" value="invitations">{t("tabs.invitations")}</TabsTrigger>
+              </TabsList>
 
-              <div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
-                <div className="space-y-6">
-                  <CreatedEvents 
-                    title={t("finalizedEvents.createdEvents.title")}
-                    description={t("finalizedEvents.createdEvents.description")}
-                    events={finalizedCreatedEvents}
-                  />
-                  <ParticipatingEvents 
-                    title={t("finalizedEvents.invitedToEvents.title")}
-                    description={t("finalizedEvents.invitedToEvents.description")}
-                    events={finalizedParticipatingEvents}
-                    participationConfirmMethod={participantWillAtted}
-                  />
-                </div>
-              </div>
-            </div>
+              <TabsContent value="my-events">
+                <Card>
+                  <CardContent className="space-y-8 pt-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
+                      <CreatedEvents
+                        title={t("pendingEvents.createdEvents.title")}
+                        description={t("pendingEvents.createdEvents.description")}
+                        events={pendingCreatedEvents}
+                      />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
+                      <CreatedEvents
+                        title={t("finalizedEvents.createdEvents.title")}
+                        description={t("finalizedEvents.createdEvents.description")}
+                        events={finalizedCreatedEvents}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="invitations">
+                <Card>
+                  <CardContent className="space-y-8 pt-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
+                      <ParticipatingEvents
+                        title={t("pendingEvents.invitedToEvents.title")}
+                        description={t("pendingEvents.invitedToEvents.description")}
+                        events={pendingParticipatingEvents}
+                        participationConfirmMethod={eventHasAvailability}
+                      />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("finalizedEvents.title")}</h2>
+                      <ParticipatingEvents
+                        title={t("finalizedEvents.invitedToEvents.title")}
+                        description={t("finalizedEvents.invitedToEvents.description")}
+                        events={finalizedParticipatingEvents}
+                        participationConfirmMethod={participantWillAttend}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
         </main>
       </div>
