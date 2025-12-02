@@ -5,40 +5,73 @@
     "title": "Agende eventos sem o vai e vem",
     "description": "Crie um evento, compartilhe um link e deixe que todos escolham seus horários disponíveis. Mostraremos quando a maioria das pessoas pode comparecer.",
     "createEvent": "Criar um Evento",
-    "easySetupTitle": "Configuração Fácil",
-    "easySetupDescription": "Crie um evento em segundos com um intervalo de datas e preferências de horário opcionais",
-    "collaborativeTitle": "Colaborativo",
-    "collaborativeDescription": "Compartilhe um link exclusivo com os participantes para coletar a disponibilidade deles",
-    "smartResultsTitle": "Resultados Inteligentes",
-    "smartResultsDescription": "Visualize a disponibilidade sobreposta e encontre o melhor horário para todos",
+    "howItWorks": {
+      "title": "Como Funciona",
+      "description": "Agendar um evento leva apenas alguns passos simples.",
+      "step1": {
+        "title": "1. Crie o Evento",
+        "description": "Preencha os detalhes do evento, selecione um intervalo de datas e adicione seus participantes."
+      },
+      "step2": {
+        "title": "2. Compartilhe o Link",
+        "description": "Cada participante recebe um link exclusivo para marcar sua disponibilidade em um calendário simples."
+      },
+      "step3": {
+        "title": "3. Encontre o Melhor Horário",
+        "description": "Nosso painel visualiza os melhores horários. Finalize o evento e notifique a todos."
+      }
+    },
     "everythingYouNeedTitle": "Tudo o que Você Precisa",
     "everythingYouNeedDescription": "Recursos poderosos projetados para tornar o agendamento de eventos simples e agradável",
-    "footer": "MindYourEvent - Simplificando o agendamento",
     "features": {
       "visualAvailability": {
         "title": "Disponibilidade Visual",
-        "description": "Gráficos e mapas de calor bonitos mostram quando a maioria das pessoas está livre"
+        "description": "Gráficos e mapas de calor mostram quando a maioria das pessoas está livre."
       },
       "easySharing": {
         "title": "Compartilhamento Fácil",
-        "description": "Compartilhe um link exclusivo - não é necessário ter uma conta para os convidados"
+        "description": "Compartilhe um link exclusivo — os convidados não precisam de conta para responder."
       },
       "emailVerification": {
-        "title": "Verificação de E-mail",
-        "description": "Acesso seguro com autenticação baseada em e-mail"
+        "title": "Seguro e Privado",
+        "description": "Acesso seguro com autenticação baseada em e-mail e links exclusivos."
       },
       "smartNotifications": {
         "title": "Notificações Inteligentes",
-        "description": "E-mails automáticos quando o horário do evento é finalizado"
+        "description": "Atualizações automáticas por e-mail quando o horário do evento é finalizado."
       },
       "mobileOptimized": {
         "title": "Otimizado para Celular",
-        "description": "Experiência perfeita em qualquer dispositivo, em qualquer lugar"
+        "description": "Uma experiência perfeita e integrada em qualquer dispositivo, em qualquer lugar."
       },
       "rsvpTracking": {
         "title": "Acompanhamento de RSVP",
-        "description": "Veja quem vai comparecer depois que o horário for definido"
+        "description": "Acompanhe facilmente quem irá comparecer após a definição do horário final."
       }
+    },
+    "testimonials": {
+      "title": "Amado por Equipes em Todos os Lugares",
+      "description": "Veja o que as pessoas estão dizendo sobre o MindYourEvent.",
+      "person1": {
+        "quote": "\"Esta ferramenta mudou o jogo para agendar nossas reuniões de equipe. Chega de correntes de e-mail intermináveis!\"",
+        "name": "Mariana S.",
+        "title": "Gerente de Projetos"
+      },
+      "person2": {
+        "quote": "\"Finalmente, uma maneira simples e intuitiva de coordenar horários com clientes em diferentes fusos horários.\"",
+        "name": "Carlos E.",
+        "title": "Consultor Freelancer"
+      }
+    },
+    "finalCta": {
+      "title": "Pronto para Simplificar Seus Agendamentos?",
+      "description": "Pare com as correntes de e-mails e enquetes intermináveis. Encontre o horário perfeito para seu próximo evento em minutos."
+    },
+    "footer": {
+      "copyright": "© 2024 MindYourEvent. Todos os direitos reservados.",
+      "features": "Recursos",
+      "pricing": "Preços",
+      "contact": "Contato"
     }
   },
   "CreateEventPage": {

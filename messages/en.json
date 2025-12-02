@@ -5,40 +5,73 @@
     "title": "Schedule events without the back-and-forth",
     "description": "Create an event, share a link, and let everyone pick their available times. We'll show you when most people can make it.",
     "createEvent": "Create an Event",
-    "easySetupTitle": "Easy Setup",
-    "easySetupDescription": "Create an event in seconds with a date range and optional time preferences",
-    "collaborativeTitle": "Collaborative",
-    "collaborativeDescription": "Share a unique link with participants to collect their availability",
-    "smartResultsTitle": "Smart Results",
-    "smartResultsDescription": "Visualize overlapping availability and find the best time for everyone",
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "Scheduling an event takes just a few simple steps.",
+      "step1": {
+        "title": "1. Create Event",
+        "description": "Fill in the event details, select a date range, and add your participants."
+      },
+      "step2": {
+        "title": "2. Share Link",
+        "description": "Each participant gets a unique link to mark their availability on a simple calendar."
+      },
+      "step3": {
+        "title": "3. Find the Best Time",
+        "description": "Our dashboard visualizes the best times. Finalize the event and notify everyone."
+      }
+    },
     "everythingYouNeedTitle": "Everything You Need",
     "everythingYouNeedDescription": "Powerful features designed to make event scheduling simple and enjoyable",
-    "footer": "MindYourEvent - Making scheduling simple",
     "features": {
       "visualAvailability": {
         "title": "Visual Availability",
-        "description": "Beautiful graphs and heatmaps show when most people are free"
+        "description": "Beautiful graphs and heatmaps show when most people are free."
       },
       "easySharing": {
         "title": "Easy Sharing",
-        "description": "Share a unique link - no account needed for guests"
+        "description": "Share a unique link—no account needed for guests to respond."
       },
       "emailVerification": {
-        "title": "Email Verification",
-        "description": "Secure access with email-based authentication"
+        "title": "Secure & Private",
+        "description": "Secure access with email-based authentication and unique links."
       },
       "smartNotifications": {
         "title": "Smart Notifications",
-        "description": "Automatic emails when the event time is finalized"
+        "description": "Automatic email updates when the event time is finalized."
       },
       "mobileOptimized": {
         "title": "Mobile Optimized",
-        "description": "Perfect experience on any device, anywhere"
+        "description": "A perfect, seamless experience on any device, anywhere."
       },
       "rsvpTracking": {
         "title": "RSVP Tracking",
-        "description": "See who's attending after the time is set"
+        "description": "Easily track who is attending after the final time is set."
       }
+    },
+    "testimonials": {
+      "title": "Loved by Teams Everywhere",
+      "description": "See what people are saying about MindYourEvent.",
+      "person1": {
+        "quote": "\"This tool has been a game-changer for scheduling our team meetings. No more endless email chains!\"",
+        "name": "Sarah J.",
+        "title": "Project Manager"
+      },
+      "person2": {
+        "quote": "\"Finally, a simple and intuitive way to coordinate schedules with clients across different time zones.\"",
+        "name": "Michael B.",
+        "title": "Freelance Consultant"
+      }
+    },
+    "finalCta": {
+      "title": "Ready to Simplify Your Scheduling?",
+      "description": "Stop the email chains and endless polls. Find the perfect time for your next event in minutes."
+    },
+    "footer": {
+      "copyright": "© 2024 MindYourEvent. All rights reserved.",
+      "features": "Features",
+      "pricing": "Pricing",
+      "contact": "Contact"
     }
   },
   "CreateEventPage": {
