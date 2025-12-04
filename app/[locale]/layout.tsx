@@ -6,6 +6,7 @@ import { getMessages } from 'next-intl/server';
 import { AuthProvider } from "@/contexts/auth-context";
 import 'react-toastify/dist/ReactToastify.css';
 import "../globals.css";
+import { CookiesProvider } from "@/contexts/cookies-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,13 +34,15 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AuthProvider>
-            {children}
-            <ToastContainer
-              position="bottom-right"
-              stacked={true}
-            />
-          </AuthProvider>
+          <CookiesProvider>
+            <AuthProvider>
+              {children}
+              <ToastContainer
+                position="bottom-right"
+                stacked={true}
+              />
+            </AuthProvider>
+          </CookiesProvider>
         </NextIntlClientProvider>
       </body>
     </html>

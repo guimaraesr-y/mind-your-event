@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2, Mail, KeyRound } from "lucide-react"
 import { toast } from "react-toastify"
+import { useCookies } from "@/contexts/cookies-context"
 
 interface VerifyEmailFormProps {
   initialEmail?: string,
@@ -25,6 +26,7 @@ export function VerifyEmailForm({
   const [email, setEmail] = useState(initialEmail)
   const [code, setCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const { setCookie } = useCookies();
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -68,6 +70,9 @@ export function VerifyEmailForm({
         const error = await response.json()
         throw new Error(error.error || t("toast.verifyError"))
       }
+
+      const data = await response.json();
+      setCookie('session_token', data.sessionToken);
 
       toast(t("toast.verifySuccess"), {
         autoClose: 500,
