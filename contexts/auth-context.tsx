@@ -10,7 +10,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { UserInterface } from "@/modules/user/user";
 import { retrieveUserBySessionToken } from "@/actions/user/retrieve";
-import Cookies from "js-cookie";
+import { useCookies } from "./cookies-context";
 
 interface AuthContextType {
   user: UserInterface | null;
@@ -21,6 +21,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const { cookies, isLoading: cookieIsLoading } = useCookies();
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,7 +30,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserStatus = async () => {
-    const sessionToken = Cookies.get("session_token")
+    const sessionToken = cookies.session_token;
+
+    if (cookieIsLoading) {
+      return;
+    }
 
     if (!sessionToken) {
       setIsLoading(false);
@@ -37,10 +42,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     fetchUser(sessionToken)
-      .then((user: any) => {
+      .then((user: UserInterface | null) => {
         setUser(user);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.error("Error fetching user:", error);
       })
       .finally(() => {
@@ -50,7 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     updateUserStatus();
-  }, [Cookies]);
+    console.log({cookies, cookieIsLoading});
+  }, [cookies, cookieIsLoading]);
 
   if (isLoading) {
     return (
