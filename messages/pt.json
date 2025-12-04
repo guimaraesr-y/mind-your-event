@@ -53,14 +53,19 @@
       "title": "Amado por Equipes em Todos os Lugares",
       "description": "Veja o que as pessoas estão dizendo sobre o MindYourEvent.",
       "person1": {
-        "quote": "\"Esta ferramenta mudou o jogo para agendar nossas reuniões de equipe. Chega de correntes de e-mail intermináveis!\"",
+        "quote": "\"Esta ferramenta mudou o jogo para agendar nossas reuniões ministeriais. Chega de confusão em grupos e informações perdidas!\"",
         "name": "Mariana S.",
-        "title": "Gerente de Projetos"
+        "title": "Pastora da Igreja Batista"
       },
       "person2": {
-        "quote": "\"Finalmente, uma maneira simples e intuitiva de coordenar horários com clientes em diferentes fusos horários.\"",
+        "quote": "\"Finalmente, uma maneira simples e intuitiva de coordenar horários com nossos clientes, mesmo com a agenda lotada.\"",
         "name": "Carlos E.",
         "title": "Consultor Freelancer"
+      },
+      "person3": {
+        "quote": "\"Centralizamos todo nosso agendamento de reuniões de apoio aqui. Acabou a confusão de procurar datas para o conselho de classe.\"",
+        "name": "Letícia R.",
+        "title": "Professora de Ensino Infantil"
       }
     },
     "finalCta": {

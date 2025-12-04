@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import {
   Calendar,
   Users,
-  Clock,
   Sparkles,
   BarChart3,
   CheckCircle,
@@ -12,7 +11,6 @@ import {
   Shield,
   Smartphone,
   TrendingUp,
-  Award,
   Quote,
   Twitter,
   Linkedin,
@@ -184,7 +182,7 @@ export default function HomePage() {
                 {t("testimonials.description")}
               </p>
             </div>
-            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
+            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-3">
               <Card className="p-6">
                 <Quote className="h-8 w-8 text-primary" />
                 <p className="mt-4 text-lg text-foreground">
@@ -210,6 +208,20 @@ export default function HomePage() {
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {t("testimonials.person2.title")}
+                  </p>
+                </div>
+              </Card>
+              <Card className="p-6">
+                <Quote className="h-8 w-8 text-primary" />
+                <p className="mt-4 text-lg text-foreground">
+                  {t("testimonials.person3.quote")}
+                </p>
+                <div className="mt-6">
+                  <p className="font-semibold">
+                    {t("testimonials.person3.name")}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("testimonials.person3.title")}
                   </p>
                 </div>
               </Card>

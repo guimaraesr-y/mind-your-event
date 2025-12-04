@@ -53,14 +53,19 @@
       "title": "Loved by Teams Everywhere",
       "description": "See what people are saying about MindYourEvent.",
       "person1": {
-        "quote": "\"This tool has been a game-changer for scheduling our team meetings. No more endless email chains!\"",
-        "name": "Sarah J.",
-        "title": "Project Manager"
+        "quote": "\"This tool was a game-changer for scheduling our ministerial meetings. No more group confusion and lost information!\"",
+        "name": "Mariana S.",
+        "title": "Baptist Church Pastor"
       },
       "person2": {
-        "quote": "\"Finally, a simple and intuitive way to coordinate schedules with clients across different time zones.\"",
-        "name": "Michael B.",
+        "quote": "\"Finally, a simple and intuitive way to coordinate schedules with our clients, even with a packed schedule.\"",
+        "name": "Carlos E.",
         "title": "Freelance Consultant"
+      },
+      "person3": {
+        "quote": "\"We centralized all our support meeting scheduling here. The confusion of searching for Faculty Council dates is over.\"",
+        "name": "Letícia R.",
+        "title": "Early Childhood Educator"
       }
     },
     "finalCta": {
