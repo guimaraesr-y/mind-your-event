@@ -89,17 +89,15 @@ export default function DashboardPage() {
                 <Card>
                   <CardContent className="space-y-8 pt-6">
                     <div>
-                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
                       <CreatedEvents
-                        title={t("pendingEvents.createdEvents.title")}
+                        title={t("pendingEvents.title")}
                         description={t("pendingEvents.createdEvents.description")}
                         events={pendingCreatedEvents}
                       />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("confirmedEvents.title")}</h2>
                       <CreatedEvents
-                        title={t("confirmedEvents.createdEvents.title")}
+                        title={t("confirmedEvents.title")}
                         description={t("confirmedEvents.createdEvents.description")}
                         events={finalizedCreatedEvents}
                       />
@@ -112,18 +110,16 @@ export default function DashboardPage() {
                 <Card>
                   <CardContent className="space-y-8 pt-6">
                     <div>
-                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("pendingEvents.title")}</h2>
                       <ParticipatingEvents
-                        title={t("pendingEvents.invitedToEvents.title")}
+                        title={t("pendingEvents.title")}
                         description={t("pendingEvents.invitedToEvents.description")}
                         events={pendingParticipatingEvents}
                         participationConfirmMethod={eventHasAvailability}
                       />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-foreground mb-4">{t("confirmedEvents.title")}</h2>
                       <ParticipatingEvents
-                        title={t("confirmedEvents.invitedToEvents.title")}
+                        title={t("confirmedEvents.title")}
                         description={t("confirmedEvents.invitedToEvents.description")}
                         events={finalizedParticipatingEvents}
                         participationConfirmMethod={participantWillAttend}

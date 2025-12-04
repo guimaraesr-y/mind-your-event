@@ -94,22 +94,18 @@
     "pendingEvents": {
       "title": "Eventos com Ação Pendente",
       "createdEvents": {
-        "title": "Eventos que Você Criou",
         "description": "Estes eventos estão aguardando a disponibilidade dos participantes para você confirmar."
       },
       "invitedToEvents": {
-        "title": "Eventos para os Quais Você Foi Convidado",
         "description": "Envie sua disponibilidade para estes eventos."
       }
     },
     "confirmedEvents": {
       "title": "Eventos Confirmados",
       "createdEvents": {
-        "title": "Eventos que Você Criou",
         "description": "Estes eventos estão aguardando as confirmações de presença (RSVPs)."
       },
       "invitedToEvents": {
-        "title": "Eventos para os Quais Você Foi Convidado",
         "description": "Estes eventos estão aguardando sua confirmação de presença (RSVP)."
       }
     }
@@ -188,6 +184,7 @@
     }
   },
   "EventDashboard": {
+    "backLink":"Voltar para a Lista de Eventos",
     "viewResultsButton": "Ver Resultados e Confirmar Evento",
     "viewRsvpsButton": "Ver RSVPs",
     "detailsTitle": "Detalhes do Evento",

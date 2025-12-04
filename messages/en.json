@@ -94,22 +94,18 @@
     "pendingEvents": {
       "title": "Events Pending Action",
       "createdEvents": {
-        "title": "Events You Created",
         "description": "These events are awaiting participant availability for you to confirm."
       },
       "invitedToEvents": {
-        "title": "Events You're Invited To",
         "description": "Submit your availability for these events."
       }
     },
     "confirmedEvents": {
       "title": "Confirmed Events",
       "createdEvents": {
-        "title": "Events You Created",
         "description": "These events are waiting for RSVPs."
       },
       "invitedToEvents": {
-        "title": "Events You're Invited To",
         "description": "These events are waiting for your RSVP confirmation."
       }
     }
@@ -188,6 +184,7 @@
     }
   },
   "EventDashboard": {
+    "backLink":"Back to Event List",
     "viewResultsButton": "View Results & Confirm Event",
     "viewRsvpsButton": "View RSVPs",
     "detailsTitle": "Event Details",

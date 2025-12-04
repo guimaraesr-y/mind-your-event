@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send } from "lucide-react"
+import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send, ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"
@@ -46,6 +46,9 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Event Header */}
       <div className="space-y-2">
+        <Link href={`/dashboard`} className="flex items-center gap-2">
+          <ArrowLeft className="h-4 w-4 mr-1" /> {t("backLink")}
+        </Link>
         <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title}</h1>
         {event.description && <p className="text-muted-foreground max-w-2xl">{event.description}</p>}
       </div>
