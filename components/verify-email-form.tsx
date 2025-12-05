@@ -44,10 +44,10 @@ export function VerifyEmailForm({
         throw new Error(error.error || t("toast.sendError"))
       }
 
-      toast(t("toast.sendSuccess"))
+      toast.success(t("toast.sendSuccess"))
       setStep("code")
     } catch (error) {
-      toast(error instanceof Error ? error.message : t("toast.sendErrorFallback"), {
+      toast.error(error instanceof Error ? error.message : t("toast.sendErrorFallback"), {
         type: "error",
       })
     } finally {
@@ -74,7 +74,7 @@ export function VerifyEmailForm({
       const data = await response.json();
       setCookie('session_token', data.sessionToken);
 
-      toast(t("toast.verifySuccess"), {
+      toast.success(t("toast.verifySuccess"), {
         autoClose: 500,
         onClose: () => {
           if (callback) {
@@ -83,7 +83,7 @@ export function VerifyEmailForm({
         }
       })
     } catch (error) {
-      toast(error instanceof Error ? error.message : t("toast.verifyErrorFallback"), {
+      toast.error(error instanceof Error ? error.message : t("toast.verifyErrorFallback"), {
         type: "error",
       })
     } finally {

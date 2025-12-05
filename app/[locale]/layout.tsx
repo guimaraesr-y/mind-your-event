@@ -39,6 +39,7 @@ export default async function LocaleLayout({
               {children}
               <ToastContainer
                 position="bottom-right"
+                theme="light"
                 stacked={true}
               />
             </AuthProvider>

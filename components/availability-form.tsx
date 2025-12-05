@@ -86,7 +86,7 @@ export function AvailabilityForm({
     e.preventDefault()
 
     if (selectedSlots.length === 0) {
-      toast(t("toast.atLeastOne"), { type: "error" })
+      toast.warn(t("toast.atLeastOne"), { type: "error" })
       return
     }
 
@@ -108,11 +108,11 @@ export function AvailabilityForm({
         throw new Error(error.error || t("toast.submitError"))
       }
 
-      toast(t("toast.submitSuccess"))
+      toast.success(t("toast.submitSuccess"))
 
       router.refresh()
     } catch (error) {
-      toast(error instanceof Error ? error.message : t("toast.submitError"), {
+      toast.error(error instanceof Error ? error.message : t("toast.submitError"), {
         type: "error",
       })
     } finally {

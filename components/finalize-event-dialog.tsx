@@ -56,12 +56,12 @@ export function FinalizeEventDialog({
         throw new Error(error.error || "Failed to finalize event")
       }
 
-      toast("Event finalized! All participants have been notified")
+      toast.success("Event finalized! All participants have been notified")
 
       setOpen(false)
       router.refresh()
     } catch (error) {
-      toast(error instanceof Error ? error.message : "Failed to finalize event", {
+      toast.error(error instanceof Error ? error.message : "Failed to finalize event", {
         type: "error",
       })
     } finally {
