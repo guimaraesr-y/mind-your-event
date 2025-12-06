@@ -57,10 +57,10 @@ export function CreateEventForm() {
       }
 
       const data = await response.json()
-      toast(t("toast.createSuccess"))
+      toast.success(t("toast.createSuccess"))
       router.push(`/events/${data.eventId}`)
     } catch (error) {
-      toast(error instanceof Error ? error.message : t("toast.createError"), {
+      toast.error(error instanceof Error ? error.message : t("toast.createError"), {
         type: "error",
       })
     } finally {

@@ -22,7 +22,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
     const link = `${window.location.origin}/invite/${token}`
     navigator.clipboard.writeText(link)
     setCopiedTokens(new Set(copiedTokens).add(token))
-    toast(t("toast.copySuccess"))
+    toast.success(t("toast.copySuccess"))
     setTimeout(() => {
       setCopiedTokens((prev) => {
         const next = new Set(prev)

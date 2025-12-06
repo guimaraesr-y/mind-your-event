@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
+    "@next/eslint-plugin-next": "^16.0.7",
     "@tailwindcss/postcss": "^4.1.9",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22",

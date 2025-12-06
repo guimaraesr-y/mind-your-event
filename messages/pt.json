@@ -73,7 +73,7 @@
       "description": "Pare com as correntes de e-mails e enquetes intermináveis. Encontre o horário perfeito para seu próximo evento em minutos."
     },
     "footer": {
-      "copyright": "© 2024 MindYourEvent. Todos os direitos reservados.",
+      "copyright": "© 2025 MindYourEvent. Todos os direitos reservados.",
       "features": "Recursos",
       "pricing": "Preços",
       "contact": "Contato"
@@ -108,7 +108,12 @@
       "invitedToEvents": {
         "description": "Estes eventos estão aguardando sua confirmação de presença (RSVP)."
       }
-    }
+    },
+    "hello_greeting": "Olá,",
+    "editName": "Editar nome",
+    "saveName": "Salvar nome",
+    "updateNameSuccess": "Nome atualizado com sucesso!",
+    "updateNameError": "Falha ao atualizar o nome."
   },
   "InvitePage": {
     "finalized": {

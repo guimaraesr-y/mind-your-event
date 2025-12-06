@@ -73,7 +73,7 @@
       "description": "Stop the email chains and endless polls. Find the perfect time for your next event in minutes."
     },
     "footer": {
-      "copyright": "© 2024 MindYourEvent. All rights reserved.",
+      "copyright": "© 2025 MindYourEvent. All rights reserved.",
       "features": "Features",
       "pricing": "Pricing",
       "contact": "Contact"
@@ -108,7 +108,12 @@
       "invitedToEvents": {
         "description": "These events are waiting for your RSVP confirmation."
       }
-    }
+    },
+    "hello_greeting": "Hello,",
+    "editName": "Edit name",
+    "saveName": "Save name",
+    "updateNameSuccess": "Name updated successfully!",
+    "updateNameError": "Failed to update name."
   },
   "InvitePage": {
     "finalized": {

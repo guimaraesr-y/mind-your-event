@@ -34,11 +34,11 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
         throw new Error(error.error || t("toast.error"))
       }
 
-      toast(willAttend ? t("toast.attending") : t("toast.declined"))
+      toast.info(willAttend ? t("toast.attending") : t("toast.declined"))
 
       router.refresh()
     } catch (error) {
-      toast(error instanceof Error ? error.message : t("toast.error"), {
+      toast.error(error instanceof Error ? error.message : t("toast.error"), {
         type: "error",
       })
     } finally {
