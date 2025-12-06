@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CircleCheck, Clock } from "lucide-react";
-import Link from "next/link";
 import { EventParticipantWithEvent } from "@/actions/event/retrieve";
 import { EventCard } from "./event-card";
 

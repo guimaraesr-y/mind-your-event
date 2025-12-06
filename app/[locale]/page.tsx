@@ -12,7 +12,6 @@ import {
   Smartphone,
   TrendingUp,
   Quote,
-  Twitter,
   Linkedin,
   Github,
   MoveRight,
