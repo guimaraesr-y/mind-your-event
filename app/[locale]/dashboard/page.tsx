@@ -103,7 +103,7 @@ export default function DashboardPage() {
         <main className="flex-1 px-4 py-8 md:py-12">
           <div className="max-w-6xl mx-auto space-y-8">
 
-            <div className="flex flex-col md:flex-row items-start gap-4 md:gap-0 md:items-center justify-between px-4 py-2">
+            <div className="flex flex-col md:flex-row items-start gap-6 md:gap-0 md:items-center justify-between px-4 py-2">
               <div className="text-md md:text-2xl flex items-center gap-4">
                 <CircleUserRound className="h-8 w-8 md:h-12 md:w-12 text-muted-foreground" />
                 <div className="flex items-center gap-2">
@@ -144,8 +144,8 @@ export default function DashboardPage() {
                   </h1>
                 </div>
               </div>
-              <div>
-                <Button asChild>
+              <div className="w-full md:w-auto">
+                <Button asChild className="w-full md:w-auto">
                   <Link href="/create">{t("createEvent")}</Link>
                 </Button>
               </div>
@@ -170,7 +170,7 @@ export default function DashboardPage() {
 
               <TabsContent value="my-events">
                 <Card>
-                  <CardContent className="space-y-8 pt-6">
+                  <CardContent className="space-y-8">
                     <div>
                       <CreatedEvents
                         title={t("pendingEvents.title")}

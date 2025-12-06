@@ -7,9 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, Users, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { EventCard } from "./event-card";
 
 interface CreatedEventsProps {
   events: any[];
@@ -18,14 +16,6 @@ interface CreatedEventsProps {
 }
 
 export function CreatedEvents({ events, title, description }: CreatedEventsProps) {
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -38,33 +28,15 @@ export function CreatedEvents({ events, title, description }: CreatedEventsProps
         {events.length > 0 ? (
           <div className="space-y-4">
             {events.map((event) => (
-              <div
+              <EventCard
                 key={event.id}
-                className="flex items-center justify-between p-4 rounded-lg border"
-              >
-                <div className="space-y-1">
-                  <p className="font-semibold text-foreground">{event.title}</p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-4 w-4" />
-                      <span>
-                        {formatDate(event.start_date)} -{" "}
-                        {formatDate(event.end_date)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Users className="h-4 w-4" />
-                      <span>{event.event_participants[0].count} participants</span>
-                    </div>
-                  </div>
-                </div>
-                <Button asChild variant="outline" size="sm">
-                  <Link href={`/events/${event.id}`}>
-                    View Details
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
+                title={event.title}
+                startDate={event.start_date}
+                endDate={event.end_date}
+                participantsCount={event.event_participants[0].count}
+                linkHref={`/events/${event.id}`}
+                linkText="View Details"
+              />
             ))}
           </div>
         ) : (
