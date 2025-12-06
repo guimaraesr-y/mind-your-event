@@ -15,8 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { CircleUserRound, Pencil } from "lucide-react";
-import { toast } from "react-toastify";
-import { updateUser } from "@/actions/user/update";
+import { useUser } from "@/hooks/useUser";
 
 export default function DashboardPage() {
   const t = useTranslations("DashboardPage");
@@ -29,6 +28,8 @@ export default function DashboardPage() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editableName, setEditableName] = useState(user?.name || "");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
+
+  const { updateUser } = useUser();
 
   useEffect(() => {
     if (!isLoading && user) {
@@ -43,17 +44,21 @@ export default function DashboardPage() {
     }
 
     setIsUpdatingName(true);
-    try {
-      await updateUser(user.id, { name: editableName });
-      await updateUserStatus();
-      toast.success(t("updateNameSuccess"));
-      setIsEditingName(false);
-    } catch (error) {
-      toast.error(t("updateNameError"));
-      setEditableName(user.name || "");
-    } finally {
-      setIsUpdatingName(false);
-    }
+    updateUser({ 
+      id: user.id, name: editableName 
+    })
+      .then(data => {
+        user.name = data.name;
+        updateUserStatus();
+      })
+      .catch((error) => {
+        setEditableName(user.name || "");
+        console.log('Errror updating name', error);
+      })
+      .finally(() => {
+        setIsUpdatingName(false);
+        setIsEditingName(false);
+      })
   };
 
   useEffect(() => {
@@ -97,12 +102,13 @@ export default function DashboardPage() {
         <Header />
         <main className="flex-1 px-4 py-8 md:py-12">
           <div className="max-w-6xl mx-auto space-y-8">
-            <div className="flex items-center justify-between px-4 py-2">
-              <div className="flex items-center gap-4">
-                <CircleUserRound className="h-12 w-12 text-muted-foreground" />
+
+            <div className="flex flex-col md:flex-row items-start gap-4 md:gap-0 md:items-center justify-between px-4 py-2">
+              <div className="text-md md:text-2xl flex items-center gap-4">
+                <CircleUserRound className="h-8 w-8 md:h-12 md:w-12 text-muted-foreground" />
                 <div className="flex items-center gap-2">
-                  <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
-                    {t("hello", { name: user?.name || "there" })}
+                  <h1 className="font-semibold text-foreground flex items-center gap-2">
+                    {t("hello_greeting")}
                     {user && (
                       isEditingName ? (
                         <Input
@@ -116,18 +122,18 @@ export default function DashboardPage() {
                               setEditableName(user.name || "");
                             }
                           }}
-                          className="text-2xl md:text-3xl font-bold w-48"
+                          className="font-bold w-auto border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent p-0 h-auto"
                           disabled={isUpdatingName}
                           autoFocus
                         />
                       ) : (
                         <>
-                          <span className="text-3xl md:text-4xl font-bold text-foreground">{user.name}</span>
+                          <span className="md:text-2xl font-bold text-foreground">{user.name}</span>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setIsEditingName(true)}
-                            className="h-8 w-8 text-muted-foreground"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
                             aria-label={t("editName")}
                           >
                             <Pencil className="h-4 w-4" />
