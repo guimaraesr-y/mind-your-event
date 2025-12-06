@@ -108,7 +108,12 @@
       "invitedToEvents": {
         "description": "These events are waiting for your RSVP confirmation."
       }
-    }
+    },
+    "hello_greeting": "Hello,",
+    "editName": "Edit name",
+    "saveName": "Save name",
+    "updateNameSuccess": "Name updated successfully!",
+    "updateNameError": "Failed to update name."
   },
   "InvitePage": {
     "finalized": {

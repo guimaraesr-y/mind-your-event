@@ -6,6 +6,22 @@ export default class UserRepository {
 
     constructor() {}
 
+    async updateUser(payload: UserInterface): Promise<UserInterface> {
+        const supabase = await this.getSupabase();
+        const { data, error } = await supabase
+            .from("users")
+            .update(payload)
+            .eq("id", payload.id)
+            .select()
+            .single();
+        
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return data as UserInterface;
+    }
+
     async getUserByEmail(email: string): Promise<UserInterface | null> {
         const supabase = await this.getSupabase();
         const { data } = await supabase
