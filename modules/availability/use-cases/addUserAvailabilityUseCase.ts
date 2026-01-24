@@ -1,6 +1,6 @@
 import { ApiException } from "@/lib/exceptions/api";
 import { IUserRepository } from "@/modules/user/interfaces/user-repository.interface";
-import { IAvailabilityRepository, AvailabilitySlot as IAvailabilitySlot } from "../interfaces/availability-repository.interface";
+import { IAvailabilityRepository } from "../interfaces/availability-repository.interface";
 import { IParticipantRepository } from "@/modules/events/interfaces/participant-repository.interface";
 import UserRepository from "@/modules/user/repository";
 import AvailabilityRepository from "../repository";

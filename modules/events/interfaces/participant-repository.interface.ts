@@ -1,5 +1,3 @@
-import { UserInterface } from "@/modules/user/user";
-
 export interface IParticipantRepository {
     createParticipant(eventId: string, userId: string, inviteToken: string): Promise<void>;
     getParticipantsByEventId(eventId: string): Promise<any[]>;
