@@ -9,6 +9,7 @@ import { AvailabilityHeatmap } from "@/components/availability-heatmap"
 import { ParticipantsList } from "@/components/participants-list"
 import { FinalizeEventDialog } from "@/components/finalize-event-dialog"
 import { useFormatter, useTranslations } from "next-intl"
+import { CalculateBestSlotsUseCase } from "@/modules/events/use-cases/calculateBestSlotsUseCase"
 
 interface ResultsDashboardProps {
   event: any
@@ -16,14 +17,6 @@ interface ResultsDashboardProps {
   availabilitySlots: any[]
 }
 
-interface TimeSlotOverlap {
-  date: string
-  startTime: string
-  endTime: string
-  count: number
-  percentage: number
-  participants: string[]
-}
 
 export function ResultsDashboard({ event, participants, availabilitySlots }: ResultsDashboardProps) {
   const t = useTranslations("ResultsDashboard")
@@ -31,38 +24,12 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
   const totalParticipants = participants.length
   const submittedCount = participants.filter((p) => p.has_submitted).length
 
-  // Calculate overlapping time slots
-  const overlaps = useMemo(() => {
-    const overlapMap = new Map<string, TimeSlotOverlap>()
-
-    availabilitySlots.forEach((slot) => {
-      const key = `${slot.date}-${slot.start_time}-${slot.end_time}`
-      const existing = overlapMap.get(key)
-
-      if (existing) {
-        existing.count++
-        existing.participants.push(slot.users.name)
-        existing.percentage = (existing.count / totalParticipants) * 100
-      } else {
-        overlapMap.set(key, {
-          date: slot.date,
-          startTime: slot.start_time,
-          endTime: slot.end_time,
-          count: 1,
-          percentage: (1 / totalParticipants) * 100,
-          participants: [slot.users.name],
-        })
-      }
-    })
-
-    return Array.from(overlapMap.values()).sort((a, b) => {
-      if (b.count !== a.count) return b.count - a.count
-      if (a.date !== b.date) return a.date.localeCompare(b.date)
-      return a.startTime.localeCompare(b.startTime)
-    })
+  // Calculate overlapping time slots using Use Case
+  const bestSlots = useMemo(() => {
+    const useCase = new CalculateBestSlotsUseCase();
+    return useCase.execute({ availabilitySlots, totalParticipants });
   }, [availabilitySlots, totalParticipants])
 
-  const bestSlots = overlaps.slice(0, 5)
   const bestSlot = bestSlots[0]
 
   const formatDate = (dateStr: string) => {
@@ -164,13 +131,12 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
                 >
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     <div
-                      className={`flex items-center justify-center h-10 w-10 rounded-full flex-shrink-0 ${
-                        index === 0
-                          ? "bg-primary text-primary-foreground"
-                          : index === 1
-                            ? "bg-accent text-accent-foreground"
-                            : "bg-muted"
-                      }`}
+                      className={`flex items-center justify-center h-10 w-10 rounded-full flex-shrink-0 ${index === 0
+                        ? "bg-primary text-primary-foreground"
+                        : index === 1
+                          ? "bg-accent text-accent-foreground"
+                          : "bg-muted"
+                        }`}
                     >
                       <span className="font-bold text-sm">#{index + 1}</span>
                     </div>
