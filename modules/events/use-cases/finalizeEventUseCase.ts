@@ -1,8 +1,10 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseServerClient } from "@/lib/server";
 import { EventInterface } from "../event";
 import { ApiException } from "@/lib/exceptions/api";
 import { SendEventFinalizedEmailUseCase } from "./email/sendEventFinalizedEmail";
+import { IEventRepository } from "../interfaces/event-repository.interface";
+import { IParticipantRepository } from "../interfaces/participant-repository.interface";
+import EventRepository from "../repository";
+import ParticipantRepository from "../participant-repository";
 
 interface FinalizeEventDto {
     eventId: string;
@@ -13,63 +15,46 @@ interface FinalizeEventDto {
 
 export default class FinalizeEventUseCase {
 
+    constructor(
+        private eventRepository: IEventRepository = new EventRepository(),
+        private participantRepository: IParticipantRepository = new ParticipantRepository(),
+        private sendEventFinalizedEmail: SendEventFinalizedEmailUseCase = new SendEventFinalizedEmailUseCase()
+    ) { }
+
     private async updateFinalizedEvent(
         eventId: string,
         finalizedDate: string,
         finalizedStartTime: string,
         finalizedEndTime: string,
     ): Promise<EventInterface> {
-        const supabase = await this.getSupabase();
-        const { data: event, error: updateError } = await supabase
-            .from("events")
-            .update({
-                is_finalized: true,
-                finalized_date: finalizedDate,
-                finalized_start_time: finalizedStartTime,
-                finalized_end_time: finalizedEndTime,
-                updated_at: new Date().toISOString(),
-            })
-            .eq("id", eventId)
-            .select("*")
-            .single()
-        
-        if (updateError) {
-            throw new Error("Failed to update event");
-        }
-        return event
+        return await this.eventRepository.updateEvent(eventId, {
+            is_finalized: true,
+            finalized_date: finalizedDate,
+            finalized_start_time: finalizedStartTime,
+            finalized_end_time: finalizedEndTime,
+            updated_at: new Date().toISOString(),
+        });
     }
 
     private async isEventFinalized(eventId: string): Promise<boolean> {
-        const supabase = await this.getSupabase();
-        const { data: event } = await supabase
-            .from("events")
-            .select("is_finalized")
-            .eq("id", eventId)
-            .single()
-        
-        return Boolean(event?.is_finalized);
+        return await this.eventRepository.isEventFinalized(eventId);
     }
 
     private async notificateParticipants(event: EventInterface) {
-        const supabase = await this.getSupabase();
-        const { data: participants } = await supabase
-            .from("event_participants")
-            .select("*, users(name, email)")
-            .eq("event_id", event.id)
-        
+        const participants = await this.participantRepository.getParticipantsByEventId(event.id);
+
         if (!participants) {
             return;
         }
-        
-        const sendEventFinalizedEmail = new SendEventFinalizedEmailUseCase();
+
         const emailPromises = participants.map(async (participant) => {
-            const email = participant.users.email;
+            const email = participant.user.email;
             const finalizedTime = `${event.finalized_start_time} - ${event.finalized_end_time}`;
-            
+
             try {
-                await sendEventFinalizedEmail.execute({
+                await this.sendEventFinalizedEmail.execute({
                     email,
-                    userName: participant.users.name,
+                    userName: participant.user.name,
                     eventTitle: event.title,
                     eventLink: this.getParticipantUrl(participant.invite_token),
                     finalizedDate: event.finalized_date,
@@ -102,10 +87,6 @@ export default class FinalizeEventUseCase {
     private getParticipantUrl(token: string) {
         const baseUrl = process.env.API_BASE_URL || "http://localhost:3000";
         return `${baseUrl}/invite/${token}`;
-    }
-
-    private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {
-        return await getSupabaseServerClient();
     }
 
 }

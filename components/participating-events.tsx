@@ -36,8 +36,8 @@ export function ParticipatingEvents({ events, title, description, participationC
                 title={p.events.title}
                 startDate={p.events.start_date}
                 endDate={p.events.end_date}
-                participantsCount={p.events.event_participants[0].count}
-                organizerName={p.events.users.name}
+                participantsCount={p.events._count.event_participants}
+                organizerName={p.events.creator.name}
                 statusIcon={
                   participationConfirmMethod(p) ? (
                     <CircleCheck className="text-accent/50" />

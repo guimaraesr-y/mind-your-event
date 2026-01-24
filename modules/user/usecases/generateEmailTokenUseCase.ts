@@ -1,6 +1,6 @@
-import { SupabaseClient } from "@supabase/supabase-js"
-import { getSupabaseServerClient } from "@/lib/server"
 import { ApiException } from "@/lib/exceptions/api"
+import { IAuthRepository } from "@/modules/auth/interfaces/auth-repository.interface"
+import AuthRepository from "@/modules/auth/repository"
 
 interface EmailToken {
     token: string
@@ -12,6 +12,7 @@ const EXPIRES_IN_MINUTES = 15
 export class GenerateEmailTokenUseCase {
 
     constructor(
+        private authRepository: IAuthRepository = new AuthRepository()
     ) { }
 
     public async execute(email: string): Promise<EmailToken> {
@@ -19,27 +20,14 @@ export class GenerateEmailTokenUseCase {
         const expiresAt = new Date()
         expiresAt.setMinutes(expiresAt.getMinutes() + EXPIRES_IN_MINUTES);
 
-        await this.storeOnDatabase(email, token, expiresAt)
-        return { token, expiresAt }
-    }
-
-    private async storeOnDatabase(email: string, token: string, expiresAt: Date) {
-        const supabase = await this.getSupabase();
-        const { error: insertError } = await supabase.from("auth_tokens").insert({
-            email,
-            token,
-            expires_at: expiresAt.toISOString(),
-            used: false,
-        })
-
-        if (insertError) {
-            console.error("[v0] Error storing auth token:", insertError)
+        try {
+            await this.authRepository.createToken(email, token, expiresAt)
+        } catch (error) {
+            console.error("[v0] Error storing auth token:", error)
             throw new ApiException("Failed to store auth token", 500)
         }
-    }
 
-    private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {
-        return await getSupabaseServerClient();
+        return { token, expiresAt }
     }
 
 }

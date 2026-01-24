@@ -1,5 +1,5 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseServerClient } from "@/lib/server";
+import { IParticipantRepository } from "../interfaces/participant-repository.interface";
+import ParticipantRepository from "../participant-repository";
 
 interface SaveRsvpDto {
     eventId: string;
@@ -9,22 +9,16 @@ interface SaveRsvpDto {
 
 export default class SaveRsvpUseCase {
 
-    public async execute(payload: SaveRsvpDto) {
-        const supabase = await this.getSupabase();
-        const { error } = await supabase
-            .from("event_participants")
-            .update({ will_attend: payload.willAttend })
-            .eq("has_submitted", true)
-            .eq("invite_token", payload.inviteToken)
-            .eq("event_id", payload.eventId)
+    constructor(
+        private participantRepository: IParticipantRepository = new ParticipantRepository()
+    ) { }
 
-        if (error) {
+    public async execute(payload: SaveRsvpDto) {
+        try {
+            await this.participantRepository.updateRsvp(payload.eventId, payload.inviteToken, payload.willAttend);
+        } catch (error: any) {
             throw new Error(error.message);
         }
-    }
-
-    private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {
-        return await getSupabaseServerClient();
     }
 
 }
