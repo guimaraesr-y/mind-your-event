@@ -1,86 +1,92 @@
-import { getSupabaseServerClient } from "@/lib/server";
-import { SupabaseClient } from "@supabase/supabase-js";
+import prisma from "@/lib/db";
 import { UserInterface } from "./user";
+import { IUserRepository } from "./interfaces/user-repository.interface";
 
-export default class UserRepository {
+export default class UserRepository implements IUserRepository {
 
-    constructor() {}
+    constructor() { }
+
+    async createUser(payload: Partial<UserInterface>): Promise<UserInterface> {
+        const data = await prisma.user.create({
+            data: {
+                email: payload.email!,
+                name: payload.name!,
+                session_token: payload.session_token
+            }
+        });
+
+        return this.mapToUserInterface(data);
+    }
 
     async updateUser(payload: UserInterface): Promise<UserInterface> {
-        const supabase = await this.getSupabase();
-        const { data, error } = await supabase
-            .from("users")
-            .update(payload)
-            .eq("id", payload.id)
-            .select()
-            .single();
-        
-        if (error) {
-            throw new Error(error.message);
-        }
+        const data = await prisma.user.update({
+            where: { id: payload.id },
+            data: {
+                email: payload.email,
+                name: payload.name,
+                session_token: payload.session_token
+            }
+        });
 
-        return data as UserInterface;
+        return this.mapToUserInterface(data);
     }
 
     async getUserByEmail(email: string): Promise<UserInterface | null> {
-        const supabase = await this.getSupabase();
-        const { data } = await supabase
-            .from("users")
-            .select("*")
-            .eq("email", email)
-            .single();
+        const data = await prisma.user.findUnique({
+            where: { email }
+        });
 
-        return data;
+        return data ? this.mapToUserInterface(data) : null;
     }
 
     async getUserBySessionToken(sessionToken: string): Promise<UserInterface | null> {
-        const supabase = await this.getSupabase();
-        const { data } = await supabase
-            .from("users")
-            .select("*")
-            .eq("session_token", sessionToken)
-            .single();
+        const data = await prisma.user.findUnique({
+            where: { session_token: sessionToken }
+        });
 
-        return data;
+        return data ? this.mapToUserInterface(data) : null;
     }
 
     async getUserByEmailAndSessionToken(email: string, sessionToken: string): Promise<UserInterface | null> {
-        const supabase = await this.getSupabase();
-        const { data } = await supabase
-            .from("users")
-            .select("*")
-            .eq('email', email)
-            .eq('session_token', sessionToken)
-            .single();
+        const data = await prisma.user.findFirst({
+            where: {
+                email,
+                session_token: sessionToken
+            }
+        });
 
-        return data;
+        return data ? this.mapToUserInterface(data) : null;
     }
 
     async getUserByInviteToken(inviteToken: string): Promise<UserInterface | null> {
-        const supabase = await this.getSupabase();
-        const { data } = await supabase
-            .from("users")
-            .select("*,event_participants!inner(invite_token)")
-            .eq("event_participants.invite_token", inviteToken)
-            .single();
-        
-        return data;
+        const participant = await prisma.eventParticipant.findUnique({
+            where: { invite_token: inviteToken },
+            include: { user: true }
+        });
+
+        return participant ? this.mapToUserInterface(participant.user) : null;
     }
 
     async updateSessionToken(email: string, sessionToken: string): Promise<void> {
-        const supabase = await this.getSupabase();
-        const { error } = await supabase
-            .from("users")
-            .update({ session_token: sessionToken })
-            .eq("email", email);
-
-        if (error) {
-            throw new Error(error.message);
-        }
+        await prisma.user.upsert({
+            where: { email },
+            update: { session_token: sessionToken },
+            create: {
+                email,
+                name: email,
+                session_token: sessionToken,
+            },
+        });
     }
 
-  private async getSupabase(): Promise<SupabaseClient<any, "public", "public", any, any>> {
-    return await getSupabaseServerClient();
-  }
+    private mapToUserInterface(data: any): UserInterface {
+        return {
+            id: data.id,
+            email: data.email,
+            name: data.name,
+            session_token: data.session_token || "",
+            created_at: data.created_at?.toISOString() || ""
+        };
+    }
 
 }
