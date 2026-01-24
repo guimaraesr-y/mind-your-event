@@ -17,7 +17,8 @@ export default class FinalizeEventUseCase {
 
     constructor(
         private eventRepository: IEventRepository = new EventRepository(),
-        private participantRepository: IParticipantRepository = new ParticipantRepository()
+        private participantRepository: IParticipantRepository = new ParticipantRepository(),
+        private sendEventFinalizedEmail: SendEventFinalizedEmailUseCase = new SendEventFinalizedEmailUseCase()
     ) { }
 
     private async updateFinalizedEvent(
@@ -46,13 +47,12 @@ export default class FinalizeEventUseCase {
             return;
         }
 
-        const sendEventFinalizedEmail = new SendEventFinalizedEmailUseCase();
         const emailPromises = participants.map(async (participant) => {
             const email = participant.user.email;
             const finalizedTime = `${event.finalized_start_time} - ${event.finalized_end_time}`;
 
             try {
-                await sendEventFinalizedEmail.execute({
+                await this.sendEventFinalizedEmail.execute({
                     email,
                     userName: participant.user.name,
                     eventTitle: event.title,
