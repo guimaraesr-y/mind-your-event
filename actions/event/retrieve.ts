@@ -1,50 +1,32 @@
 'use server';
 
-import { getSupabaseServerClient } from "@/lib/server";
 import { AvailabilitySlot } from "@/modules/events/availabilitySlot";
 import { EventInterface } from "@/modules/events/event";
 import { EventParticipant } from "@/modules/events/eventParticipants";
 import { PublicUserInterface, UserInterface } from "@/modules/user/user";
+import EventRepository from "@/modules/events/repository";
+import ParticipantRepository from "@/modules/events/participant-repository";
+import AvailabilityRepository from "@/modules/availability/repository";
+
+const eventRepo = new EventRepository();
+const participantRepo = new ParticipantRepository();
+const availabilityRepo = new AvailabilityRepository();
 
 interface EventWithCreator extends EventInterface {
     creator: Pick<UserInterface, "name" | "email">;
 }
 
 export async function retrieveEventById(eventId: string): Promise<EventWithCreator | null> {
-    const supabase = await getSupabaseServerClient();
-    const { data: event } = await supabase
-        .from("events")
-        .select("*, creator:users!events_creator_id_fkey(name, email)")
-        .eq("id", eventId)
-        .single();
-
-    return event;
+    return await eventRepo.getEventById(eventId);
 }
 
 export async function retrieveEventCreator(eventId: string): Promise<PublicUserInterface | null> {
-    const supabase = await getSupabaseServerClient();
-    const { data: creator } = await supabase
-        .from("event")
-        .select("users(id, name, email)")
-        .eq("id", eventId)
-        .single();
-    
-    const users = creator?.users;
-    if (users) {
-        return users[0];
-    }
-    
-    return null;
+    const event = await eventRepo.getEventById(eventId);
+    return event?.creator || null;
 }
 
 export async function retrieveEventsByCreatorId(userId: string): Promise<EventInterface[]> {
-    const supabase = await getSupabaseServerClient();
-    const { data: created } = await supabase
-        .from("events")
-        .select("*, users!events_creator_id_fkey(name, email), event_participants(count)")
-        .eq("creator_id", userId);
-
-    return created || [];
+    return await eventRepo.getEventsByCreatorId(userId);
 }
 
 export interface EventWithAvailabilitySlotsInterface extends EventInterface {
@@ -56,13 +38,14 @@ export interface EventParticipantWithEvent extends EventParticipant {
 }
 
 export async function retrieveParticipatingEventsByUserId(userId: string): Promise<EventParticipantWithEvent[]> {
-    const supabase = await getSupabaseServerClient();
-    const { data: participating } = await supabase
-        .from("event_participants")
-        .select("*, events(*, users!events_creator_id_fkey(name, email), event_participants(count), availability_slots!inner(user_id))")
-        .eq("user_id", userId);
-
-    return participating || [];
+    const participating = await participantRepo.getParticipatingEventsByUserId(userId);
+    return participating.map(p => ({
+        ...p,
+        events: {
+            ...p.event,
+            availability_slots: p.event.availabilities
+        }
+    }));
 }
 
 interface EventParticipantWithUser extends EventParticipant {
@@ -70,64 +53,43 @@ interface EventParticipantWithUser extends EventParticipant {
 }
 
 export async function retrieveEventParticipants(eventId: string): Promise<EventParticipantWithUser[]> {
-    const supabase = await getSupabaseServerClient();
-    const { data: participants } = await supabase
-        .from("event_participants")
-        .select("*, users(name, email)")
-        .eq("event_id", eventId)
-
-    return participants || [];
+    const participants = await participantRepo.getParticipantsByEventId(eventId);
+    return participants.map(p => ({
+        ...p,
+        users: p.user
+    }));
 }
 
 export async function retrieveEventAvailabilities(eventId: string): Promise<AvailabilitySlot[]> {
-    const supabase = await getSupabaseServerClient();
-    const { data: availabilitySlots } = await supabase
-        .from("availability_slots")
-        .select("*, users(name, email)")
-        .eq("event_id", eventId)
-
-    return availabilitySlots || [];
+    const availabilities = await availabilityRepo.getEventAvailabilities(eventId);
+    return availabilities.map(a => ({
+        ...a,
+        users: a.user
+    }));
 }
 
 export async function retrieveUserAvailabilitiesForEvent(userId: string, eventId: string): Promise<AvailabilitySlot[]> {
-    const supabase = await getSupabaseServerClient();
-    const { data: existingAvailability } = await supabase
-        .from("availability_slots")
-        .select("*")
-        .eq("event_id", eventId)
-        .eq("user_id", userId)
-
-    return existingAvailability || [];
+    return await availabilityRepo.getUserAvailabilitiesForEvent(userId, eventId);
 }
-
 
 interface EventParticipantWithUserAndEvent extends EventParticipantWithUser {
     events: EventInterface
 }
 
 export async function retrieveEventParticipantByInviteToken(token: string): Promise<EventParticipantWithUserAndEvent> {
-    const supabase = await getSupabaseServerClient();
-    const { data: participant } = await supabase
-        .from("event_participants")
-        .select("*, events(*), users(name, email)")
-        .eq("invite_token", token)
-        .single()
+    const participant = await participantRepo.getParticipantByInviteToken(token);
+    if (!participant) return null as any;
 
-    return participant || [];
+    return {
+        ...participant,
+        users: participant.user,
+        events: participant.event
+    };
 }
 
 export async function isEventOwner(userId?: string, eventId?: string): Promise<boolean> {
     if (!userId || !eventId) {
         return false;
     }
-
-    const supabase = await getSupabaseServerClient();
-    const { data: event } = await supabase
-        .from("events")
-        .select("id", { count: "exact" })
-        .eq("id", eventId)
-        .eq("creator_id", userId)
-        .limit(1);
-    
-    return Boolean(event && event.length > 0);
+    return await eventRepo.isEventOwner(userId, eventId);
 }

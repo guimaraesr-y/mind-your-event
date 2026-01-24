@@ -1,8 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getSupabaseServerClient } from "@/lib/server"
 import { randomBytes } from "crypto"
-
 import { updateUserSessionToken } from "@/actions/user/update";
+import AuthRepository from "@/modules/auth/repository";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,18 +12,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email and token are required" }, { status: 400 })
     }
 
-    const supabase = await getSupabaseServerClient()
+    const authRepository = new AuthRepository();
 
     // Find valid token
-    const { data: authToken, error: tokenError } = await supabase
-      .from("auth_tokens")
-      .select("*")
-      .eq("email", email)
-      .eq("token", token)
-      .eq("used", false)
-      .single()
+    const authToken = await authRepository.getToken(token);
 
-    if (tokenError || !authToken) {
+    if (!authToken || authToken.email !== email || authToken.used) {
       return NextResponse.json({ error: "Invalid verification code" }, { status: 401 })
     }
 
@@ -37,11 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark token as used
-    const { error: updateError } = await supabase.from("auth_tokens").update({ used: true }).eq("id", authToken.id)
-
-    if (updateError) {
-      console.error("[v0] Error updating auth token:", updateError)
-    }
+    await authRepository.markTokenAsUsed(token);
 
     // Generate session token
     const sessionToken = randomBytes(32).toString("hex")
