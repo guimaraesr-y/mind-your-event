@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
-import { EventInterface } from "../event";
 import { IEventRepository } from "./interfaces/event-repository.interface";
+import { EventInterface } from "./event";
 
 export default class EventRepository implements IEventRepository {
 
