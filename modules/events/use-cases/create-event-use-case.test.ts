@@ -73,4 +73,41 @@ describe('CreateEventUseCase', () => {
 
         await expect(useCase.execute(eventData)).rejects.toThrow('This user already exists');
     });
+
+    it('should automatically create users for participants who do not exist', async () => {
+        const eventData: CreateEventDto = {
+            title: 'Community Meeting',
+            start_date: '2026-03-01',
+            end_date: '2026-03-02',
+            participantEmails: ['new-user@test.com'],
+            creatorEmail: 'creator@test.com',
+            creatorName: 'Creator',
+            authenticatedUser: { id: 'creator-id', email: 'creator@test.com', name: 'Creator', session_token: 'abc', created_at: '' }
+        };
+
+        const mockCreator = { id: 'creator-id', email: 'creator@test.com', name: 'Creator' };
+        const mockNewUser = { id: 'new-user-id', email: 'new-user@test.com', name: 'new-user' };
+        const mockEvent = { id: 'event-id', ...eventData };
+
+        // Creator is already authenticated and exists
+        mockUserRepo.getUserByEmail.mockResolvedValueOnce(mockCreator);
+        mockEventRepo.createEvent.mockResolvedValue(mockEvent);
+
+        // Participant check
+        mockUserRepo.getUserByEmail.mockResolvedValueOnce(null); // Doesn't exist
+        mockUserRepo.createUser.mockResolvedValueOnce(mockNewUser); // Should be created
+
+        await useCase.execute(eventData);
+
+        expect(mockUserRepo.createUser).toHaveBeenCalledWith(expect.objectContaining({
+            email: 'new-user@test.com',
+            name: 'new-user'
+        }));
+
+        expect(mockParticipantRepo.createParticipant).toHaveBeenCalledWith(
+            'event-id',
+            'new-user-id',
+            expect.any(String)
+        );
+    });
 });
