@@ -64,4 +64,23 @@ describe('UserRepository', () => {
             expect(result).toBeNull();
         });
     });
+
+    describe('updateSessionToken', () => {
+        it('should upsert user (create if not exists) when updating session token', async () => {
+            const email = 'new@test.com';
+            const token = 'session-123';
+
+            await repository.updateSessionToken(email, token);
+
+            expect(prisma.user.upsert).toHaveBeenCalledWith({
+                where: { email },
+                update: { session_token: token },
+                create: {
+                    email,
+                    name: email,
+                    session_token: token,
+                },
+            });
+        });
+    });
 });
