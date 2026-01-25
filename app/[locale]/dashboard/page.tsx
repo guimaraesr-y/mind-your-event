@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { Header } from "@/components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { CircleUserRound, Pencil } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
@@ -27,12 +27,23 @@ export default function DashboardPage() {
   const [finalizedParticipatingEvents, setFinalizedParticipatingEvents] = useState<EventParticipantWithEvent[]>([]);
 
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [activeTab, setActiveTab] = useState("my-events");
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [editableName, setEditableName] = useState(user?.name || "");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
 
   const { updateUser } = useUser();
+
+  const handleOnboardingComplete = useCallback(() => {
+    setShowOnboarding(false);
+  }, []);
+
+  const handleStepChange = useCallback((index: number) => {
+    if (index === 3) {
+      setActiveTab("invitations");
+    }
+  }, []);
 
   useEffect(() => {
     if (!isLoading && user) {
@@ -104,7 +115,12 @@ export default function DashboardPage() {
       <div className="min-h-screen flex flex-col bg-background">
         <Header onShowTutorial={() => setShowOnboarding(true)} />
         <main className="flex-1 px-4 py-8 md:py-12">
-          <Onboarding forceShow={showOnboarding} onComplete={() => setShowOnboarding(false)} />
+          <Onboarding
+            forceShow={showOnboarding}
+            onComplete={handleOnboardingComplete}
+            isLoading={isLoading}
+            onStepChange={handleStepChange}
+          />
           <div className="max-w-6xl mx-auto space-y-8 dashboard-container">
 
             <div className="flex flex-col md:flex-row items-start gap-6 md:gap-0 md:items-center justify-between px-4 py-2">
@@ -166,7 +182,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <Tabs defaultValue="my-events">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger className="cursor-pointer" value="my-events">{t("tabs.myEvents")}</TabsTrigger>
                 <TabsTrigger className="cursor-pointer" value="invitations">{t("tabs.invitations")}</TabsTrigger>
