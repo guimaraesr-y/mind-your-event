@@ -114,72 +114,79 @@ export default function DashboardPage() {
     <AuthGuard>
       <div className="min-h-screen flex flex-col bg-background">
         <Header onShowTutorial={() => setShowOnboarding(true)} />
-        <main className="flex-1 px-4 py-8 md:py-12">
+        <main className="flex-1 px-4 py-6 md:py-10">
           <Onboarding
             forceShow={showOnboarding}
             onComplete={handleOnboardingComplete}
             isLoading={isLoading}
             onStepChange={handleStepChange}
           />
-          <div className="max-w-6xl mx-auto space-y-8 dashboard-container">
+          <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 dashboard-container">
 
-            <div className="flex flex-col md:flex-row items-start gap-6 md:gap-0 md:items-center justify-between px-4 py-2">
-              <div className="text-md md:text-2xl flex items-center gap-4">
-                <CircleUserRound className="h-8 w-8 md:h-12 md:w-12 text-muted-foreground" />
-                <div className="flex items-center gap-2">
-                  <h1 className="font-semibold text-foreground flex items-center gap-2">
-                    {t("hello_greeting")}
-                    {user && (
-                      isEditingName ? (
-                        <Input
-                          value={editableName}
-                          onChange={(e) => setEditableName(e.target.value)}
-                          onBlur={handleUpdateName}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleUpdateName();
-                            if (e.key === 'Escape') {
-                              setIsEditingName(false);
-                              setEditableName(user.name || "");
-                            }
-                          }}
-                          className="font-bold w-auto border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent p-0 h-auto"
-                          disabled={isUpdatingName}
-                          autoFocus
-                        />
-                      ) : (
-                        <>
-                          <span className="md:text-2xl font-bold text-foreground">{user.name}</span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setIsEditingName(true)}
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                            aria-label={t("editName")}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                        </>
-                      )
-                    )}
-                  </h1>
+            <div className="relative overflow-hidden rounded-3xl bg-primary/5 p-6 md:p-8 border border-primary/10">
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
+              <div className="absolute bottom-0 left-0 -mb-10 -ml-10 h-40 w-40 rounded-full bg-accent/10 blur-3xl" />
+
+              <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="flex items-center gap-4 md:gap-6">
+                  <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-background border flex items-center justify-center shadow-sm">
+                    <CircleUserRound className="h-10 w-10 md:h-12 md:w-12 text-primary" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h1 className="text-xl md:text-3xl font-bold text-foreground">
+                        {t("hello_greeting")}
+                        {user && (
+                          isEditingName ? (
+                            <Input
+                              value={editableName}
+                              onChange={(e) => setEditableName(e.target.value)}
+                              onBlur={handleUpdateName}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleUpdateName();
+                                if (e.key === 'Escape') {
+                                  setIsEditingName(false);
+                                  setEditableName(user.name || "");
+                                }
+                              }}
+                              className="font-bold w-auto border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent p-0 h-auto inline-block"
+                              disabled={isUpdatingName}
+                              autoFocus
+                            />
+                          ) : (
+                            <span className="ml-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{user.name}</span>
+                          )
+                        )}
+                      </h1>
+                      {!isEditingName && user && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setIsEditingName(true)}
+                          className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
+                          aria-label={t("editName")}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                    <p className="text-muted-foreground text-sm md:text-base font-medium">
+                      {t("description")}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="w-full md:w-auto">
-                <Button asChild className="w-full md:w-auto create-event-button">
-                  <Link href="/create">{t("createEvent")}</Link>
-                </Button>
+                <div className="w-full md:w-auto">
+                  <Button asChild size="lg" className="w-full md:w-auto shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all create-event-button">
+                    <Link href="/create">{t("createEvent")}</Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
-            <div className="w-full inline-flex items-center gap-2 px-4 py-2">
-              <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                  {t("title")}
-                </h1>
-                <p className="text-muted-foreground">
-                  {t("description")}
-                </p>
-              </div>
+            <div className="hidden md:block w-full px-2">
+              <h2 className="text-3xl font-bold tracking-tight text-foreground">
+                {t("title")}
+              </h2>
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab}>

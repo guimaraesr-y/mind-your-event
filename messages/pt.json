@@ -115,6 +115,19 @@
     "updateNameSuccess": "Nome atualizado com sucesso!",
     "updateNameError": "Falha ao atualizar o nome."
   },
+  "EventCard": {
+    "organizedBy": "Por {name}",
+    "participants": "{count, plural, one {# participante} other {# participantes}}",
+    "viewDetails": "Ver Detalhes",
+    "viewInvitation": "Ver Convite"
+  },
+  "CreatedEvents": {
+    "noEvents": "Nenhum evento encontrado ainda. Comece criando seu primeiro evento!",
+    "noEventsFilter": "Nenhum evento corresponde a esta categoria."
+  },
+  "ParticipatingEvents": {
+    "noInvitations": "Nenhum convite ainda. Quando alguém te convidar, eles aparecerão aqui!"
+  },
   "InvitePage": {
     "finalized": {
       "banner": "Evento Confirmado",
