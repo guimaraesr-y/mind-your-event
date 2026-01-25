@@ -189,7 +189,7 @@
     }
   },
   "EventDashboard": {
-    "backLink":"Back to Event List",
+    "backLink": "Back to Event List",
     "viewResultsButton": "View Results & Confirm Event",
     "viewRsvpsButton": "View RSVPs",
     "detailsTitle": "Event Details",
@@ -250,9 +250,19 @@
     "participantInfo": "Each participant will receive a unique link to submit their availability.",
     "creatingButton": "Creating Event...",
     "createButton": "Create Event & Get Shareable Links",
+    "nextButton": "Next",
+    "previousButton": "Previous",
     "toast": {
       "createSuccess": "Event created successfully!",
       "createError": "Failed to create event"
+    },
+    "validation": {
+      "titleMin": "Title must be at least 3 characters",
+      "nameRequired": "Name is required",
+      "emailInvalid": "Invalid email address",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "participantEmailsInvalid": "Please enter valid comma-separated emails (at least one)"
     }
   },
   "ParticipantsList": {
@@ -341,6 +351,50 @@
         "thanks": "Thank you for signing up. Please use the following verification code to complete your registration. This code is valid for 15 minutes.",
         "ifFallback": "If you did not sign up for this account, ignore this email."
       }
+    }
+  },
+  "Onboarding": {
+    "steps": {
+      "welcome": {
+        "title": "Welcome to MindYourEvent!",
+        "popover": {
+          "title": "Let's Get Started",
+          "description": "Welcome to MindYourEvent! We'll show you how to quickly find the best time for your activities with your friends or team."
+        }
+      },
+      "dashboard": {
+        "title": "Your Dashboard",
+        "popover": {
+          "title": "Monitor Your Events",
+          "description": "Here you can see all the events you've created and the invitations you've received."
+        }
+      },
+      "create": {
+        "title": "Create Your First Event",
+        "popover": {
+          "title": "Start Planning",
+          "description": "Click here to create a new event. You'll define a date range and invite participants."
+        }
+      },
+      "invitations": {
+        "title": "Manage Invitations",
+        "popover": {
+          "title": "Your Invitations",
+          "description": "Check this tab to see events you were invited to and submit your availability."
+        }
+      },
+      "info": {
+        "title": "Need Help?",
+        "popover": {
+          "title": "Re-watch Tutorial",
+          "description": "If you ever need a refresher, just click this info icon to see this tutorial again."
+        }
+      }
+    },
+    "buttons": {
+      "next": "Next",
+      "previous": "Previous",
+      "done": "Got it!"
     }
   }
 }

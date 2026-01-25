@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { CircleUserRound, Pencil } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
+import { Onboarding } from "@/components/onboarding";
 
 export default function DashboardPage() {
   const t = useTranslations("DashboardPage");
@@ -24,6 +25,8 @@ export default function DashboardPage() {
   const [finalizedCreatedEvents, setFinalizedCreatedEvents] = useState<EventInterface[]>([]);
   const [pendingParticipatingEvents, setPendingParticipatingEvents] = useState<EventParticipantWithEvent[]>([]);
   const [finalizedParticipatingEvents, setFinalizedParticipatingEvents] = useState<EventParticipantWithEvent[]>([]);
+
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [editableName, setEditableName] = useState(user?.name || "");
@@ -44,8 +47,8 @@ export default function DashboardPage() {
     }
 
     setIsUpdatingName(true);
-    updateUser({ 
-      id: user.id, name: editableName 
+    updateUser({
+      id: user.id, name: editableName
     })
       .then(data => {
         user.name = data.name;
@@ -99,9 +102,10 @@ export default function DashboardPage() {
   return (
     <AuthGuard>
       <div className="min-h-screen flex flex-col bg-background">
-        <Header />
+        <Header onShowTutorial={() => setShowOnboarding(true)} />
         <main className="flex-1 px-4 py-8 md:py-12">
-          <div className="max-w-6xl mx-auto space-y-8">
+          <Onboarding forceShow={showOnboarding} onComplete={() => setShowOnboarding(false)} />
+          <div className="max-w-6xl mx-auto space-y-8 dashboard-container">
 
             <div className="flex flex-col md:flex-row items-start gap-6 md:gap-0 md:items-center justify-between px-4 py-2">
               <div className="text-md md:text-2xl flex items-center gap-4">
@@ -145,7 +149,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="w-full md:w-auto">
-                <Button asChild className="w-full md:w-auto">
+                <Button asChild className="w-full md:w-auto create-event-button">
                   <Link href="/create">{t("createEvent")}</Link>
                 </Button>
               </div>
