@@ -1,3 +1,4 @@
+import { getLocale } from 'next-intl/server';
 import React from 'react';
 
 interface EmailMessageTemplateProps {
@@ -5,7 +6,8 @@ interface EmailMessageTemplateProps {
   message: string;
 }
 
-export const EmailMessageTemplate: React.FC<EmailMessageTemplateProps> = ({ subject, message }) => {
+export const EmailMessageTemplate: React.FC<EmailMessageTemplateProps> = async ({ subject, message }) => {
+  const locale = await getLocale();
   const containerStyle = {
     maxWidth: '600px',
     margin: '20px auto',
@@ -25,7 +27,7 @@ export const EmailMessageTemplate: React.FC<EmailMessageTemplateProps> = ({ subj
   };
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

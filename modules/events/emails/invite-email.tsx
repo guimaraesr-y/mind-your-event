@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
 interface EventInviteEmailTemplateProps {
@@ -15,6 +15,7 @@ export const EventInviteEmailTemplate: React.FC<EventInviteEmailTemplateProps> =
   authorName,
 }) => {
   const t = await getTranslations('Email.Event.InviteEmail');
+  const locale = await getLocale();
 
   const bodyStyle = {
     fontFamily: 'var(--font-sans, sans-serif)',
@@ -67,7 +68,7 @@ export const EventInviteEmailTemplate: React.FC<EventInviteEmailTemplateProps> =
   };
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

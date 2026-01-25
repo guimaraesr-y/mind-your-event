@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 
 interface VerifyUserTemplateProps {
@@ -8,6 +8,7 @@ interface VerifyUserTemplateProps {
 
 export const VerifyUserTemplate: React.FC<VerifyUserTemplateProps> = async ({ email, token }) => {
   const t = await getTranslations('Email.User.VerifyEmail');
+  const locale = await getLocale();
 
   const containerStyle = {
     maxWidth: '600px',
@@ -28,7 +29,7 @@ export const VerifyUserTemplate: React.FC<VerifyUserTemplateProps> = async ({ em
   };
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
