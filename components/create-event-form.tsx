@@ -40,7 +40,7 @@ export function CreateEventForm() {
     })
   }, [user])
 
-  const handleSubmit = async (e: React.FormEvent) => { // TODO: add redirect to event after email verification
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
