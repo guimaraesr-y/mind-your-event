@@ -10,6 +10,8 @@ jobs:
   validate-and-migrate:
     name: Validate and Migrate
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ (github.ref == 'refs/heads/master' && 'Production') || 'Development' }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
