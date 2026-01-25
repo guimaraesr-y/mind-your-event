@@ -31,14 +31,7 @@ jobs:
       - name: Run Backend Tests
         run: npm run test
 
-      - name: Run Migrations on Master
-        if: github.ref == 'refs/heads/master'
-        run: npx prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: Run Migrations on Development
-        if: github.ref == 'refs/heads/development'
+      - name: Run Migrations
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
