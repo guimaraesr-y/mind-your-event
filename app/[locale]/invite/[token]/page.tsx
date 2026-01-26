@@ -13,14 +13,20 @@ interface PageProps {
   params: Promise<{ token: string }>
 }
 
-export default async function InvitePage({ params }: PageProps) { // TODO: remove auth. this route should be accessible through the invite link without auth
+export default async function InvitePage({ params }: PageProps) {
   const { token } = await params;
   const t = await getTranslations("InvitePage");
   const locale = await getLocale();
   const user = await getCurrentUser();
   const participant = await retrieveEventParticipantByInviteToken(token);
 
-  if (!user || participant.user_id !== user.id) {
+  if (!participant) {
+    notFound();
+  }
+
+  // If there's a user logged in, match it. If not, we allow viewing via token.
+  // We only block if there's a user logged in but it's NOT the participant's user.
+  if (user && participant.user_id !== user.id) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <EmailVerificationRequiredCard
@@ -30,13 +36,9 @@ export default async function InvitePage({ params }: PageProps) { // TODO: remov
     )
   }
 
-  if (!participant) {
-    notFound();
-  }
-
   const creator = await retrieveEventCreator(participant.event_id)
   const existingAvailability = await retrieveUserAvailabilitiesForEvent(
-    user.id,
+    participant.user_id,
     participant.event_id,
   );
 
