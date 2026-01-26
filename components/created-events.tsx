@@ -38,7 +38,7 @@ export function CreatedEvents({ events, title, description }: CreatedEventsProps
                 title={event.title}
                 startDate={event.start_date}
                 endDate={event.end_date}
-                participantsCount={event._count.event_participants}
+                participantsCount={event._count.participants}
                 linkHref={`/events/${event.id}`}
                 linkTextKey="viewDetails"
               />

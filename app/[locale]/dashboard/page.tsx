@@ -89,8 +89,8 @@ export default function DashboardPage() {
       setPendingCreatedEvents(created.filter(e => !e.is_finalized));
       setFinalizedCreatedEvents(created.filter(e => e.is_finalized));
 
-      setPendingParticipatingEvents(participating.filter(e => !e.events.is_finalized));
-      setFinalizedParticipatingEvents(participating.filter(e => e.events.is_finalized));
+      setPendingParticipatingEvents(participating.filter(e => !e.event.is_finalized));
+      setFinalizedParticipatingEvents(participating.filter(e => e.event.is_finalized));
     })();
 
     return () => {
@@ -102,8 +102,8 @@ export default function DashboardPage() {
   }, [isLoading, user])
 
   const eventHasAvailability = (participant: EventParticipantWithEvent): boolean => {
-    const event = participant.events;
-    return Boolean(event?.availability_slots.length > 0)
+    const event = participant.event;
+    return Boolean(event?.availabilities.length > 0)
   }
 
   const participantWillAttend = (participant: EventParticipantWithEvent): boolean => {

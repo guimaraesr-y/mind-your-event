@@ -37,11 +37,11 @@ export function ParticipatingEvents({ events, title, description, participationC
             {events.map((p) => (
               <EventCard
                 key={p.id}
-                title={p.events.title}
-                startDate={p.events.start_date}
-                endDate={p.events.end_date}
-                participantsCount={p.events._count.event_participants}
-                organizerName={p.events.creator.name}
+                title={p.event.title}
+                startDate={p.event.start_date}
+                endDate={p.event.end_date}
+                participantsCount={p.event._count.participants}
+                organizerName={p.event.creator.name}
                 statusIcon={
                   participationConfirmMethod(p) ? (
                     <CircleCheck className="h-5 w-5 text-accent" />
