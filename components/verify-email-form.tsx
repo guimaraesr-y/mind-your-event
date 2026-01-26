@@ -18,7 +18,7 @@ interface VerifyEmailFormProps {
 }
 
 export function VerifyEmailForm({
-  initialEmail="",
+  initialEmail = "",
   callback
 }: VerifyEmailFormProps) {
   const t = useTranslations("VerifyEmailForm")
@@ -55,15 +55,15 @@ export function VerifyEmailForm({
     }
   }
 
-  const handleVerifyCode = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const submitCode = async (currentCode: string) => {
+    if (currentCode.length !== 6) return
     setIsLoading(true)
 
     try {
       const response = await fetch("/api/auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, token: code }),
+        body: JSON.stringify({ email, token: currentCode }),
       })
 
       if (!response.ok) {
@@ -89,6 +89,11 @@ export function VerifyEmailForm({
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleVerifyCode = async (e: React.FormEvent) => {
+    e.preventDefault()
+    submitCode(code)
   }
 
   return (
@@ -139,18 +144,60 @@ export function VerifyEmailForm({
               <Label htmlFor="code" className="sr-only">
                 {t("codeLabel")}
               </Label>
-              <div className="relative">
-                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="code"
-                  type="text"
-                  placeholder={t("codePlaceholder")}
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="pl-10 text-center tracking-[0.5em]"
-                  maxLength={6}
-                  required
-                />
+              <div className="flex justify-between gap-2">
+                {[0, 1, 2, 3, 4, 5].map((index) => (
+                  <Input
+                    key={index}
+                    id={`code-${index}`}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
+                    value={code[index] || ""}
+                    onChange={(e) => {
+                      const typedValue = e.target.value.replace(/\D/g, "");
+                      const val = typedValue.slice(-1); // Take the last character
+
+                      const newCode = code.split("");
+                      // Ensure the array has length 6
+                      while (newCode.length < 6) newCode.push("");
+
+                      newCode[index] = val;
+                      const completeCode = newCode.join("").slice(0, 6);
+                      setCode(completeCode);
+
+                      if (val && index < 5) {
+                        const nextInput = document.getElementById(`code-${index + 1}`);
+                        nextInput?.focus();
+                      }
+
+                      if (completeCode.length === 6) {
+                        submitCode(completeCode);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Backspace" && !code[index]) {
+                        const prevInput = document.getElementById(`code-${index - 1}`);
+                        prevInput?.focus();
+                      }
+                    }}
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      const pastedData = e.clipboardData.getData("text").slice(0, 6).replace(/\D/g, "");
+                      if (pastedData) {
+                        setCode(pastedData);
+                        if (pastedData.length === 6) {
+                          submitCode(pastedData);
+                        } else {
+                          const nextId = Math.min(pastedData.length, 5);
+                          document.getElementById(`code-${nextId}`)?.focus();
+                        }
+                      }
+                    }}
+                    className="h-12 w-full text-center text-xl font-bold p-0"
+                    autoFocus={index === 0}
+                    required
+                  />
+                ))}
               </div>
               <p className="text-xs text-muted-foreground text-center">{t("codeSentTo", { email })}</p>
             </div>
