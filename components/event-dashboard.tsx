@@ -33,7 +33,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
     }, 2000)
   }
 
-  const formatDate = async (date: string) => {
+  const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString(locale, {
       weekday: "long",
       month: "short",
