@@ -231,7 +231,8 @@
       },
       "creator": {
         "title": "2. Suas Informações",
-        "description": "Isso identificará você como o organizador do evento."
+        "description": "Isso identificará você como o organizador do evento.",
+        "loggedIn": "Organizando como você"
       },
       "dateTime": {
         "title": "3. Intervalo de Data e Hora",

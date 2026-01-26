@@ -173,28 +173,45 @@ export function CreateEventForm() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="creatorName">{t("labels.creatorName")}</Label>
-                  <Input
-                    id="creatorName"
-                    placeholder={t("placeholders.creatorName")}
-                    {...register("creatorName")}
-                    disabled={Boolean(user)}
-                  />
-                  {errors.creatorName && <p className="text-sm text-destructive">{errors.creatorName.message}</p>}
-                </div>
+                {user ? (
+                  <div className="col-span-full p-4 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        {user.name?.[0].toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{user.name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                      {t("sections.creator.loggedIn") || "Organizing as you"}
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="creatorName">{t("labels.creatorName")}</Label>
+                      <Input
+                        id="creatorName"
+                        placeholder={t("placeholders.creatorName")}
+                        {...register("creatorName")}
+                      />
+                      {errors.creatorName && <p className="text-sm text-destructive">{errors.creatorName.message}</p>}
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="creatorEmail">{t("labels.creatorEmail")}</Label>
-                  <Input
-                    id="creatorEmail"
-                    type="email"
-                    placeholder={t("placeholders.creatorEmail")}
-                    {...register("creatorEmail")}
-                    disabled={Boolean(user)}
-                  />
-                  {errors.creatorEmail && <p className="text-sm text-destructive">{errors.creatorEmail.message}</p>}
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="creatorEmail">{t("labels.creatorEmail")}</Label>
+                      <Input
+                        id="creatorEmail"
+                        type="email"
+                        placeholder={t("placeholders.creatorEmail")}
+                        {...register("creatorEmail")}
+                      />
+                      {errors.creatorEmail && <p className="text-sm text-destructive">{errors.creatorEmail.message}</p>}
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4">
@@ -249,18 +266,35 @@ export function CreateEventForm() {
               <CardDescription>{t("sections.participants.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="participantEmails">{t("labels.participantEmails")}</Label>
-                <Textarea
-                  id="participantEmails"
-                  placeholder={t("placeholders.participantEmails")}
-                  {...register("participantEmails")}
-                  rows={5}
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t("participantInfo")}
-                </p>
-                {errors.participantEmails && <p className="text-sm text-destructive">{errors.participantEmails.message}</p>}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="participantEmails" className="text-base font-semibold">
+                    {t("labels.participantEmails")}
+                  </Label>
+                  <div className="relative group">
+                    <Textarea
+                      id="participantEmails"
+                      placeholder={t("placeholders.participantEmails")}
+                      {...register("participantEmails")}
+                      rows={6}
+                      className="resize-none border-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all rounded-xl"
+                    />
+                    <div className="absolute bottom-3 right-3 opacity-50 group-focus-within:opacity-100 transition-opacity">
+                      <Loader2 className={cn("h-4 w-4 animate-spin hidden", isLoading && "block")} />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 border border-muted-foreground/10">
+                    <Loader2 className="h-4 w-4 text-primary shrink-0 rotate-45" />
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {t("participantInfo")}
+                    </p>
+                  </div>
+                  {errors.participantEmails && (
+                    <p className="text-sm font-medium text-destructive mt-2 animate-in fade-in slide-in-from-top-1">
+                      {errors.participantEmails.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
