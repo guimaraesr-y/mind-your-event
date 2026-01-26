@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import React from 'react';
 import { getFormatter } from 'next-intl/server';
 
@@ -18,6 +18,7 @@ export const EventFinalizedEmailTemplate: React.FC<EventFinalizedEmailTemplatePr
   finalizedTime,
 }) => {
   const t = await getTranslations('Email.Event.FinalizedEmail');
+  const locale = await getLocale();
   const formatter = await getFormatter();
   const formattedDate = formatter.dateTime(new Date(finalizedDate)) + ', ' + finalizedTime;
 
@@ -72,7 +73,7 @@ export const EventFinalizedEmailTemplate: React.FC<EventFinalizedEmailTemplatePr
   };
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

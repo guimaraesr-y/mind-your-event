@@ -6,7 +6,7 @@ import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send, ArrowLeft }
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { sendEventInviteLinkEmails } from "@/actions/event/send-event-invite-links"
 
 interface EventDashboardProps {
@@ -16,6 +16,7 @@ interface EventDashboardProps {
 
 export function EventDashboard({ event, participants }: EventDashboardProps) {
   const t = useTranslations("EventDashboard")
+  const locale = useLocale();
   const [copiedTokens, setCopiedTokens] = useState<Set<string>>(new Set())
 
   const copyInviteLink = (token: string) => {
@@ -33,7 +34,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
   }
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
+    return new Date(date).toLocaleDateString(locale, {
       weekday: "long",
       month: "short",
       day: "numeric",
