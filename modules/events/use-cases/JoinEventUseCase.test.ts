@@ -7,6 +7,7 @@ describe('JoinEventUseCase', () => {
     let mockUserRepo: any;
     let mockEventRepo: any;
     let mockParticipantRepo: any;
+    let mockT: any;
 
     beforeEach(() => {
         mockUserRepo = {
@@ -20,8 +21,14 @@ describe('JoinEventUseCase', () => {
             createParticipant: vi.fn(),
             getParticipantByEventAndUser: vi.fn(),
         };
+        mockT = vi.fn((key: string) => key);
 
-        useCase = new JoinEventUseCase(mockUserRepo, mockEventRepo, mockParticipantRepo);
+        useCase = new JoinEventUseCase(
+            mockUserRepo,
+            mockEventRepo,
+            mockParticipantRepo,
+            Promise.resolve(mockT)
+        );
     });
 
     it('should allow a new user to join an event', async () => {
@@ -86,7 +93,7 @@ describe('JoinEventUseCase', () => {
         mockEventRepo.getEventByInviteToken.mockResolvedValue(mockEvent);
         mockUserRepo.getUserByEmail.mockResolvedValue(existingUser);
 
-        await expect(useCase.execute(request)).rejects.toThrow('This email is already registered. Please login to join.');
+        await expect(useCase.execute(request)).rejects.toThrow('alreadyRegistered');
         await expect(useCase.execute(request)).rejects.toBeInstanceOf(ApiException);
     });
 
@@ -104,7 +111,7 @@ describe('JoinEventUseCase', () => {
         mockEventRepo.getEventByInviteToken.mockResolvedValue(mockEvent);
         mockUserRepo.getUserByEmail.mockResolvedValue(existingUser);
 
-        await expect(useCase.execute(request)).rejects.toThrow('This email is already registered. Please login to join.');
+        await expect(useCase.execute(request)).rejects.toThrow('alreadyRegistered');
     });
 
     it('should return existing participant if they are already registered', async () => {
@@ -138,6 +145,6 @@ describe('JoinEventUseCase', () => {
 
         mockEventRepo.getEventByInviteToken.mockResolvedValue(null);
 
-        await expect(useCase.execute(request)).rejects.toThrow('Event not found');
+        await expect(useCase.execute(request)).rejects.toThrow('eventNotFound');
     });
 });

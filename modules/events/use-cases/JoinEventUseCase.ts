@@ -7,8 +7,8 @@ import EventRepository from "../repository";
 import ParticipantRepository from "../participant-repository";
 import { ApiException } from "@/lib/exceptions/api";
 import { EventParticipant } from "../eventParticipants";
-
 import { UserInterface } from "@/modules/user/user";
+import { getTranslations } from "next-intl/server";
 
 interface JoinEventRequest {
     token: string;
@@ -21,14 +21,16 @@ export default class JoinEventUseCase {
     constructor(
         private userRepository: IUserRepository = new UserRepository(),
         private eventRepository: IEventRepository = new EventRepository(),
-        private participantRepository: IParticipantRepository = new ParticipantRepository()
+        private participantRepository: IParticipantRepository = new ParticipantRepository(),
+        private translations = getTranslations("JoinEvent")
     ) { }
 
     public async execute(request: JoinEventRequest): Promise<EventParticipant> {
+        const t = await this.translations;
         const event = await this.eventRepository.getEventByInviteToken(request.token);
-        this.ensureEventExists(event);
+        this.ensureEventExists(event, t);
 
-        const user = await this.findOrCreateUser(request);
+        const user = await this.findOrCreateUser(request, t);
 
         const existingParticipant = await this.participantRepository.getParticipantByEventAndUser(event.id, user.id);
         if (existingParticipant) {
@@ -41,17 +43,17 @@ export default class JoinEventUseCase {
         return participant;
     }
 
-    private ensureEventExists(event: any): void {
+    private ensureEventExists(event: any, t: any): void {
         if (!event) {
-            throw new ApiException("Event not found", 404);
+            throw new ApiException(t("eventNotFound"), 404);
         }
     }
 
-    private async findOrCreateUser(request: JoinEventRequest) {
+    private async findOrCreateUser(request: JoinEventRequest, t: any) {
         const existingUser = await this.userRepository.getUserByEmail(request.email);
 
         if (existingUser) {
-            this.ensureUserIsAuthenticated(existingUser, request.authenticatedUser);
+            this.ensureUserIsAuthenticated(existingUser, request.authenticatedUser, t);
             return existingUser;
         }
 
@@ -62,9 +64,9 @@ export default class JoinEventUseCase {
         });
     }
 
-    private ensureUserIsAuthenticated(existingUser: UserInterface, authenticatedUser?: UserInterface): void {
+    private ensureUserIsAuthenticated(existingUser: UserInterface, authenticatedUser: UserInterface | undefined, t: any): void {
         if (!authenticatedUser || authenticatedUser.id !== existingUser.id) {
-            throw new ApiException("This email is already registered. Please login to join.", 401);
+            throw new ApiException(t("alreadyRegistered"), 401);
         }
     }
 
