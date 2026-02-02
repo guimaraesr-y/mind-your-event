@@ -25,6 +25,7 @@ model Event {
   title                 String
   description           String?
   creator_id            String             @db.Uuid
+  invite_token          String             @unique @default(dbgenerated("gen_random_uuid()"))
   start_date            DateTime           @db.Date
   end_date              DateTime           @db.Date
   start_time            String?            @db.VarChar(8) // SQL TIME is string in Prisma
