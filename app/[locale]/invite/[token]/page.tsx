@@ -1,13 +1,15 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { AvailabilityForm } from "@/components/availability-form"
 import { RsvpCard } from "@/components/rsvp-card"
-import { Calendar, CheckCircle2, Clock } from "lucide-react"
+import { Calendar, CheckCircle2, Clock, UserCheck } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getCurrentUser } from "@/actions/user/get-current-user"
-import { retrieveEventCreator, retrieveEventParticipantByInviteToken, retrieveUserAvailabilitiesForEvent } from "@/actions/event/retrieve"
+import { retrieveEventByPublicToken, retrieveEventCreator, retrieveEventParticipantByInviteToken, retrieveUserAvailabilitiesForEvent } from "@/actions/event/retrieve"
 import { EmailVerificationRequiredCard } from "@/components/email-verification-card"
 import { getLocale, getTranslations } from "next-intl/server"
 import { Header } from "@/components/header"
+import { JoinEventForm } from "@/components/join-event-form"
+import JoinEventUseCase from "@/modules/events/use-cases/JoinEventUseCase"
 
 interface PageProps {
   params: Promise<{ token: string }>
@@ -18,9 +20,45 @@ export default async function InvitePage({ params }: PageProps) {
   const t = await getTranslations("InvitePage");
   const locale = await getLocale();
   const user = await getCurrentUser();
-  const participant = await retrieveEventParticipantByInviteToken(token);
 
+  // Try to find as a specific participant first
+  let participant = await retrieveEventParticipantByInviteToken(token);
+  let event = participant?.events;
+  let creator = participant ? await retrieveEventCreator(participant.event_id) : null;
+
+  // If not a participant token, maybe it's a public event token
   if (!participant) {
+    const publicEvent = await retrieveEventByPublicToken(token);
+    if (!publicEvent) {
+      notFound();
+    }
+
+    // If user is logged in, join them automatically or redirect if already joined
+    if (user) {
+      const useCase = new JoinEventUseCase();
+      const result = await useCase.execute({
+        token,
+        email: user.email,
+        name: user.name,
+        authenticatedUser: user
+      });
+
+      redirect(`/${locale}/invite/${result.invite_token}`);
+    }
+
+    // If it's a public event and user is NOT logged in, they need to join first
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Header />
+        <main className="flex-1 px-4 py-8 md:py-12 flex items-center justify-center">
+          <JoinEventForm token={token} currentUser={user} />
+        </main>
+      </div>
+    );
+  }
+
+  // If we reach here, we have a participant
+  if (!event) {
     notFound();
   }
 
@@ -36,13 +74,11 @@ export default async function InvitePage({ params }: PageProps) {
     )
   }
 
-  const creator = await retrieveEventCreator(participant.event_id)
   const existingAvailability = await retrieveUserAvailabilitiesForEvent(
     participant.user_id,
     participant.event_id,
   );
 
-  const event = participant.events
   const isFinalized = event.is_finalized
 
   const formatDate = (dateStr: string) => {
