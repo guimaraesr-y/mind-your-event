@@ -25,27 +25,24 @@ export async function retrieveEventCreator(eventId: string): Promise<PublicUserI
     return event?.creator || null;
 }
 
+export async function retrieveEventByPublicToken(token: string): Promise<EventWithCreator | null> {
+    return await eventRepo.getEventByInviteToken(token);
+}
+
 export async function retrieveEventsByCreatorId(userId: string): Promise<EventInterface[]> {
     return await eventRepo.getEventsByCreatorId(userId);
 }
 
 export interface EventWithAvailabilitySlotsInterface extends EventInterface {
-    availability_slots: AvailabilitySlot[]
+    availabilities: AvailabilitySlot[]
 }
 
 export interface EventParticipantWithEvent extends EventParticipant {
-    events: EventWithAvailabilitySlotsInterface
+    event: EventWithAvailabilitySlotsInterface
 }
 
 export async function retrieveParticipatingEventsByUserId(userId: string): Promise<EventParticipantWithEvent[]> {
-    const participating = await participantRepo.getParticipatingEventsByUserId(userId);
-    return participating.map(p => ({
-        ...p,
-        events: {
-            ...p.event,
-            availability_slots: p.event.availabilities
-        }
-    }));
+    return await participantRepo.getParticipatingEventsByUserId(userId);
 }
 
 interface EventParticipantWithUser extends EventParticipant {

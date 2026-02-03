@@ -115,6 +115,19 @@
     "updateNameSuccess": "Nome atualizado com sucesso!",
     "updateNameError": "Falha ao atualizar o nome."
   },
+  "EventCard": {
+    "organizedBy": "Por {name}",
+    "participants": "{count, plural, one {# participante} other {# participantes}}",
+    "viewDetails": "Ver Detalhes",
+    "viewInvitation": "Ver Convite"
+  },
+  "CreatedEvents": {
+    "noEvents": "Nenhum evento encontrado ainda. Comece criando seu primeiro evento!",
+    "noEventsFilter": "Nenhum evento corresponde a esta categoria."
+  },
+  "ParticipatingEvents": {
+    "noInvitations": "Nenhum convite ainda. Quando alguém te convidar, eles aparecerão aqui!"
+  },
   "InvitePage": {
     "finalized": {
       "banner": "Evento Confirmado",
@@ -122,6 +135,22 @@
       "dateLabel": "Data",
       "timeLabel": "Hora"
     }
+  },
+  "JoinEvent": {
+    "title": "Participar do Evento",
+    "description": "Por favor, forneça seus dados para participar deste evento e compartilhar sua disponibilidade.",
+    "nameLabel": "Seu Nome",
+    "namePlaceholder": "Digite seu nome completo",
+    "emailLabel": "Endereço de E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "submitButton": "Participar do Evento",
+    "joining": "Entrando...",
+    "error": "Falha ao participar do evento",
+    "alreadyRegistered": "Este e-mail já está registrado. Por favor, faça login para participar.",
+    "eventNotFound": "Evento não encontrado",
+    "loginToJoin": "Faça login para participar",
+    "loggedInAs": "Você está logado como {name}",
+    "joinAs": "Participar como {email}"
   },
   "EmailVerificationCard": {
     "title": "Verificação de E-mail Necessária",
@@ -189,7 +218,7 @@
     }
   },
   "EventDashboard": {
-    "backLink":"Voltar para a Lista de Eventos",
+    "backLink": "Voltar para a Lista de Eventos",
     "viewResultsButton": "Ver Resultados e Confirmar Evento",
     "viewRsvpsButton": "Ver RSVPs",
     "detailsTitle": "Detalhes do Evento",
@@ -208,6 +237,8 @@
     "toast": {
       "copySuccess": "Link de convite copiado para a área de transferência!"
     },
+    "publicInviteLink": "Link de Convite Público",
+    "publicInviteDescription": "Compartilhe este link com quem desejar convidar. Eles fornecerão nome e e-mail ao entrar.",
     "sendInvitesEmailButton": "Enviar Links de Convite Únicos por E-mail"
   },
   "CreateEventForm": {
@@ -218,7 +249,8 @@
       },
       "creator": {
         "title": "2. Suas Informações",
-        "description": "Isso identificará você como o organizador do evento."
+        "description": "Isso identificará você como o organizador do evento.",
+        "loggedIn": "Organizando como você"
       },
       "dateTime": {
         "title": "3. Intervalo de Data e Hora",
@@ -250,9 +282,19 @@
     "participantInfo": "Cada participante receberá um link exclusivo para enviar sua disponibilidade.",
     "creatingButton": "Criando Evento...",
     "createButton": "Criar Evento e Obter Links Compartilháveis",
+    "nextButton": "Próximo",
+    "previousButton": "Anterior",
     "toast": {
       "createSuccess": "Evento criado com sucesso!",
       "createError": "Falha ao criar o evento"
+    },
+    "validation": {
+      "titleMin": "O título deve ter pelo menos 3 caracteres",
+      "nameRequired": "O nome é obrigatório",
+      "emailInvalid": "Endereço de e-mail inválido",
+      "startDateRequired": "A data de início é obrigatória",
+      "endDateRequired": "A data de término é obrigatória",
+      "participantEmailsInvalid": "Por favor, insira e-mails válidos separados por vírgula (pelo menos um)"
     }
   },
   "ParticipantsList": {
@@ -342,6 +384,50 @@
         "thanks": "Obrigado por se inscrever. Por favor, use o código de verificação abaixo para completar o seu cadastro. Este código é válido por 15 minutos.",
         "ifFallback": "Se você não se inscreveu para esta conta, ignore este e-mail."
       }
+    }
+  },
+  "Onboarding": {
+    "steps": {
+      "welcome": {
+        "title": "Bem-vindo ao MindYourEvent!",
+        "popover": {
+          "title": "Vamos Começar",
+          "description": "Bem-vindo ao MindYourEvent! Vamos mostrar como encontrar rapidamente o melhor horário para suas atividades com seus amigos ou equipe."
+        }
+      },
+      "dashboard": {
+        "title": "Seu Painel",
+        "popover": {
+          "title": "Monitore seus Eventos",
+          "description": "Aqui você pode ver todos os eventos que criou e os convites que recebeu."
+        }
+      },
+      "create": {
+        "title": "Crie seu Primeiro Evento",
+        "popover": {
+          "title": "Comece a Planejar",
+          "description": "Clique aqui para criar um novo evento. Você definirá um intervalo de datas e convidará participantes."
+        }
+      },
+      "invitations": {
+        "title": "Gerencie Convites",
+        "popover": {
+          "title": "Seus Convites",
+          "description": "Confira esta aba para ver eventos para os quais foi convidado e envie sua disponibilidade."
+        }
+      },
+      "info": {
+        "title": "Precisa de Ajuda?",
+        "popover": {
+          "title": "Rever Tutorial",
+          "description": "Se precisar de um lembrete, basta clicar neste ícone de informação para ver este tutorial novamente."
+        }
+      }
+    },
+    "buttons": {
+      "next": "Próximo",
+      "previous": "Anterior",
+      "done": "Entendi!"
     }
   }
 }

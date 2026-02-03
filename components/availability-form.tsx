@@ -216,29 +216,30 @@ export function AvailabilityForm({
                   {hasSlots && (
                     <div className="space-y-2 pt-4 border-t">
                       {slotsForDate.map((slot) => (
-                        <div key={slot.index} className="flex items-center gap-2">
-                          <input
-                            type="time"
-                            value={slot.startTime}
-                            onChange={(e) => updateTimeSlot(slot.index, "startTime", e.target.value)}
-                            className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full"
-                            required
-                          />
-                          <span className="text-muted-foreground">{t("to")}</span>
-                          <input
-                            type="time"
-                            lang="pt"
-                            value={slot.endTime}
-                            onChange={(e) => updateTimeSlot(slot.index, "endTime", e.target.value)}
-                            className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full"
-                            required
-                          />
+                        <div key={slot.index} className="flex flex-col sm:flex-row sm:items-center gap-2 p-2 rounded-md bg-muted/30 border border-muted-foreground/10">
+                          <div className="flex-1 flex items-center gap-2">
+                            <input
+                              type="time"
+                              value={slot.startTime}
+                              onChange={(e) => updateTimeSlot(slot.index, "startTime", e.target.value)}
+                              className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                              required
+                            />
+                            <span className="text-muted-foreground text-xs font-medium shrink-0 uppercase tracking-wider">{t("to")}</span>
+                            <input
+                              type="time"
+                              value={slot.endTime}
+                              onChange={(e) => updateTimeSlot(slot.index, "endTime", e.target.value)}
+                              className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                              required
+                            />
+                          </div>
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => removeTimeSlot(slot.index)}
-                            className="text-destructive hover:text-destructive"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10 self-end sm:self-auto"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

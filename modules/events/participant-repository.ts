@@ -3,8 +3,8 @@ import { IParticipantRepository } from "./interfaces/participant-repository.inte
 
 export default class ParticipantRepository implements IParticipantRepository {
 
-    async createParticipant(eventId: string, userId: string, inviteToken: string): Promise<void> {
-        await prisma.eventParticipant.create({
+    async createParticipant(eventId: string, userId: string, inviteToken: string) {
+        return await prisma.eventParticipant.create({
             data: {
                 event_id: eventId,
                 user_id: userId,
@@ -59,6 +59,17 @@ export default class ParticipantRepository implements IParticipantRepository {
         await prisma.eventParticipant.update({
             where: { invite_token: inviteToken },
             data: { will_attend: willAttend }
+        });
+    }
+
+    async getParticipantByEventAndUser(eventId: string, userId: string): Promise<any | null> {
+        return await prisma.eventParticipant.findUnique({
+            where: {
+                event_id_user_id: {
+                    event_id: eventId,
+                    user_id: userId
+                }
+            }
         });
     }
 }

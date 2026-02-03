@@ -6,7 +6,7 @@ import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send, ArrowLeft }
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { sendEventInviteLinkEmails } from "@/actions/event/send-event-invite-links"
 
 interface EventDashboardProps {
@@ -16,6 +16,7 @@ interface EventDashboardProps {
 
 export function EventDashboard({ event, participants }: EventDashboardProps) {
   const t = useTranslations("EventDashboard")
+  const locale = useLocale();
   const [copiedTokens, setCopiedTokens] = useState<Set<string>>(new Set())
 
   const copyInviteLink = (token: string) => {
@@ -33,7 +34,7 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
   }
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
+    return new Date(date).toLocaleDateString(locale, {
       weekday: "long",
       month: "short",
       day: "numeric",
@@ -122,9 +123,31 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
           <CardDescription>{t("participantsDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-end mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 p-4 rounded-xl bg-accent/5 border border-accent/20">
+            <div className="space-y-1">
+              <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Copy className="h-4 w-4 text-accent" />
+                {t("publicInviteLink")}
+              </h4>
+              <p className="text-xs text-muted-foreground">{t("publicInviteDescription")}</p>
+            </div>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => copyInviteLink(event.invite_token)}
+              className="sm:w-auto"
+            >
+              {copiedTokens.has(event.invite_token) ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+              <span className="ml-2">{t("copyLink")}</span>
+            </Button>
+          </div>
+
+          <div className="flex justify-end mb-4 border-t pt-4">
             <Button onClick={() => sendEventInviteLinkEmails(event.id)}>{t("sendInvitesEmailButton")}</Button>
-            {/* <Button onClick={() => setCopiedTokens(new Set())}>{t("copyUniqueInviteLinkButton")}</Button> */}
           </div>
 
           <div className="space-y-3">
