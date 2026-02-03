@@ -136,6 +136,22 @@
       "timeLabel": "Hora"
     }
   },
+  "JoinEvent": {
+    "title": "Participar do Evento",
+    "description": "Por favor, forneça seus dados para participar deste evento e compartilhar sua disponibilidade.",
+    "nameLabel": "Seu Nome",
+    "namePlaceholder": "Digite seu nome completo",
+    "emailLabel": "Endereço de E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "submitButton": "Participar do Evento",
+    "joining": "Entrando...",
+    "error": "Falha ao participar do evento",
+    "alreadyRegistered": "Este e-mail já está registrado. Por favor, faça login para participar.",
+    "eventNotFound": "Evento não encontrado",
+    "loginToJoin": "Faça login para participar",
+    "loggedInAs": "Você está logado como {name}",
+    "joinAs": "Participar como {email}"
+  },
   "EmailVerificationCard": {
     "title": "Verificação de E-mail Necessária",
     "description": "Por favor, verifique seu endereço de e-mail para enviar sua disponibilidade.",
@@ -221,6 +237,8 @@
     "toast": {
       "copySuccess": "Link de convite copiado para a área de transferência!"
     },
+    "publicInviteLink": "Link de Convite Público",
+    "publicInviteDescription": "Compartilhe este link com quem desejar convidar. Eles fornecerão nome e e-mail ao entrar.",
     "sendInvitesEmailButton": "Enviar Links de Convite Únicos por E-mail"
   },
   "CreateEventForm": {

@@ -136,6 +136,22 @@
       "timeLabel": "Time"
     }
   },
+  "JoinEvent": {
+    "title": "Join Event",
+    "description": "Please provide your details to join this event and share your availability.",
+    "nameLabel": "Your Name",
+    "namePlaceholder": "Enter your full name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your@email.com",
+    "submitButton": "Join Event",
+    "joining": "Joining...",
+    "error": "Failed to join event",
+    "alreadyRegistered": "This email is already registered. Please login to join.",
+    "eventNotFound": "Event not found",
+    "loginToJoin": "Login to join",
+    "loggedInAs": "You are logged in as {name}",
+    "joinAs": "Join as {email}"
+  },
   "EmailVerificationCard": {
     "title": "Email Verification Required",
     "description": "Please verify your email address to submit your availability.",
@@ -221,6 +237,8 @@
     "toast": {
       "copySuccess": "Invite link copied to clipboard!"
     },
+    "publicInviteLink": "Public Invite Link",
+    "publicInviteDescription": "Share this link with anyone who wants to join. They will be asked for their name and email.",
     "sendInvitesEmailButton": "Send Unique Invite Links via Email"
   },
   "CreateEventForm": {

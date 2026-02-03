@@ -5,6 +5,7 @@ export interface EventInterface {
     title: string;
     description: string;
     creator_id: string;
+    invite_token: string;
     start_date: string;
     end_date: string;
     start_time: string;

@@ -25,6 +25,10 @@ export async function retrieveEventCreator(eventId: string): Promise<PublicUserI
     return event?.creator || null;
 }
 
+export async function retrieveEventByPublicToken(token: string): Promise<EventWithCreator | null> {
+    return await eventRepo.getEventByInviteToken(token);
+}
+
 export async function retrieveEventsByCreatorId(userId: string): Promise<EventInterface[]> {
     return await eventRepo.getEventsByCreatorId(userId);
 }

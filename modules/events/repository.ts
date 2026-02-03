@@ -47,6 +47,15 @@ export default class EventRepository implements IEventRepository {
         return event;
     }
 
+    async getEventByInviteToken(token: string): Promise<any | null> {
+        const event = await prisma.event.findUnique({
+            where: { invite_token: token },
+            include: { creator: { select: { name: true, email: true } } }
+        });
+
+        return event;
+    }
+
     async getEventsByCreatorId(userId: string): Promise<any[]> {
         return await prisma.event.findMany({
             where: { creator_id: userId },
@@ -79,6 +88,7 @@ export default class EventRepository implements IEventRepository {
             title: data.title,
             description: data.description || "",
             creator_id: data.creator_id,
+            invite_token: data.invite_token,
             start_date: data.start_date.toISOString().split('T')[0],
             end_date: data.end_date.toISOString().split('T')[0],
             start_time: data.start_time || "",
