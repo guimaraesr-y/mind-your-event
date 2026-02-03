@@ -22,9 +22,9 @@ export default async function InvitePage({ params }: PageProps) {
   const user = await getCurrentUser();
 
   // Try to find as a specific participant first
-  let participant = await retrieveEventParticipantByInviteToken(token);
-  let event = participant?.events;
-  let creator = participant ? await retrieveEventCreator(participant.event_id) : null;
+  const participant = await retrieveEventParticipantByInviteToken(token);
+  const event = participant?.events;
+  const creator = participant ? await retrieveEventCreator(participant.event_id) : null;
 
   // If not a participant token, maybe it's a public event token
   if (!participant) {

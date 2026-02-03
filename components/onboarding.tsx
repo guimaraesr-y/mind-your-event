@@ -79,7 +79,7 @@ export function Onboarding({ forceShow = false, onComplete, onStepChange, isLoad
           },
         },
       ],
-      onHighlightStarted: (element, step) => {
+      onHighlightStarted: (_element, _step) => {
         if (onStepChange && driverRef.current) {
           onStepChange(driverRef.current.getActiveIndex())
         }
