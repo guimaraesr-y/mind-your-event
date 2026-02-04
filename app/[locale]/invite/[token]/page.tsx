@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { AvailabilityForm } from "@/components/availability-form"
 import { RsvpCard } from "@/components/rsvp-card"
-import { Calendar, CheckCircle2, Clock, UserCheck } from "lucide-react"
+import { Calendar, CheckCircle2, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getCurrentUser } from "@/actions/user/get-current-user"
 import { retrieveEventByPublicToken, retrieveEventCreator, retrieveEventParticipantByInviteToken, retrieveUserAvailabilitiesForEvent } from "@/actions/event/retrieve"
@@ -22,9 +22,9 @@ export default async function InvitePage({ params }: PageProps) {
   const user = await getCurrentUser();
 
   // Try to find as a specific participant first
-  let participant = await retrieveEventParticipantByInviteToken(token);
-  let event = participant?.events;
-  let creator = participant ? await retrieveEventCreator(participant.event_id) : null;
+  const participant = await retrieveEventParticipantByInviteToken(token);
+  const event = participant?.events;
+  const creator = participant ? await retrieveEventCreator(participant.event_id) : null;
 
   // If not a participant token, maybe it's a public event token
   if (!participant) {
