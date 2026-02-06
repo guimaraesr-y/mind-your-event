@@ -27,18 +27,16 @@ export function Onboarding({ forceShow = false, onComplete, onStepChange, isLoad
 
     driverRef.current = driver({
       showProgress: true,
-      allowClose: false,
       popoverClass: "driverjs-theme",
       nextBtnText: t("buttons.next"),
       prevBtnText: t("buttons.previous"),
       doneBtnText: t("buttons.done"),
       steps: [
         {
-          element: "body",
           popover: {
             title: t("steps.welcome.popover.title"),
             description: t("steps.welcome.popover.description"),
-            side: "bottom",
+            side: "over",
             align: "center",
           },
         },

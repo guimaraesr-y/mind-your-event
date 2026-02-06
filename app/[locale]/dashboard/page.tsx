@@ -112,7 +112,7 @@ export default function DashboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen flex flex-col bg-background">
+      <div className="min-h-screen flex flex-col bg-background dashboard-div">
         <Header onShowTutorial={() => setShowOnboarding(true)} />
         <main className="flex-1 px-4 py-6 md:py-10">
           <Onboarding
