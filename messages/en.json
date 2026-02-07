@@ -279,7 +279,7 @@
       "creatorEmail": "john@example.com",
       "participantEmails": "alice@example.com, bob@example.com"
     },
-    "participantInfo": "Each participant will receive a unique link to submit their availability.",
+    "participantInfo": "You will receive a unique links for each participant to submit their availability.",
     "creatingButton": "Creating Event...",
     "createButton": "Create Event & Get Shareable Links",
     "nextButton": "Next",
