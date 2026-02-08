@@ -1,16 +1,16 @@
 import prisma from "@/lib/db";
-import { UserInterface } from "./user";
+import { CreateUserDto, UserInterface } from "./user";
 import { IUserRepository } from "./interfaces/user-repository.interface";
 
 export default class UserRepository implements IUserRepository {
 
     constructor() { }
 
-    async createUser(payload: Partial<UserInterface>): Promise<UserInterface> {
+    async createUser(payload: CreateUserDto): Promise<UserInterface> {
         const data = await prisma.user.create({
             data: {
-                email: payload.email!,
-                name: payload.name!,
+                email: payload.email,
+                name: payload.name,
                 session_token: payload.session_token
             }
         });

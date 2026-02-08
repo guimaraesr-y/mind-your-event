@@ -279,7 +279,7 @@
       "creatorEmail": "joao@exemplo.com",
       "participantEmails": "alice@exemplo.com, bob@exemplo.com"
     },
-    "participantInfo": "Cada participante receberá um link exclusivo para enviar sua disponibilidade.",
+    "participantInfo": "Você receberá links exclusivos para cada participante enviar sua disponibilidade.",
     "creatingButton": "Criando Evento...",
     "createButton": "Criar Evento e Obter Links Compartilháveis",
     "nextButton": "Próximo",

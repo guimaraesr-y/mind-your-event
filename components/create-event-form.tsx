@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
+import { DebouncedButton } from "@/components/ui/debounced-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -34,7 +35,7 @@ export function CreateEventForm() {
     endTime: z.string().optional(),
     participantEmails: z.string().refine((val) => {
       const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
-      return emails.length > 0 && emails.every(e => z.string().email().safeParse(e).success);
+      return emails.every(e => z.string().email().safeParse(e).success);
     }, t("validation.participantEmailsInvalid")),
   }), [t])
 
@@ -302,19 +303,19 @@ export function CreateEventForm() {
 
         <div className="flex gap-4">
           {step > 1 && (
-            <Button type="button" variant="outline" onClick={prevStep} className="flex-1">
+            <DebouncedButton type="button" variant="outline" onClick={prevStep} className="flex-1" debounceOnAppear>
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t("previousButton") || "Previous"}
-            </Button>
+            </DebouncedButton>
           )}
 
           {step < 3 ? (
-            <Button type="button" onClick={nextStep} className="flex-1 ml-auto">
+            <DebouncedButton type="button" onClick={nextStep} className="flex-1 ml-auto" debounceOnAppear>
               {t("nextButton") || "Next"}
               <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            </DebouncedButton>
           ) : (
-            <Button type="submit" size="lg" className="flex-1 ml-auto" disabled={isLoading}>
+            <DebouncedButton type="submit" size="lg" className="flex-1 ml-auto" disabled={isLoading} debounceOnAppear>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -326,7 +327,7 @@ export function CreateEventForm() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}
-            </Button>
+            </DebouncedButton>
           )}
         </div>
       </form>

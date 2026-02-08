@@ -11,3 +11,9 @@ export interface PublicUserInterface {
     email: string;
     name: string;
 }
+
+export interface CreateUserDto {
+    email: string;
+    name: string;
+    session_token?: string;
+}
