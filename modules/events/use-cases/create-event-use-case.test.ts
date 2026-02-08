@@ -4,23 +4,22 @@ import { CreateEventDto } from '../event';
 
 describe('CreateEventUseCase', () => {
     let useCase: CreateEventUseCase;
-    let mockUserRepo: any;
     let mockEventRepo: any;
     let mockParticipantRepo: any;
+    let mockFindOrCreateUserUseCase: any;
 
     beforeEach(() => {
-        mockUserRepo = {
-            getUserByEmail: vi.fn(),
-            createUser: vi.fn(),
-        };
         mockEventRepo = {
             createEvent: vi.fn(),
         };
         mockParticipantRepo = {
             createParticipant: vi.fn(),
         };
+        mockFindOrCreateUserUseCase = {
+            execute: vi.fn(),
+        };
 
-        useCase = new CreateEventUseCase(mockUserRepo, mockEventRepo, mockParticipantRepo);
+        useCase = new CreateEventUseCase(mockEventRepo, mockParticipantRepo, mockFindOrCreateUserUseCase);
     });
 
     it('should create a new event and its participants', async () => {
@@ -38,18 +37,13 @@ describe('CreateEventUseCase', () => {
         const mockParticipantUser = { id: 'p1-id', email: 'p1@test.com', name: 'p1' };
         const mockEvent = { id: 'event-id', ...eventData };
 
-        mockUserRepo.getUserByEmail.mockResolvedValueOnce(null); // Creator not found
-        mockUserRepo.createUser.mockResolvedValueOnce(mockCreator); // Create creator
-
+        mockFindOrCreateUserUseCase.execute.mockResolvedValueOnce({ user: mockCreator, created: true });
         mockEventRepo.createEvent.mockResolvedValue(mockEvent);
-
-        // For participant loop
-        mockUserRepo.getUserByEmail.mockResolvedValueOnce(null); // Participant not found
-        mockUserRepo.createUser.mockResolvedValueOnce(mockParticipantUser); // Create participant
+        mockFindOrCreateUserUseCase.execute.mockResolvedValueOnce({ user: mockParticipantUser, created: true });
 
         const result = await useCase.execute(eventData);
 
-        expect(mockUserRepo.createUser).toHaveBeenCalledWith(expect.objectContaining({ email: 'creator@test.com' }));
+        expect(mockFindOrCreateUserUseCase.execute).toHaveBeenCalledWith('creator@test.com', 'Creator');
         expect(mockEventRepo.createEvent).toHaveBeenCalled();
         expect(mockParticipantRepo.createParticipant).toHaveBeenCalledWith(
             'event-id',
@@ -69,7 +63,7 @@ describe('CreateEventUseCase', () => {
             creatorName: 'Existing',
         };
 
-        mockUserRepo.getUserByEmail.mockResolvedValue({ id: 'existing-id', email: 'existing@test.com' });
+        mockFindOrCreateUserUseCase.execute.mockResolvedValue({ user: { id: 'existing-id', email: 'existing@test.com' }, created: false });
 
         await expect(useCase.execute(eventData)).rejects.toThrow('This user already exists');
     });
@@ -90,19 +84,15 @@ describe('CreateEventUseCase', () => {
         const mockEvent = { id: 'event-id', ...eventData };
 
         // Creator is already authenticated and exists
-        mockUserRepo.getUserByEmail.mockResolvedValueOnce(mockCreator);
+        mockFindOrCreateUserUseCase.execute.mockResolvedValueOnce({ user: mockCreator, created: false });
         mockEventRepo.createEvent.mockResolvedValue(mockEvent);
 
         // Participant check
-        mockUserRepo.getUserByEmail.mockResolvedValueOnce(null); // Doesn't exist
-        mockUserRepo.createUser.mockResolvedValueOnce(mockNewUser); // Should be created
+        mockFindOrCreateUserUseCase.execute.mockResolvedValueOnce({ user: mockNewUser, created: true });
 
         await useCase.execute(eventData);
 
-        expect(mockUserRepo.createUser).toHaveBeenCalledWith(expect.objectContaining({
-            email: 'new-user@test.com',
-            name: 'new-user'
-        }));
+        expect(mockFindOrCreateUserUseCase.execute).toHaveBeenCalledWith('new-user@test.com', 'new-user');
 
         expect(mockParticipantRepo.createParticipant).toHaveBeenCalledWith(
             'event-id',
