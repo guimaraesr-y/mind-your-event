@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       participantEmails
     } = body;
 
-    if (!title || !startDate || !endDate || !participantEmails) {
+    if (!title || !startDate || !endDate) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -36,10 +36,6 @@ export async function POST(request: NextRequest) {
       .split(",")
       .map((email: string) => email.trim())
       .filter((email: string) => email.length > 0);
-
-    if (emails.length === 0) {
-      return NextResponse.json({ error: "At least one participant email is required" }, { status: 400 });
-    }
 
     const createEventUseCase = new CreateEventUseCase();
     const event = await createEventUseCase.execute({
