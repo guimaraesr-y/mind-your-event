@@ -30,3 +30,12 @@ export interface CreateEventDto {
     creatorEmail: string;
     authenticatedUser?: UserInterface;
 }
+
+export interface UpdateEventDto {
+    title?: string;
+    description?: string;
+    start_date?: string;
+    end_date?: string;
+    start_time?: string;
+    end_time?: string;
+}
