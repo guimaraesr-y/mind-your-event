@@ -17,7 +17,21 @@ import { useAuth } from "@/contexts/auth-context"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 
-export function CreateEventForm() {
+interface CreateEventFormProps {
+  initialData?: {
+    id: string
+    title: string
+    description: string
+    startDate: string
+    endDate: string
+    startTime: string
+    endTime: string
+    creatorName: string
+    creatorEmail: string
+  }
+}
+
+export function CreateEventForm({ initialData }: CreateEventFormProps) {
   const t = useTranslations("CreateEventForm")
   const router = useRouter()
   const { user } = useAuth()
@@ -33,11 +47,13 @@ export function CreateEventForm() {
     endDate: z.string().min(1, t("validation.endDateRequired")),
     startTime: z.string().optional(),
     endTime: z.string().optional(),
-    participantEmails: z.string().refine((val) => {
-      const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
-      return emails.every(e => z.string().email().safeParse(e).success);
-    }, t("validation.participantEmailsInvalid")),
-  }), [t])
+    participantEmails: initialData
+      ? z.string().optional()
+      : z.string().refine((val) => {
+        const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
+        return emails.every(e => z.string().email().safeParse(e).success);
+      }, t("validation.participantEmailsInvalid")),
+  }), [t, initialData])
 
   type FormData = z.infer<typeof createEventSchema>
 
@@ -50,24 +66,24 @@ export function CreateEventForm() {
   } = useForm<FormData>({
     resolver: zodResolver(createEventSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      creatorName: user?.name || "",
-      creatorEmail: user?.email || "",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      creatorName: initialData?.creatorName || user?.name || "",
+      creatorEmail: initialData?.creatorEmail || user?.email || "",
+      startDate: initialData?.startDate || "",
+      endDate: initialData?.endDate || "",
+      startTime: initialData?.startTime || "",
+      endTime: initialData?.endTime || "",
       participantEmails: "",
     },
   })
 
   useEffect(() => {
-    if (user) {
+    if (user && !initialData) {
       setValue("creatorName", user.name)
       setValue("creatorEmail", user.email)
     }
-  }, [user, setValue])
+  }, [user, setValue, initialData])
 
   const nextStep = async () => {
     let fieldsToValidate: (keyof FormData)[] = []
@@ -83,22 +99,26 @@ export function CreateEventForm() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true)
     try {
-      const response = await fetch("/api/events", {
-        method: "POST",
+      const url = initialData ? `/api/events/${initialData.id}` : "/api/events"
+      const method = initialData ? "PATCH" : "POST"
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || t("toast.createError"))
+        throw new Error(error.error || (initialData ? t("toast.updateError") : t("toast.createError")))
       }
 
       const result = await response.json()
-      toast.success(t("toast.createSuccess"))
-      router.push(`/events/${result.eventId}`)
+      toast.success(initialData ? t("toast.updateSuccess") : t("toast.createSuccess"))
+      router.push(`/events/${initialData?.id || result.eventId}`)
+      router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : t("toast.createError"))
+      toast.error(error instanceof Error ? error.message : (initialData ? t("toast.updateError") : t("toast.createError")))
     } finally {
       setIsLoading(false)
     }
@@ -107,7 +127,7 @@ export function CreateEventForm() {
   const steps = [
     { id: 1, title: t("sections.details.title") },
     { id: 2, title: t("sections.creator.title") },
-    { id: 3, title: t("sections.participants.title") },
+    ...(!initialData ? [{ id: 3, title: t("sections.participants.title") }] : []),
   ]
 
   return (
@@ -309,7 +329,7 @@ export function CreateEventForm() {
             </DebouncedButton>
           )}
 
-          {step < 3 ? (
+          {step < steps.length ? (
             <DebouncedButton type="button" onClick={nextStep} className="flex-1 ml-auto" debounceOnAppear>
               {t("nextButton") || "Next"}
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -319,11 +339,11 @@ export function CreateEventForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("creatingButton")}
+                  {initialData ? (t("updatingButton") || "Updating...") : t("creatingButton")}
                 </>
               ) : (
                 <>
-                  {t("createButton")}
+                  {initialData ? (t("updateButton") || "Update") : t("createButton")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}

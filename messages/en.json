@@ -83,6 +83,10 @@
     "title": "Create a New Event",
     "description": "Fill out the form below to get started."
   },
+  "EditEventPage": {
+    "title": "Edit Event",
+    "description": "Update the details of your event below."
+  },
   "DashboardPage": {
     "createEvent": "Create Event",
     "title": "Dashboard",
@@ -221,6 +225,7 @@
     "backLink": "Back to Event List",
     "viewResultsButton": "View Results & Confirm Event",
     "viewRsvpsButton": "View RSVPs",
+    "editButton": "Edit Event",
     "detailsTitle": "Event Details",
     "organizerLabel": "Organizer",
     "dateRangeLabel": "Date Range",
@@ -284,9 +289,13 @@
     "createButton": "Create Event & Get Shareable Links",
     "nextButton": "Next",
     "previousButton": "Previous",
+    "updateButton": "Update Event",
+    "updatingButton": "Updating Event...",
     "toast": {
       "createSuccess": "Event created successfully!",
-      "createError": "Failed to create event"
+      "createError": "Failed to create event",
+      "updateSuccess": "Event updated successfully!",
+      "updateError": "Failed to update event"
     },
     "validation": {
       "titleMin": "Title must be at least 3 characters",

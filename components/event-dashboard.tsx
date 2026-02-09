@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send, ArrowLeft } from "lucide-react"
+import { Calendar, Clock, User, Copy, Check, BarChart3, Users, Send, ArrowLeft, Edit } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import Link from "next/link"
@@ -50,7 +50,15 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
         <Link href={`/dashboard`} className="flex items-center gap-2">
           <ArrowLeft className="h-4 w-4 mr-1" /> {t("backLink")}
         </Link>
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title}</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title}</h1>
+          <Button asChild variant="outline" size="sm" className="sm:w-auto self-start sm:self-center">
+            <Link href={`/events/${event.id}/edit`}>
+              <Edit className="mr-2 h-4 w-4" />
+              {t("editButton")}
+            </Link>
+          </Button>
+        </div>
         {event.description && <p className="text-muted-foreground max-w-2xl">{event.description}</p>}
       </div>
 

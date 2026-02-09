@@ -80,8 +80,12 @@
     }
   },
   "CreateEventPage": {
-    "title": "Criar um Novo Evento",
+    "title": "Criar Novo Evento",
     "description": "Preencha o formulário abaixo para começar."
+  },
+  "EditEventPage": {
+    "title": "Editar Evento",
+    "description": "Atualize os detalhes do seu evento abaixo."
   },
   "DashboardPage": {
     "createEvent": "Criar Evento",
@@ -221,6 +225,7 @@
     "backLink": "Voltar para a Lista de Eventos",
     "viewResultsButton": "Ver Resultados e Confirmar Evento",
     "viewRsvpsButton": "Ver RSVPs",
+    "editButton": "Editar Evento",
     "detailsTitle": "Detalhes do Evento",
     "organizerLabel": "Organizador",
     "dateRangeLabel": "Intervalo de Datas",
@@ -284,9 +289,13 @@
     "createButton": "Criar Evento e Obter Links Compartilháveis",
     "nextButton": "Próximo",
     "previousButton": "Anterior",
+    "updateButton": "Atualizar Evento",
+    "updatingButton": "Atualizando Evento...",
     "toast": {
       "createSuccess": "Evento criado com sucesso!",
-      "createError": "Falha ao criar o evento"
+      "createError": "Falha ao criar evento",
+      "updateSuccess": "Evento atualizado com sucesso!",
+      "updateError": "Falha ao atualizar evento"
     },
     "validation": {
       "titleMin": "O título deve ter pelo menos 3 caracteres",
