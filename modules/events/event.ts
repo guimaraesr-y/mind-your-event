@@ -1,4 +1,14 @@
+import { z } from "zod";
 import { UserInterface } from "../user/user";
+
+export const updateEventSchema = z.object({
+    title: z.string().min(3).optional(),
+    description: z.string().optional(),
+    start_date: z.string().min(1).optional(),
+    end_date: z.string().min(1).optional(),
+    start_time: z.string().optional(),
+    end_time: z.string().optional(),
+});
 
 export interface EventInterface {
     id: string;
@@ -31,11 +41,4 @@ export interface CreateEventDto {
     authenticatedUser?: UserInterface;
 }
 
-export interface UpdateEventDto {
-    title?: string;
-    description?: string;
-    start_date?: string;
-    end_date?: string;
-    start_time?: string;
-    end_time?: string;
-}
+export type UpdateEventDto = z.infer<typeof updateEventSchema>;

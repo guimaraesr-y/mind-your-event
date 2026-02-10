@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { retrieveUserBySessionToken } from "@/actions/user/retrieve";
 import UpdateEventUseCase from "@/modules/events/use-cases/updateEventUseCase";
 import { ApiException } from "@/lib/exceptions/api";
+import { ZodError } from "zod";
 
 export async function PATCH(
     request: NextRequest,
@@ -40,6 +41,9 @@ export async function PATCH(
 
         return NextResponse.json({ event, success: true });
     } catch (error) {
+        if (error instanceof ZodError) {
+            return NextResponse.json({ error: error.errors[0].message, details: error.errors }, { status: 400 });
+        }
         if (error instanceof ApiException) {
             return NextResponse.json({ error: error.message }, { status: error.httpCode });
         }
