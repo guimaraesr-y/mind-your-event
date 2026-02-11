@@ -17,7 +17,7 @@ export const EventFinalizedEmailTemplate: React.FC<EventFinalizedEmailTemplatePr
   finalizedDate,
   finalizedTime,
 }) => {
-  const t = await getTranslations('Email.Event.FinalizedEmail');
+  const t = await getTranslations('Email.Event.ConfirmedEmail');
   const locale = await getLocale();
   const formatter = await getFormatter();
   const formattedDate = formatter.dateTime(new Date(finalizedDate)) + ', ' + finalizedTime;
@@ -107,7 +107,7 @@ export const EventFinalizedEmailTemplate: React.FC<EventFinalizedEmailTemplatePr
               {t('greeting', { authorName: userName })}
             </h2>
             <p style={{ fontSize: '18px', marginBottom: '20px' }}>
-              {t('eventFinalized', { eventTitle })}
+              {t('eventConfirmed', { eventTitle })}
             </p>
             <div style={{
               padding: '20px',
@@ -116,8 +116,8 @@ export const EventFinalizedEmailTemplate: React.FC<EventFinalizedEmailTemplatePr
               textAlign: 'left',
               marginBottom: '20px',
             }}>
-              <h3 style={{ marginTop: 0, marginBottom: '10px', fontSize: '18px' }}>{t('finalizedDetails')}</h3>
-              <p style={{ margin: 0 }}>{t('finalizedDate', { finalizedDate: formattedDate })}</p>
+              <h3 style={{ marginTop: 0, marginBottom: '10px', fontSize: '18px' }}>{t('confirmedDetails')}</h3>
+              <p style={{ margin: 0 }}>{t('confirmedDate', { finalizedDate: formattedDate })}</p>
             </div>
             <p style={{ margin: '0 0 15px' }}>{t('viewEventDetails')}</p>
             <a href={eventLink} style={buttonStyle}>

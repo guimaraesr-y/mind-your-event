@@ -85,7 +85,8 @@
   },
   "EditEventPage": {
     "title": "Edit Event",
-    "description": "Update the details of your event below."
+    "description": "Update the details of your event below.",
+    "isConfirmed": "This event has been confirmed and can no longer be edited."
   },
   "DashboardPage": {
     "createEvent": "Create Event",
@@ -133,7 +134,7 @@
     "noInvitations": "No invitations yet. When someone invites you, they'll show up here!"
   },
   "InvitePage": {
-    "finalized": {
+    "confirmed": {
       "banner": "Event Confirmed",
       "cardTitle": "Final Event Details",
       "dateLabel": "Date",
@@ -247,6 +248,8 @@
     "sendInvitesEmailButton": "Send Unique Invite Links via Email"
   },
   "CreateEventForm": {
+    "isConfirmed": "This event has already been confirmed and cannot be edited.",
+    "removedParticipantWithAvailability": "The following participants have already submitted their availability: {emails}. Removing them will delete their data. Do you want to continue?",
     "sections": {
       "details": {
         "title": "1. Event Details",
@@ -359,6 +362,18 @@
       "login": "Verify my Email"
     }
   },
+  "ConfirmEventDialog": {
+    "trigger": "Confirm Event",
+    "title": "Confirm Event",
+    "description": "Set the final date and time for this event. All participants will be notified.",
+    "dateLabel": "Final Date *",
+    "startTimeLabel": "Start Time *",
+    "endTimeLabel": "End Time *",
+    "submitButton": "Confirm & Notify Participants",
+    "submitting": "Confirming...",
+    "success": "Event confirmed! All participants have been notified.",
+    "error": "Failed to confirm event"
+  },
   "Email": {
     "Event": {
       "InviteEmail": {
@@ -372,13 +387,13 @@
         "linkNotWorking": "If the button above doesn't work,",
         "clickHere": "click here."
       },
-      "FinalizedEmail": {
+      "ConfirmedEmail": {
         "title": "Event Confirmed!",
         "subtitle": "Your event has been confirmed by MindYourEvent",
         "greeting": "Hello, {authorName}!",
-        "eventFinalized": "The event {eventTitle} has been confirmed.",
-        "finalizedDetails": "Event Details",
-        "finalizedDate": "Date: {finalizedDate}",
+        "eventConfirmed": "The event {eventTitle} has been confirmed.",
+        "confirmedDetails": "Event Details",
+        "confirmedDate": "Date: {finalizedDate}",
         "viewEventDetails": "Click the button below to view the final event details.",
         "viewEventButton": "View Event Details",
         "linkNotWorking": "If the button above doesn't work,",

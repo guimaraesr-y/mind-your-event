@@ -27,6 +27,7 @@ export async function PATCH(
             endDate,
             startTime,
             endTime,
+            participantEmails
         } = body;
 
         const updateEventUseCase = new UpdateEventUseCase();
@@ -37,6 +38,7 @@ export async function PATCH(
             end_date: endDate,
             start_time: startTime,
             end_time: endTime,
+            participantEmails: Array.isArray(participantEmails) ? participantEmails : undefined
         });
 
         return NextResponse.json({ event, success: true });

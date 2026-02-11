@@ -28,6 +28,9 @@ interface CreateEventFormProps {
     endTime: string
     creatorName: string
     creatorEmail: string
+    participantEmails?: string
+    participants?: { email: string; hasSubmitted: boolean }[]
+    isConfirmed?: boolean
   }
 }
 
@@ -47,12 +50,11 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
     endDate: z.string().min(1, t("validation.endDateRequired")),
     startTime: z.string().optional(),
     endTime: z.string().optional(),
-    participantEmails: initialData
-      ? z.string().optional()
-      : z.string().refine((val) => {
-        const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
-        return emails.every(e => z.string().email().safeParse(e).success);
-      }, t("validation.participantEmailsInvalid")),
+    participantEmails: z.string().refine((val) => {
+      const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
+      if (emails.length === 0 && !initialData) return false;
+      return emails.every(e => z.string().email().safeParse(e).success);
+    }, t("validation.participantEmailsInvalid")),
   }), [t, initialData])
 
   type FormData = z.infer<typeof createEventSchema>
@@ -74,7 +76,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
       endDate: initialData?.endDate || "",
       startTime: initialData?.startTime || "",
       endTime: initialData?.endTime || "",
-      participantEmails: "",
+      participantEmails: initialData?.participantEmails || "",
     },
   })
 
@@ -97,15 +99,41 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
   const prevStep = () => setStep(step - 1)
 
   const onSubmit = async (data: FormData) => {
+    if (initialData?.isConfirmed) {
+      toast.error(t("isConfirmed") || "This event is confirmed and cannot be modified.")
+      return
+    }
+
+    if (initialData?.participants) {
+      const currentEmails = data.participantEmails?.split(",").map(e => e.trim()).filter(Boolean) || [];
+      const removedWithSubmission = initialData.participants.filter(
+        p => p.hasSubmitted && !currentEmails.includes(p.email)
+      );
+
+      if (removedWithSubmission.length > 0) {
+        const emails = removedWithSubmission.map(p => p.email).join(", ");
+        const confirm = window.confirm(
+          t("removedParticipantWithAvailability", { emails }) ||
+          `The following participants already submitted their availability: ${emails}. Removing them will delete their data. Do you want to continue?`
+        );
+        if (!confirm) return;
+      }
+    }
+
     setIsLoading(true)
     try {
       const url = initialData ? `/api/events/${initialData.id}` : "/api/events"
       const method = initialData ? "PATCH" : "POST"
 
+      const payload = {
+        ...data,
+        participantEmails: data.participantEmails?.split(",").map(e => e.trim()).filter(Boolean) || []
+      }
+
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
@@ -127,7 +155,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
   const steps = [
     { id: 1, title: t("sections.details.title") },
     { id: 2, title: t("sections.creator.title") },
-    ...(!initialData ? [{ id: 3, title: t("sections.participants.title") }] : []),
+    { id: 3, title: t("sections.participants.title") },
   ]
 
   return (
@@ -168,6 +196,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                   id="title"
                   placeholder={t("placeholders.title")}
                   {...register("title")}
+                  disabled={initialData?.isConfirmed}
                 />
                 {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
               </div>
@@ -179,6 +208,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                   placeholder={t("placeholders.description")}
                   {...register("description")}
                   rows={3}
+                  disabled={initialData?.isConfirmed}
                 />
                 {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
               </div>
@@ -217,6 +247,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                         id="creatorName"
                         placeholder={t("placeholders.creatorName")}
                         {...register("creatorName")}
+                        disabled={initialData?.isConfirmed}
                       />
                       {errors.creatorName && <p className="text-sm text-destructive">{errors.creatorName.message}</p>}
                     </div>
@@ -228,6 +259,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                         type="email"
                         placeholder={t("placeholders.creatorEmail")}
                         {...register("creatorEmail")}
+                        disabled={initialData?.isConfirmed}
                       />
                       {errors.creatorEmail && <p className="text-sm text-destructive">{errors.creatorEmail.message}</p>}
                     </div>
@@ -242,6 +274,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                     id="startDate"
                     type="date"
                     {...register("startDate")}
+                    disabled={initialData?.isConfirmed}
                   />
                   {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
                 </div>
@@ -252,6 +285,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                     id="endDate"
                     type="date"
                     {...register("endDate")}
+                    disabled={initialData?.isConfirmed}
                   />
                   {errors.endDate && <p className="text-sm text-destructive">{errors.endDate.message}</p>}
                 </div>
@@ -264,6 +298,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                     id="startTime"
                     type="time"
                     {...register("startTime")}
+                    disabled={initialData?.isConfirmed}
                   />
                 </div>
 
@@ -273,6 +308,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                     id="endTime"
                     type="time"
                     {...register("endTime")}
+                    disabled={initialData?.isConfirmed}
                   />
                 </div>
               </div>
@@ -299,6 +335,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
                       {...register("participantEmails")}
                       rows={6}
                       className="resize-none border-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all rounded-xl"
+                      disabled={initialData?.isConfirmed}
                     />
                     <div className="absolute bottom-3 right-3 opacity-50 group-focus-within:opacity-100 transition-opacity">
                       <Loader2 className={cn("h-4 w-4 animate-spin hidden", isLoading && "block")} />
@@ -330,12 +367,12 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
           )}
 
           {step < steps.length ? (
-            <DebouncedButton type="button" onClick={nextStep} className="flex-1 ml-auto" debounceOnAppear>
+            <DebouncedButton type="button" onClick={nextStep} className="flex-1 ml-auto" debounceOnAppear disabled={initialData?.isConfirmed}>
               {t("nextButton") || "Next"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </DebouncedButton>
           ) : (
-            <DebouncedButton type="submit" size="lg" className="flex-1 ml-auto" disabled={isLoading} debounceOnAppear>
+            <DebouncedButton type="submit" size="lg" className="flex-1 ml-auto" disabled={isLoading || initialData?.isConfirmed} debounceOnAppear>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

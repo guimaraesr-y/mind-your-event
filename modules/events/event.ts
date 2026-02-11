@@ -8,6 +8,7 @@ export const updateEventSchema = z.object({
     end_date: z.string().min(1).optional(),
     start_time: z.string().optional(),
     end_time: z.string().optional(),
+    participantEmails: z.array(z.string().email()).optional(),
 });
 
 export interface EventInterface {

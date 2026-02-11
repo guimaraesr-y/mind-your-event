@@ -85,7 +85,8 @@
   },
   "EditEventPage": {
     "title": "Editar Evento",
-    "description": "Atualize os detalhes do seu evento abaixo."
+    "description": "Atualize os detalhes do seu evento abaixo.",
+    "isConfirmed": "Este evento já foi confirmado e não pode mais ser editado."
   },
   "DashboardPage": {
     "createEvent": "Criar Evento",
@@ -133,7 +134,7 @@
     "noInvitations": "Nenhum convite ainda. Quando alguém te convidar, eles aparecerão aqui!"
   },
   "InvitePage": {
-    "finalized": {
+    "confirmed": {
       "banner": "Evento Confirmado",
       "cardTitle": "Detalhes Finais do Evento",
       "dateLabel": "Data",
@@ -247,6 +248,8 @@
     "sendInvitesEmailButton": "Enviar Links de Convite Únicos por E-mail"
   },
   "CreateEventForm": {
+    "isConfirmed": "Este evento já foi confirmado e não pode mais ser editado.",
+    "removedParticipantWithAvailability": "Os seguintes participantes já enviaram sua disponibilidade: {emails}. Removê-los excluirá seus dados. Deseja continuar?",
     "sections": {
       "details": {
         "title": "1. Detalhes do Evento",
@@ -359,6 +362,18 @@
       "login": "Verificar meu Email"
     }
   },
+  "ConfirmEventDialog": {
+    "trigger": "Confirmar Evento",
+    "title": "Confirmar Evento",
+    "description": "Defina a data e hora final para este evento. Todos os participantes serão notificados.",
+    "dateLabel": "Data Final *",
+    "startTimeLabel": "Hora de Início *",
+    "endTimeLabel": "Hora de Término *",
+    "submitButton": "Confirmar e Notificar Participantes",
+    "submitting": "Confirmando...",
+    "success": "Evento confirmado! Todos os participantes foram notificados.",
+    "error": "Falha ao confirmar o evento"
+  },
   "Email": {
     "Event": {
       "InviteEmail": {
@@ -372,14 +387,14 @@
         "linkNotWorking": "Se o botão acima não funcionar,",
         "clickHere": "clique aqui."
       },
-      "FinalizedEmail": {
+      "ConfirmedEmail": {
         "title": "Evento Confirmado!",
         "subtitle": "Seu evento foi confirmado pelo MindYourEvent",
         "greeting": "Olá, {authorName}!",
-        "eventFinalized": "O evento {eventTitle} foi confirmado.",
-        "finalizedDetails": "Detalhes do Evento",
-        "finalizedDate": "Data: {finalizedDate}",
-        "finalizedTime": "Hora: {finalizedTime}",
+        "eventConfirmed": "O evento {eventTitle} foi confirmado.",
+        "confirmedDetails": "Detalhes do Evento",
+        "confirmedDate": "Data: {finalizedDate}",
+        "confirmedTime": "Hora: {finalizedTime}",
         "viewEventDetails": "Clique no botão abaixo para ver os detalhes finais do evento.",
         "viewEventButton": "Ver Detalhes do Evento",
         "linkNotWorking": "Se o botão acima não funcionar,",

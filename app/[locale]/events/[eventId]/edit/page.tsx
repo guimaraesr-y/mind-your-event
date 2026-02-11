@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { CreateEventForm } from "@/components/create-event-form";
-import { retrieveEventById } from "@/actions/event/retrieve";
+import { retrieveEventById, retrieveEventParticipants } from "@/actions/event/retrieve";
 import { getCurrentUser } from "@/actions/user/get-current-user";
 import { Header } from "@/components/header";
 import { getTranslations } from "next-intl/server";
@@ -27,6 +27,8 @@ export default async function EditEventPage({ params }: PageProps) {
         notFound();
     }
 
+    const participants = await retrieveEventParticipants(eventId);
+
     const initialData = {
         id: event.id,
         title: event.title,
@@ -37,6 +39,12 @@ export default async function EditEventPage({ params }: PageProps) {
         endTime: event.end_time || "",
         creatorName: event.creator.name,
         creatorEmail: event.creator.email,
+        participantEmails: participants.map(p => p.users.email).join(', '),
+        participants: participants.map(p => ({
+            email: p.users.email,
+            hasSubmitted: !!p.has_submitted
+        })),
+        isConfirmed: !!event.is_finalized
     };
 
     return (
@@ -47,7 +55,11 @@ export default async function EditEventPage({ params }: PageProps) {
                 <div className="max-w-4xl mx-auto space-y-8 text-center">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-                        <p className="text-muted-foreground">{t("description")}</p>
+                        <p className="text-muted-foreground">
+                            {event.is_finalized
+                                ? t("isConfirmed")
+                                : t("description")}
+                        </p>
                     </div>
 
                     <CreateEventForm initialData={initialData} />

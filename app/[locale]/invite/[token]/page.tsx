@@ -102,7 +102,7 @@ export default async function InvitePage({ params }: PageProps) {
             <div className="space-y-2 text-center">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>{t("finalized.banner")}</span>
+                <span>{t("confirmed.banner")}</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">{event.title}</h1>
               {event.description && <p className="text-muted-foreground max-w-2xl mx-auto">{event.description}</p>}
@@ -110,13 +110,13 @@ export default async function InvitePage({ params }: PageProps) {
 
             <Card className="bg-primary/5 border-primary/20">
               <CardHeader>
-                <CardTitle>{t("finalized.cardTitle")}</CardTitle>
+                <CardTitle>{t("confirmed.cardTitle")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start gap-3">
                   <Calendar className="h-5 w-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">{t("finalized.dateLabel")}</p>
+                    <p className="text-sm font-medium text-foreground">{t("confirmed.dateLabel")}</p>
                     <p className="text-lg font-semibold text-foreground">{formatDate(event.finalized_date)}</p>
                   </div>
                 </div>
@@ -124,7 +124,7 @@ export default async function InvitePage({ params }: PageProps) {
                 <div className="flex items-start gap-3">
                   <Clock className="h-5 w-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">{t("finalized.timeLabel")}</p>
+                    <p className="text-sm font-medium text-foreground">{t("confirmed.timeLabel")}</p>
                     <p className="text-lg font-semibold text-foreground">
                       {event.finalized_start_time} - {event.finalized_end_time}
                     </p>
