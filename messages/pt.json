@@ -453,5 +453,11 @@
       "previous": "Anterior",
       "done": "Entendi!"
     }
+  },
+  "NotFound": {
+    "title": "404 - Evento Não Encontrado",
+    "description": "Ops! Parece que este evento não está no calendário. Talvez ele tenha sido movido, excluído ou nunca existiu nesta linha do tempo.",
+    "goBack": "Voltar para a Realidade",
+    "home": "Início"
   }
 }

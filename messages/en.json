@@ -452,5 +452,11 @@
       "previous": "Previous",
       "done": "Got it!"
     }
+  },
+  "NotFound": {
+    "title": "404 - Event Not Found",
+    "description": "Oops! It seems this event isn't on the calendar. Maybe it was moved, deleted, or never existed in this timeline.",
+    "goBack": "Back to Reality",
+    "home": "Dashboard"
   }
 }
