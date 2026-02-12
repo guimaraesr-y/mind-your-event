@@ -24,6 +24,18 @@ const DebouncedButton = React.forwardRef<HTMLButtonElement, DebouncedButtonProps
         const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
             if (isLocked) return
 
+            if (props.type === "submit" && !onClick) {
+                // If it's a submit button without a custom onClick, 
+                // we must let the event propagate to trigger the form submission 
+                // before disabling the button.
+                setTimeout(() => setIsLocked(true), 0)
+
+                setTimeout(() => {
+                    setIsLocked(false)
+                }, debounceMs)
+                return
+            }
+
             setIsLocked(true)
 
             try {

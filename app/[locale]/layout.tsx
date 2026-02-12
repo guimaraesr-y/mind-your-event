@@ -1,22 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import { ToastContainer } from 'react-toastify';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 import { AuthProvider } from "@/contexts/auth-context";
 import 'react-toastify/dist/ReactToastify.css';
-import "../globals.css";
 import { CookiesProvider } from "@/contexts/cookies-context";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export default async function LocaleLayout({
   children,
@@ -29,23 +17,18 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <CookiesProvider>
-            <AuthProvider>
-              {children}
-              <ToastContainer
-                position="bottom-right"
-                theme="light"
-                stacked={true}
-              />
-            </AuthProvider>
-          </CookiesProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <CookiesProvider>
+        <AuthProvider>
+          {children}
+          <ToastContainer
+            position="bottom-right"
+            theme="light"
+            stacked={true}
+          />
+        </AuthProvider>
+      </CookiesProvider>
+    </NextIntlClientProvider>
   );
 }
+

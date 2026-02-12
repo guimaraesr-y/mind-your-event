@@ -17,7 +17,24 @@ import { useAuth } from "@/contexts/auth-context"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 
-export function CreateEventForm() {
+interface CreateEventFormProps {
+  initialData?: {
+    id: string
+    title: string
+    description: string
+    startDate: string
+    endDate: string
+    startTime: string
+    endTime: string
+    creatorName: string
+    creatorEmail: string
+    participantEmails?: string
+    participants?: { email: string; hasSubmitted: boolean }[]
+    isConfirmed?: boolean
+  }
+}
+
+export function CreateEventForm({ initialData }: CreateEventFormProps) {
   const t = useTranslations("CreateEventForm")
   const router = useRouter()
   const { user } = useAuth()
@@ -35,9 +52,10 @@ export function CreateEventForm() {
     endTime: z.string().optional(),
     participantEmails: z.string().refine((val) => {
       const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
+      if (emails.length === 0 && !initialData) return false;
       return emails.every(e => z.string().email().safeParse(e).success);
     }, t("validation.participantEmailsInvalid")),
-  }), [t])
+  }), [t, initialData])
 
   type FormData = z.infer<typeof createEventSchema>
 
@@ -50,24 +68,24 @@ export function CreateEventForm() {
   } = useForm<FormData>({
     resolver: zodResolver(createEventSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      creatorName: user?.name || "",
-      creatorEmail: user?.email || "",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      participantEmails: "",
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      creatorName: initialData?.creatorName || user?.name || "",
+      creatorEmail: initialData?.creatorEmail || user?.email || "",
+      startDate: initialData?.startDate || "",
+      endDate: initialData?.endDate || "",
+      startTime: initialData?.startTime || "",
+      endTime: initialData?.endTime || "",
+      participantEmails: initialData?.participantEmails || "",
     },
   })
 
   useEffect(() => {
-    if (user) {
+    if (user && !initialData) {
       setValue("creatorName", user.name)
       setValue("creatorEmail", user.email)
     }
-  }, [user, setValue])
+  }, [user, setValue, initialData])
 
   const nextStep = async () => {
     let fieldsToValidate: (keyof FormData)[] = []
@@ -81,24 +99,54 @@ export function CreateEventForm() {
   const prevStep = () => setStep(step - 1)
 
   const onSubmit = async (data: FormData) => {
+    if (initialData?.isConfirmed) {
+      toast.error(t("isConfirmed") || "This event is confirmed and cannot be modified.")
+      return
+    }
+
+    if (initialData?.participants) {
+      const currentEmails = data.participantEmails?.split(",").map(e => e.trim()).filter(Boolean) || [];
+      const removedWithSubmission = initialData.participants.filter(
+        p => p.hasSubmitted && !currentEmails.includes(p.email)
+      );
+
+      if (removedWithSubmission.length > 0) {
+        const emails = removedWithSubmission.map(p => p.email).join(", ");
+        const confirm = window.confirm(
+          t("removedParticipantWithAvailability", { emails }) ||
+          `The following participants already submitted their availability: ${emails}. Removing them will delete their data. Do you want to continue?`
+        );
+        if (!confirm) return;
+      }
+    }
+
     setIsLoading(true)
     try {
-      const response = await fetch("/api/events", {
-        method: "POST",
+      const url = initialData ? `/api/events/${initialData.id}` : "/api/events"
+      const method = initialData ? "PATCH" : "POST"
+
+      const payload = {
+        ...data,
+        participantEmails: data.participantEmails?.split(",").map(e => e.trim()).filter(Boolean) || []
+      }
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || t("toast.createError"))
+        throw new Error(error.error || (initialData ? t("toast.updateError") : t("toast.createError")))
       }
 
       const result = await response.json()
-      toast.success(t("toast.createSuccess"))
-      router.push(`/events/${result.eventId}`)
+      toast.success(initialData ? t("toast.updateSuccess") : t("toast.createSuccess"))
+      router.push(`/events/${initialData?.id || result.eventId}`)
+      router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : t("toast.createError"))
+      toast.error(error instanceof Error ? error.message : (initialData ? t("toast.updateError") : t("toast.createError")))
     } finally {
       setIsLoading(false)
     }
@@ -148,6 +196,7 @@ export function CreateEventForm() {
                   id="title"
                   placeholder={t("placeholders.title")}
                   {...register("title")}
+                  disabled={initialData?.isConfirmed}
                 />
                 {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
               </div>
@@ -159,6 +208,7 @@ export function CreateEventForm() {
                   placeholder={t("placeholders.description")}
                   {...register("description")}
                   rows={3}
+                  disabled={initialData?.isConfirmed}
                 />
                 {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
               </div>
@@ -197,6 +247,7 @@ export function CreateEventForm() {
                         id="creatorName"
                         placeholder={t("placeholders.creatorName")}
                         {...register("creatorName")}
+                        disabled={initialData?.isConfirmed}
                       />
                       {errors.creatorName && <p className="text-sm text-destructive">{errors.creatorName.message}</p>}
                     </div>
@@ -208,6 +259,7 @@ export function CreateEventForm() {
                         type="email"
                         placeholder={t("placeholders.creatorEmail")}
                         {...register("creatorEmail")}
+                        disabled={initialData?.isConfirmed}
                       />
                       {errors.creatorEmail && <p className="text-sm text-destructive">{errors.creatorEmail.message}</p>}
                     </div>
@@ -222,6 +274,7 @@ export function CreateEventForm() {
                     id="startDate"
                     type="date"
                     {...register("startDate")}
+                    disabled={initialData?.isConfirmed}
                   />
                   {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
                 </div>
@@ -232,6 +285,7 @@ export function CreateEventForm() {
                     id="endDate"
                     type="date"
                     {...register("endDate")}
+                    disabled={initialData?.isConfirmed}
                   />
                   {errors.endDate && <p className="text-sm text-destructive">{errors.endDate.message}</p>}
                 </div>
@@ -244,6 +298,7 @@ export function CreateEventForm() {
                     id="startTime"
                     type="time"
                     {...register("startTime")}
+                    disabled={initialData?.isConfirmed}
                   />
                 </div>
 
@@ -253,6 +308,7 @@ export function CreateEventForm() {
                     id="endTime"
                     type="time"
                     {...register("endTime")}
+                    disabled={initialData?.isConfirmed}
                   />
                 </div>
               </div>
@@ -279,6 +335,7 @@ export function CreateEventForm() {
                       {...register("participantEmails")}
                       rows={6}
                       className="resize-none border-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all rounded-xl"
+                      disabled={initialData?.isConfirmed}
                     />
                     <div className="absolute bottom-3 right-3 opacity-50 group-focus-within:opacity-100 transition-opacity">
                       <Loader2 className={cn("h-4 w-4 animate-spin hidden", isLoading && "block")} />
@@ -309,21 +366,21 @@ export function CreateEventForm() {
             </DebouncedButton>
           )}
 
-          {step < 3 ? (
-            <DebouncedButton type="button" onClick={nextStep} className="flex-1 ml-auto" debounceOnAppear>
+          {step < steps.length ? (
+            <DebouncedButton type="button" onClick={nextStep} className="flex-1 ml-auto" debounceOnAppear disabled={initialData?.isConfirmed}>
               {t("nextButton") || "Next"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </DebouncedButton>
           ) : (
-            <DebouncedButton type="submit" size="lg" className="flex-1 ml-auto" disabled={isLoading} debounceOnAppear>
+            <DebouncedButton type="submit" size="lg" className="flex-1 ml-auto" disabled={isLoading || initialData?.isConfirmed} debounceOnAppear>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("creatingButton")}
+                  {initialData ? (t("updatingButton") || "Updating...") : t("creatingButton")}
                 </>
               ) : (
                 <>
-                  {t("createButton")}
+                  {initialData ? (t("updateButton") || "Update") : t("createButton")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}

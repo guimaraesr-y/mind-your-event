@@ -37,7 +37,7 @@ export default class FinalizeEventUseCase {
     }
 
     private async isEventFinalized(eventId: string): Promise<boolean> {
-        return await this.eventRepository.isEventFinalized(eventId);
+        return await this.eventRepository.isEventConfirmed(eventId);
     }
 
     private async notificateParticipants(event: EventInterface) {

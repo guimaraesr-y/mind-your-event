@@ -5,4 +5,5 @@ export interface IParticipantRepository {
     getParticipantByEventAndUser(eventId: string, userId: string): Promise<any | null>;
     updateParticipantStatus(eventId: string, userId: string, hasSubmitted: boolean): Promise<void>;
     updateRsvp(eventId: string, inviteToken: string, willAttend: boolean): Promise<void>;
+    deleteParticipant(eventId: string, userId: string): Promise<void>;
 }
