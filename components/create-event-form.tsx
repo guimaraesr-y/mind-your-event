@@ -11,11 +11,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, ArrowRight, ArrowLeft, Check } from "lucide-react"
+import { Loader2, ArrowRight, ArrowLeft, Check, X, Plus } from "lucide-react"
 import { toast } from "react-toastify"
 import { useAuth } from "@/contexts/auth-context"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
+import { EmailTagInput } from "./email-tag-input"
 
 interface CreateEventFormProps {
   initialData?: {
@@ -50,11 +51,10 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
     endDate: z.string().min(1, t("validation.endDateRequired")),
     startTime: z.string().optional(),
     endTime: z.string().optional(),
-    participantEmails: z.string().refine((val) => {
-      const emails = val.split(",").map(e => e.trim()).filter(e => e !== "");
-      if (emails.length === 0 && !initialData) return false;
-      return emails.every(e => z.string().email().safeParse(e).success);
-    }, t("validation.participantEmailsInvalid")),
+    participantEmails: z.array(z.string().email(t("validation.emailInvalid"))).min(
+      initialData ? 0 : 1,
+      t("validation.participantEmailsInvalid")
+    ),
   }), [t, initialData])
 
   type FormData = z.infer<typeof createEventSchema>
@@ -64,6 +64,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
     handleSubmit,
     setValue,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(createEventSchema),
@@ -76,9 +77,13 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
       endDate: initialData?.endDate || "",
       startTime: initialData?.startTime || "",
       endTime: initialData?.endTime || "",
-      participantEmails: initialData?.participantEmails || "",
+      participantEmails: initialData?.participantEmails
+        ? initialData.participantEmails.split(",").map(e => e.trim()).filter(Boolean)
+        : [],
     },
   })
+
+  const emails = watch("participantEmails") || []
 
   useEffect(() => {
     if (user && !initialData) {
@@ -105,7 +110,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
     }
 
     if (initialData?.participants) {
-      const currentEmails = data.participantEmails?.split(",").map(e => e.trim()).filter(Boolean) || [];
+      const currentEmails = data.participantEmails
       const removedWithSubmission = initialData.participants.filter(
         p => p.hasSubmitted && !currentEmails.includes(p.email)
       );
@@ -127,7 +132,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
 
       const payload = {
         ...data,
-        participantEmails: data.participantEmails?.split(",").map(e => e.trim()).filter(Boolean) || []
+        participantEmails: data.participantEmails
       }
 
       const response = await fetch(url, {
@@ -324,35 +329,14 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="participantEmails" className="text-base font-semibold">
-                    {t("labels.participantEmails")}
-                  </Label>
-                  <div className="relative group">
-                    <Textarea
-                      id="participantEmails"
-                      placeholder={t("placeholders.participantEmails")}
-                      {...register("participantEmails")}
-                      rows={6}
-                      className="resize-none border-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all rounded-xl"
-                      disabled={initialData?.isConfirmed}
-                    />
-                    <div className="absolute bottom-3 right-3 opacity-50 group-focus-within:opacity-100 transition-opacity">
-                      <Loader2 className={cn("h-4 w-4 animate-spin hidden", isLoading && "block")} />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 border border-muted-foreground/10">
-                    <Loader2 className="h-4 w-4 text-primary shrink-0 rotate-45" />
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      {t("participantInfo")}
-                    </p>
-                  </div>
-                  {errors.participantEmails && (
-                    <p className="text-sm font-medium text-destructive mt-2 animate-in fade-in slide-in-from-top-1">
-                      {errors.participantEmails.message}
-                    </p>
-                  )}
-                </div>
+                <EmailTagInput
+                  value={emails}
+                  onChange={(newEmails) => setValue("participantEmails", newEmails, { shouldValidate: true })}
+                  label={t("labels.participantEmails")}
+                  placeholder={t("placeholders.participantEmails")}
+                  disabled={initialData?.isConfirmed}
+                  error={errors.participantEmails?.message}
+                />
               </div>
             </CardContent>
           </Card>

@@ -266,7 +266,7 @@
       },
       "participants": {
         "title": "4. Invite Participants",
-        "description": "Enter email addresses separated by commas."
+        "description": "Enter email addresses."
       }
     },
     "labels": {
@@ -287,7 +287,8 @@
       "creatorEmail": "john@example.com",
       "participantEmails": "alice@example.com, bob@example.com"
     },
-    "participantInfo": "You will receive a unique links for each participant to submit their availability.",
+    "addButton": "Add",
+    "noParticipantsYet": "No participants added yet.",
     "creatingButton": "Creating Event...",
     "createButton": "Create Event & Get Shareable Links",
     "nextButton": "Next",
@@ -306,7 +307,8 @@
       "emailInvalid": "Invalid email address",
       "startDateRequired": "Start date is required",
       "endDateRequired": "End date is required",
-      "participantEmailsInvalid": "Please enter valid comma-separated emails (at least one)"
+      "participantEmailsInvalid": "Please enter valid emails (at least one)",
+      "emailAlreadyAdded": "This email has already been added"
     }
   },
   "ParticipantsList": {
