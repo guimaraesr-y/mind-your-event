@@ -12,11 +12,9 @@ export default function VerifyPage() {
   const redirect = searchParams.get("redirect");
   const { updateUserStatus } = useAuth();
 
-  const authenticateAndRedirectBack = () => {
-    updateUserStatus()
-      .then(() => {
-        router.push(redirect || "/");
-      })
+  const authenticateAndRedirectBack = async () => {
+    await updateUserStatus();
+    router.push(redirect || "/");
   }
 
   return (
@@ -28,7 +26,7 @@ export default function VerifyPage() {
         <VerifyEmailForm
           initialEmail={email || ""}
           callback={authenticateAndRedirectBack}
-          />
+        />
       </main>
     </div>
   )
