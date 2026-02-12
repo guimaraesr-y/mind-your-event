@@ -9,7 +9,7 @@ interface DebouncedButtonProps extends React.ComponentProps<typeof Button> {
 }
 
 const DebouncedButton = React.forwardRef<HTMLButtonElement, DebouncedButtonProps>(
-    ({ onClick, disabled, debounceMs = 2000, debounceOnAppear = false, ...props }, ref) => {
+    ({ onClick, disabled, debounceMs = 1000, debounceOnAppear = false, ...props }, ref) => {
         const [isLocked, setIsLocked] = React.useState(debounceOnAppear)
 
         React.useEffect(() => {
