@@ -7,7 +7,7 @@ import Link from "next/link"
 import { useMemo } from "react"
 import { AvailabilityHeatmap } from "@/components/availability-heatmap"
 import { ParticipantsList } from "@/components/participants-list"
-import { FinalizeEventDialog } from "@/components/finalize-event-dialog"
+import { ConfirmEventDialog } from "@/components/finalize-event-dialog"
 import { useFormatter, useTranslations } from "next-intl"
 import { CalculateBestSlotsUseCase } from "@/modules/events/use-cases/calculateBestSlotsUseCase"
 
@@ -66,7 +66,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
       </div>
 
       {!event.is_finalized && bestSlot && (
-        <FinalizeEventDialog
+        <ConfirmEventDialog
           eventId={event.id}
           suggestedDate={bestSlot.date}
           suggestedStartTime={bestSlot.startTime}

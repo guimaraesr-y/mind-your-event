@@ -18,19 +18,22 @@ import { CheckCircle2, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
 
-interface FinalizeEventDialogProps {
+import { useTranslations } from "next-intl"
+
+interface ConfirmEventDialogProps {
   eventId: string
   suggestedDate?: string
   suggestedStartTime?: string
   suggestedEndTime?: string
 }
 
-export function FinalizeEventDialog({
+export function ConfirmEventDialog({
   eventId,
   suggestedDate,
   suggestedStartTime,
   suggestedEndTime,
-}: FinalizeEventDialogProps) {
+}: ConfirmEventDialogProps) {
+  const t = useTranslations("ConfirmEventDialog")
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -53,17 +56,15 @@ export function FinalizeEventDialog({
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to finalize event")
+        throw new Error(error.error || t("error"))
       }
 
-      toast.success("Event finalized! All participants have been notified")
+      toast.success(t("success"))
 
       setOpen(false)
       router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to finalize event", {
-        type: "error",
-      })
+      toast.error(error instanceof Error ? error.message : t("error"))
     } finally {
       setIsLoading(false)
     }
@@ -74,19 +75,19 @@ export function FinalizeEventDialog({
       <DialogTrigger asChild>
         <Button size="lg" className="w-full">
           <CheckCircle2 className="mr-2 h-5 w-5" />
-          Finalize Event
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Finalize Event</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Set the final date and time for this event. All participants will be notified.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="finalizedDate">Final Date *</Label>
+            <Label htmlFor="finalizedDate">{t("dateLabel")}</Label>
             <Input
               id="finalizedDate"
               type="date"
@@ -98,7 +99,7 @@ export function FinalizeEventDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="finalizedStartTime">Start Time *</Label>
+              <Label htmlFor="finalizedStartTime">{t("startTimeLabel")}</Label>
               <Input
                 id="finalizedStartTime"
                 type="time"
@@ -109,7 +110,7 @@ export function FinalizeEventDialog({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="finalizedEndTime">End Time *</Label>
+              <Label htmlFor="finalizedEndTime">{t("endTimeLabel")}</Label>
               <Input
                 id="finalizedEndTime"
                 type="time"
@@ -124,10 +125,10 @@ export function FinalizeEventDialog({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Finalizing...
+                {t("submitting")}
               </>
             ) : (
-              "Confirm & Notify Participants"
+              t("submitButton")
             )}
           </Button>
         </form>

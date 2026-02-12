@@ -72,4 +72,24 @@ export default class ParticipantRepository implements IParticipantRepository {
             }
         });
     }
+
+    async deleteParticipant(eventId: string, userId: string): Promise<void> {
+        // AvailabilitySlot records are linked to Event and User directly.
+        // We must delete them explicitly as they don't cascade from EventParticipant.
+        await prisma.availabilitySlot.deleteMany({
+            where: {
+                event_id: eventId,
+                user_id: userId
+            }
+        });
+
+        await prisma.eventParticipant.delete({
+            where: {
+                event_id_user_id: {
+                    event_id: eventId,
+                    user_id: userId
+                }
+            }
+        });
+    }
 }

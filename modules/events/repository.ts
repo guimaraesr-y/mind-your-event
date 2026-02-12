@@ -73,7 +73,7 @@ export default class EventRepository implements IEventRepository {
         return !!event;
     }
 
-    async isEventFinalized(eventId: string): Promise<boolean> {
+    async isEventConfirmed(eventId: string): Promise<boolean> {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
             select: { is_finalized: true }

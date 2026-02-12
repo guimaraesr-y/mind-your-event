@@ -7,5 +7,5 @@ export interface IEventRepository {
     getEventByInviteToken(token: string): Promise<any | null>;
     getEventsByCreatorId(userId: string): Promise<any[]>;
     isEventOwner(userId: string, eventId: string): Promise<boolean>;
-    isEventFinalized(eventId: string): Promise<boolean>;
+    isEventConfirmed(eventId: string): Promise<boolean>;
 }
