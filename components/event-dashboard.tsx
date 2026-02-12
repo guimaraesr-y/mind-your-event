@@ -154,9 +154,9 @@ export function EventDashboard({ event, participants }: EventDashboardProps) {
             </Button>
           </div>
 
-          <div className="flex justify-end mb-4 border-t pt-4">
+          {/* <div className="flex justify-end mb-4 border-t pt-4">
             <Button onClick={() => sendEventInviteLinkEmails(event.id)}>{t("sendInvitesEmailButton")}</Button>
-          </div>
+          </div> */}
 
           <div className="space-y-3">
             {participants.map((participant) => (
