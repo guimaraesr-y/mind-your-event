@@ -24,7 +24,7 @@ import { Card } from "@/components/ui/card"
 import { useTranslations } from "next-intl"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { Logo } from "@/components/logo"
-import { motion, useScroll, useTransform, Variants } from "framer-motion"
+import { motion, useScroll, useTransform, Variants, useSpring } from "framer-motion"
 import { useRef } from "react"
 
 const featureDetails: Record<
@@ -78,8 +78,15 @@ export default function HomePage() {
     offset: ["start start", "end start"],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  // Smooth out the scroll progress with a spring for mobile/performance
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
+
+  const y = useTransform(smoothProgress, [0, 1], ["0%", "30%"])
+  const opacity = useTransform(smoothProgress, [0, 0.8], [1, 0])
 
   return (
     <div className="flex min-h-screen flex-col bg-background selection:bg-primary/30">
@@ -109,7 +116,7 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section ref={heroRef} className="relative overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
-          <motion.div style={{ y, opacity }} className="container mx-auto px-4 relative z-10">
+          <motion.div style={{ y, opacity }} className="container mx-auto px-4 relative z-10 will-change-transform will-change-opacity">
             <div className="flex flex-col lg:flex-row items-center gap-12">
               <div className="flex-1 text-center lg:text-left">
                 <motion.div
