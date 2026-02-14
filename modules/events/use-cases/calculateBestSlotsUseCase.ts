@@ -59,10 +59,18 @@ export class OverlappingSlot {
 
     public compare(other: OverlappingSlot): number {
         if (other.count !== this.count) return other.count - this.count;
-        if (this.timeSlot.getDate() !== other.timeSlot.getDate()) {
-            return this.timeSlot.getDate().localeCompare(other.timeSlot.getDate());
+
+        const thisDate = String(this.timeSlot.getDate());
+        const otherDate = String(other.timeSlot.getDate());
+
+        if (thisDate !== otherDate) {
+            return thisDate.localeCompare(otherDate);
         }
-        return this.timeSlot.getStartTime().localeCompare(other.timeSlot.getStartTime());
+
+        const thisStart = String(this.timeSlot.getStartTime());
+        const otherStart = String(other.timeSlot.getStartTime());
+
+        return thisStart.localeCompare(otherStart);
     }
 }
 
@@ -104,7 +112,12 @@ export class CalculateBestSlotsUseCase {
         const collection = new OverlappingSlotCollection(input.totalParticipants);
 
         input.availabilitySlots.forEach((slot) => {
-            const timeSlot = new TimeSlot(slot.date, slot.start_time, slot.end_time);
+            // Ensure date is a string, handle Date objects from Prisma
+            const dateStr = slot.date instanceof Date
+                ? slot.date.toISOString().split('T')[0]
+                : String(slot.date);
+
+            const timeSlot = new TimeSlot(dateStr, slot.start_time, slot.end_time);
             collection.addSlot(timeSlot, slot.users?.name || "Anonymous");
         });
 
