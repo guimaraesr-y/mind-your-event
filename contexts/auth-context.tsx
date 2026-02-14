@@ -30,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserStatus = async () => {
+    setIsLoading(true);
     const sessionToken = cookies.session_token;
 
     if (cookieIsLoading) {
@@ -41,30 +42,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    fetchUser(sessionToken)
-      .then((user: UserInterface | null) => {
-        setUser(user);
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      })
+    try {
+      const user = await fetchUser(sessionToken);
+      setUser(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
     updateUserStatus();
-    console.log({cookies, cookieIsLoading});
+    console.log({ cookies, cookieIsLoading });
   }, [cookies, cookieIsLoading]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={{ user, isLoading, updateUserStatus }}>

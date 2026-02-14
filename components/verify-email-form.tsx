@@ -72,7 +72,7 @@ export function VerifyEmailForm({
       }
 
       const data = await response.json();
-      setCookie('session_token', data.sessionToken);
+      await setCookie('session_token', data.sessionToken);
 
       toast.success(t("toast.verifySuccess"), {
         autoClose: 500,

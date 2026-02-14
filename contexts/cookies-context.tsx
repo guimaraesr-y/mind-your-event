@@ -28,7 +28,7 @@ export function CookiesProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const setCookie = async (name: string, value: string) => {
-    Cookies.set(name, value);
+    Cookies.set(name, value, { path: '/' });
     setCookies(Cookies.get());
   };
 
