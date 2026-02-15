@@ -9,7 +9,7 @@ describe('FinalizeEventUseCase', () => {
 
     beforeEach(() => {
         mockEventRepo = {
-            isEventFinalized: vi.fn(),
+            isEventConfirmed: vi.fn(),
             updateEvent: vi.fn(),
         };
         mockParticipantRepo = {
@@ -53,7 +53,7 @@ describe('FinalizeEventUseCase', () => {
             }
         ];
 
-        mockEventRepo.isEventFinalized.mockResolvedValue(false);
+        mockEventRepo.isEventConfirmed.mockResolvedValue(false);
         mockEventRepo.updateEvent.mockResolvedValue(mockEvent);
         mockParticipantRepo.getParticipantsByEventId.mockResolvedValue(mockParticipants);
         mockEmailUseCase.execute.mockResolvedValue(undefined);
@@ -84,7 +84,7 @@ describe('FinalizeEventUseCase', () => {
     });
 
     it('should throw error if event is already finalized', async () => {
-        mockEventRepo.isEventFinalized.mockResolvedValue(true);
+        mockEventRepo.isEventConfirmed.mockResolvedValue(true);
 
         await expect(useCase.execute({
             eventId: 'event-1',

@@ -9,7 +9,7 @@ import { AvailabilityHeatmap } from "@/components/availability-heatmap"
 import { ParticipantsList } from "@/components/participants-list"
 import { ConfirmEventDialog } from "@/components/finalize-event-dialog"
 import { useFormatter, useTranslations } from "next-intl"
-import { CalculateBestSlotsUseCase } from "@/modules/events/use-cases/calculateBestSlotsUseCase"
+import { EventMetricsService } from "@/modules/events/services/event-metrics.service"
 
 interface ResultsDashboardProps {
   event: any
@@ -21,15 +21,13 @@ interface ResultsDashboardProps {
 export function ResultsDashboard({ event, participants, availabilitySlots }: ResultsDashboardProps) {
   const t = useTranslations("ResultsDashboard")
   const format = useFormatter()
-  const totalParticipants = participants.length
-  const submittedCount = participants.filter((p) => p.has_submitted).length
 
-  // Calculate overlapping time slots using Use Case
-  const bestSlots = useMemo(() => {
-    const useCase = new CalculateBestSlotsUseCase();
-    return useCase.execute({ availabilitySlots, totalParticipants });
-  }, [availabilitySlots, totalParticipants])
+  const metrics = useMemo(() => {
+    const service = new EventMetricsService()
+    return service.calculate(participants, availabilitySlots)
+  }, [participants, availabilitySlots])
 
+  const { totalParticipants, submittedCount, responseRate, bestSlots } = metrics
   const bestSlot = bestSlots[0]
 
   const formatDate = (dateStr: string) => {
@@ -96,7 +94,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
               {submittedCount} / {totalParticipants}
             </div>
             <p className="text-xs text-muted-foreground">
-              {t("stats.responseRate", { rate: totalParticipants > 0 ? Math.round((submittedCount / totalParticipants) * 100) : 0 })}
+              {t("stats.responseRate", { rate: responseRate })}
             </p>
           </CardContent>
         </Card>
@@ -161,7 +159,11 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
       )}
 
       {/* Availability Heatmap */}
-      <AvailabilityHeatmap event={event} availabilitySlots={availabilitySlots} totalParticipants={totalParticipants} />
+      <AvailabilityHeatmap
+        event={event}
+        dateAvailability={metrics.dateAvailability}
+        totalParticipants={totalParticipants}
+      />
 
       {/* Participants List */}
       <ParticipantsList participants={participants} availabilitySlots={availabilitySlots} />
