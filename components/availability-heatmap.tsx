@@ -6,11 +6,11 @@ import { useFormatter, useTranslations } from "next-intl"
 
 interface AvailabilityHeatmapProps {
   event: any
-  availabilitySlots: any[]
+  dateAvailability: Map<string, number>
   totalParticipants: number
 }
 
-export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipants }: AvailabilityHeatmapProps) {
+export function AvailabilityHeatmap({ event, dateAvailability, totalParticipants }: AvailabilityHeatmapProps) {
   const t = useTranslations("AvailabilityHeatmap")
   const format = useFormatter()
 
@@ -26,17 +26,6 @@ export function AvailabilityHeatmap({ event, availabilitySlots, totalParticipant
     return dates
   }, [event.start_date, event.end_date])
 
-  // Calculate availability count per date
-  const dateAvailability = useMemo(() => {
-    const countMap = new Map<string, number>()
-
-    availabilitySlots.forEach((slot) => {
-      const count = countMap.get(slot.date) || 0
-      countMap.set(slot.date, count + 1)
-    })
-
-    return countMap
-  }, [availabilitySlots])
 
   const formatDate = (date: Date) => {
     return format.dateTime(date, {
