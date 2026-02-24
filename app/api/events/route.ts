@@ -32,8 +32,14 @@ export async function POST(request: NextRequest) {
     const creatorEmail = currentUser?.email || body.creatorEmail;
     const creatorName = currentUser?.name || body.creatorName;
 
-    const emails = participantEmails
-      .split(",")
+    let emails: string[] = [];
+    if (typeof participantEmails === "string") {
+      emails = participantEmails.split(",")
+    } else {
+      emails = participantEmails
+    }
+
+    emails = emails
       .map((email: string) => email.trim())
       .filter((email: string) => email.length > 0);
 
