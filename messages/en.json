@@ -280,6 +280,13 @@
       "endTime": "Preferred End Time (Optional)",
       "participantEmails": "Participant Emails *"
     },
+    "linkInfo": {
+      "title": "How Registration Works",
+      "publicInviteLink": "Public Invite Link",
+      "publicDescription": "This event will have a <strong>public link</strong> that anyone can use to sign up.",
+      "inviteParticipants": "Invite Participants",
+      "exclusiveDescription": "Added participants will receive <strong>exclusive links</strong> to submit their availability directly."
+    },
     "placeholders": {
       "title": "e.g., Team Meeting, Birthday Party",
       "description": "What's this event about?",
@@ -290,7 +297,7 @@
     "addButton": "Add",
     "noParticipantsYet": "No participants added yet.",
     "creatingButton": "Creating Event...",
-    "createButton": "Create Event & Get Shareable Links",
+    "createButton": "Create Event!",
     "nextButton": "Next",
     "previousButton": "Previous",
     "updateButton": "Update Event",
