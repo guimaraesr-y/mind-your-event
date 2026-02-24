@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, ArrowRight, ArrowLeft, Check, X, Plus } from "lucide-react"
+import { Loader2, ArrowRight, ArrowLeft, Check, X, Plus, Info, Link, Users } from "lucide-react"
 import { toast } from "react-toastify"
 import { useAuth } from "@/contexts/auth-context"
 import { useTranslations } from "next-intl"
@@ -51,10 +51,7 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
     endDate: z.string().min(1, t("validation.endDateRequired")),
     startTime: z.string().optional(),
     endTime: z.string().optional(),
-    participantEmails: z.array(z.string().email(t("validation.emailInvalid"))).min(
-      initialData ? 0 : 1,
-      t("validation.participantEmailsInvalid")
-    ),
+    participantEmails: z.array(z.string().email(t("validation.emailInvalid"))),
   }), [t, initialData])
 
   type FormData = z.infer<typeof createEventSchema>
@@ -328,6 +325,43 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
               <CardDescription>{t("sections.participants.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-4">
+                <div className="flex items-center gap-2 text-primary">
+                  <Info className="h-5 w-5" />
+                  <h4 className="font-semibold text-sm">
+                    {t("linkInfo.title") || "How Registration Works"}
+                  </h4>
+                </div>
+
+                <div className="grid gap-3">
+                  <div className="flex gap-3">
+                    <div className="mt-0.5 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <Link className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-foreground mb-0.5 font-medium">
+                        {t("linkInfo.publicInviteLink")}
+                      </p>
+                      <p className="text-xs text-muted-foreground leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: t.raw("linkInfo.publicDescription") }} />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <div className="mt-0.5 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <Users className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-foreground mb-0.5 font-medium">
+                        {t("linkInfo.inviteParticipants")}
+                      </p>
+                      <p className="text-xs text-muted-foreground leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: t.raw("linkInfo.exclusiveDescription") }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-4">
                 <EmailTagInput
                   value={emails}
