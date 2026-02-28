@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Cookies from "js-cookie";
 
 import { useState } from "react"
 import { useTranslations } from "next-intl"
@@ -10,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2, Mail } from "lucide-react"
 import { toast } from "react-toastify"
-import { useCookies } from "@/contexts/cookies-context"
+import { SESSION_COOKIE_NAME } from "@/contexts/auth-context";
 
 interface VerifyEmailFormProps {
   initialEmail?: string,
@@ -26,7 +27,6 @@ export function VerifyEmailForm({
   const [email, setEmail] = useState(initialEmail)
   const [code, setCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const { setCookie } = useCookies();
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,7 +72,7 @@ export function VerifyEmailForm({
       }
 
       const data = await response.json();
-      await setCookie('session_token', data.sessionToken);
+      Cookies.set(SESSION_COOKIE_NAME, data.sessionToken, { path: '/' });
 
       toast.success(t("toast.verifySuccess"), {
         autoClose: 500,

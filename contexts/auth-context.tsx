@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import { Loader2 } from "lucide-react";
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import Cookies from "js-cookie";
 import { UserInterface } from "@/modules/user/user";
 import { retrieveUserBySessionToken } from "@/actions/user/retrieve";
-import { useCookies } from "./cookies-context";
+
+export const SESSION_COOKIE_NAME = 'session_token';
 
 interface AuthContextType {
   user: UserInterface | null;
@@ -21,41 +16,36 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { cookies, isLoading: cookieIsLoading } = useCookies();
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchUser = async (sessionToken: string) => {
-    return await retrieveUserBySessionToken(sessionToken);
-  };
-
-  const updateUserStatus = async () => {
+  const updateUserStatus = useCallback(async () => {
     setIsLoading(true);
-    const sessionToken = cookies.session_token;
 
-    if (cookieIsLoading) {
-      return;
-    }
+    // Lemos a fonte de verdade DIRETO do navegador, sempre fresquinho
+    const sessionToken = Cookies.get('session_token');
 
     if (!sessionToken) {
+      setUser(null);
       setIsLoading(false);
       return;
     }
 
     try {
-      const user = await fetchUser(sessionToken);
-      setUser(user);
+      const fetchedUser = await retrieveUserBySessionToken(sessionToken);
+      setUser(fetchedUser);
+      console.log('Busca finalizada:', { user: fetchedUser, sessionToken });
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.error("Erro ao buscar usuário:", error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []); // Sem dependências perigosas agora!
 
   useEffect(() => {
     updateUserStatus();
-    console.log({ cookies, cookieIsLoading });
-  }, [cookies, cookieIsLoading]);
+  }, [updateUserStatus]);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, updateUserStatus }}>
