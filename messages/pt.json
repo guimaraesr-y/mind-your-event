@@ -280,6 +280,13 @@
       "endTime": "Horário de Término Preferencial (Opcional)",
       "participantEmails": "E-mails dos Participantes *"
     },
+    "linkInfo": {
+      "title": "Como funciona a inscrição",
+      "publicInviteLink": "Link de Convite Público",
+      "publicDescription": "Este evento terá um <strong>link público</strong> que qualquer pessoa pode usar para se inscrever.",
+      "inviteParticipants": "Convidar Participantes",
+      "exclusiveDescription": "Os participantes adicionados possuirão <strong>links exclusivos</strong> para enviar sua disponibilidade diretamente. Você pode accesar os links no painel."
+    },
     "placeholders": {
       "title": "ex: Reunião de Equipe, Festa de Aniversário",
       "description": "Sobre o que é este evento?",
@@ -290,7 +297,7 @@
     "addButton": "Adicionar",
     "noParticipantsYet": "Nenhum participante adicionado ainda.",
     "creatingButton": "Criando Evento...",
-    "createButton": "Criar Evento e Obter Links Compartilháveis",
+    "createButton": "Criar Evento!",
     "nextButton": "Próximo",
     "previousButton": "Anterior",
     "updateButton": "Atualizar Evento",
