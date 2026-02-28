@@ -285,7 +285,7 @@
       "publicInviteLink": "Link de Convite Público",
       "publicDescription": "Este evento terá um <strong>link público</strong> que qualquer pessoa pode usar para se inscrever.",
       "inviteParticipants": "Convidar Participantes",
-      "exclusiveDescription": "Os participantes adicionados receberão <strong>links exclusivos</strong> para enviar sua disponibilidade diretamente."
+      "exclusiveDescription": "Os participantes adicionados possuirão <strong>links exclusivos</strong> para enviar sua disponibilidade diretamente. Você pode accesar os links no painel."
     },
     "placeholders": {
       "title": "ex: Reunião de Equipe, Festa de Aniversário",

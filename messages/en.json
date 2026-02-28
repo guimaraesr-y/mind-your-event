@@ -285,7 +285,7 @@
       "publicInviteLink": "Public Invite Link",
       "publicDescription": "This event will have a <strong>public link</strong> that anyone can use to sign up.",
       "inviteParticipants": "Invite Participants",
-      "exclusiveDescription": "Added participants will receive <strong>exclusive links</strong> to submit their availability directly."
+      "exclusiveDescription": "Added participants will receive <strong>exclusive links</strong> to submit their availability directly. You can access the links on the event panel."
     },
     "placeholders": {
       "title": "e.g., Team Meeting, Birthday Party",
