@@ -34,7 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const fetchedUser = await retrieveUserBySessionToken(sessionToken);
       setUser(fetchedUser);
-      console.log('Busca finalizada:', { user: fetchedUser, sessionToken });
     } catch (error) {
       console.error("Erro ao buscar usuário:", error);
       setUser(null);

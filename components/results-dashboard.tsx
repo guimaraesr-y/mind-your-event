@@ -6,7 +6,7 @@ import { Calendar, Users, TrendingUp, ArrowLeft, Trophy } from "lucide-react"
 import Link from "next/link"
 import { useMemo } from "react"
 import { AvailabilityHeatmap } from "@/components/availability-heatmap"
-import { ParticipantsList } from "@/components/participants-list"
+import { ParticipantDetailedAvailability } from "@/components/participant-detailed-availability"
 import { ConfirmEventDialog } from "@/components/finalize-event-dialog"
 import { useFormatter, useTranslations } from "next-intl"
 import { EventMetricsService } from "@/modules/events/services/event-metrics.service"
@@ -44,7 +44,7 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
     const date = new Date();
     date.setHours(hours, minutes, 0, 0);
 
-    return format.dateTime(date, { hour: "numeric", minute: "2-digit" })
+    return format.dateTime(date, { hour: "2-digit", minute: "2-digit" })
   }
 
   return (
@@ -165,8 +165,8 @@ export function ResultsDashboard({ event, participants, availabilitySlots }: Res
         totalParticipants={totalParticipants}
       />
 
-      {/* Participants List */}
-      <ParticipantsList participants={participants} availabilitySlots={availabilitySlots} />
+      {/* Detailed Availability per Participant */}
+      <ParticipantDetailedAvailability participants={participants} availabilitySlots={availabilitySlots} />
 
       {submittedCount < totalParticipants && (
         <Card className="bg-muted/50">

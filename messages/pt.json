@@ -325,6 +325,17 @@
     "days": "{count, plural, one {# dia} other {# dias}}",
     "pending": "Pendente"
   },
+  "ParticipantDetailedAvailability": {
+    "title": "Disponibilidade por Pessoa",
+    "description": "Veja os detalhes de horários de cada participante.",
+    "searchPlaceholder": "Filtrar por nome ou e-mail...",
+    "noParticipants": "Nenhum participante encontrado.",
+    "timeSlots": "{count, plural, one {# horário} other {# horários}}",
+    "days": "{count, plural, one {# dia} other {# dias}}",
+    "pending": "Ainda não respondeu",
+    "viewDetails": "Ver horários",
+    "hideDetails": "Ocultar horários"
+  },
   "ResultsDashboard": {
     "backLink": "Voltar para o Painel do Evento",
     "title": "{eventTitle} - Resultados",

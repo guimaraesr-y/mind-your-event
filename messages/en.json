@@ -325,6 +325,17 @@
     "days": "{count, plural, one {# day} other {# days}}",
     "pending": "Pending"
   },
+  "ParticipantDetailedAvailability": {
+    "title": "Availability by Person",
+    "description": "View the schedule details for each participant.",
+    "searchPlaceholder": "Filter by name or email...",
+    "noParticipants": "No participants found.",
+    "timeSlots": "{count, plural, one {# time slot} other {# time slots}}",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "pending": "Has not responded yet",
+    "viewDetails": "View details",
+    "hideDetails": "Hide details"
+  },
   "ResultsDashboard": {
     "backLink": "Back to Event Dashboard",
     "title": "{eventTitle} - Results",
