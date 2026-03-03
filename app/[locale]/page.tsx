@@ -107,10 +107,10 @@ export default function HomePage() {
         <div className="container mx-auto flex items-center justify-between px-6 py-5">
           <Logo />
           <nav className="flex items-center gap-6">
-            <Button asChild variant="ghost" className="hidden md:flex text-sm font-semibold tracking-wide hover:bg-primary/10 hover:text-primary transition-all duration-300">
+            <Button asChild variant="ghost" className="flex text-sm font-semibold tracking-wide hover:bg-primary/10 hover:text-primary transition-all duration-300">
               <Link href="/dashboard">{t("goToDashboard")}</Link>
             </Button>
-            <Button asChild className="relative group px-7 py-2.5 bg-primary text-primary-foreground font-bold tracking-wide rounded-full shadow-[0_12px_35px_-10px_theme(colors.primary/50%)] hover:shadow-[0_18px_40px_-10px_theme(colors.primary/70%)] transition-all duration-300 hover:-translate-y-1 active:scale-95 border border-white/10">
+            <Button asChild className="hidden md:flex group px-7 py-2.5 bg-primary text-primary-foreground font-bold tracking-wide rounded-full shadow-[0_12px_35px_-10px_theme(colors.primary/50%)] hover:shadow-[0_18px_40px_-10px_theme(colors.primary/70%)] transition-all duration-300 hover:-translate-y-1 active:scale-95 border border-white/10">
               <Link href="/create">{t("createEvent")}</Link>
             </Button>
             <div className="h-6 w-px bg-border/40 mx-2 hidden md:block" />
