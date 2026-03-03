@@ -5,6 +5,7 @@
     "title": "SCHEDULE EVENTS WITHOUT THE BACK-AND-FORTH",
     "description": "Create an event, share a link, and let everyone pick their available times. We'll show you when most people can make it.",
     "createEvent": "Create an Event",
+    "freeIndicator": "100% Free",
     "howItWorks": {
       "title": "How Does It Work?",
       "description": "Scheduling an event takes just a few simple steps.",
@@ -76,7 +77,11 @@
       "copyright": "© 2025 MindYourEvent. All rights reserved.",
       "features": "Features",
       "pricing": "Pricing",
-      "contact": "Contact"
+      "contact": "Contact",
+      "description": "Simplifying event organization and calendar synchronization for everyone.",
+      "connect": "Connect",
+      "terms": "Terms",
+      "privacy": "Privacy"
     }
   },
   "CreateEventPage": {

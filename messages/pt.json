@@ -5,6 +5,7 @@
     "title": "AGENDE EVENTOS SEM O VAI E VEM",
     "description": "Crie um evento, compartilhe um link e deixe que todos escolham seus horários disponíveis. Mostraremos quando a maioria das pessoas pode comparecer.",
     "createEvent": "CRIAR EVENTO AGORA!",
+    "freeIndicator": "100% Gratuito",
     "howItWorks": {
       "title": "Como Funciona?",
       "description": "Agendar um evento leva apenas alguns passos simples.",
@@ -76,7 +77,11 @@
       "copyright": "© 2025 MindYourEvent. Todos os direitos reservados.",
       "features": "Recursos",
       "pricing": "Preços",
-      "contact": "Contato"
+      "contact": "Contato",
+      "description": "Simplificando a organização de eventos e a sincronização de agendas para todos.",
+      "connect": "Conecte-se",
+      "terms": "Termos",
+      "privacy": "Privacidade"
     }
   },
   "CreateEventPage": {

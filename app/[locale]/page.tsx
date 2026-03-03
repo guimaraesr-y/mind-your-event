@@ -397,7 +397,7 @@ export default function HomePage() {
                   </Button>
                   <div className="flex items-center gap-5 px-8 py-4 rounded-3xl bg-white/40 backdrop-blur-lg border border-white/30 shadow-sm">
                     <CheckCircle className="h-8 w-8 text-primary animate-bounce-slow" />
-                    <span className="text-xl font-bold text-foreground/80 tracking-tight">100% Gratuito</span>
+                    <span className="text-xl font-bold text-foreground/80 tracking-tight">{t("freeIndicator")}</span>
                   </div>
                 </div>
               </div>
@@ -413,11 +413,11 @@ export default function HomePage() {
             <div className="col-span-1 md:col-span-2">
               <Logo />
               <p className="mt-6 text-muted-foreground max-w-sm mx-auto md:mx-0">
-                Simplificando a organização de eventos e a sincronização de agendas para todos.
+                {t("footer.description")}
               </p>
             </div>
             <div>
-              <h4 className="font-bold mb-6 text-foreground">Conecte-se</h4>
+              <h4 className="font-bold mb-6 text-foreground">{t("footer.connect")}</h4>
               <div className="flex justify-center md:justify-start gap-4">
                 <Link href="https://github.com/guimaraesr-y" className="p-3 rounded-xl bg-muted hover:bg-primary/10 hover:text-primary transition-all">
                   <Github className="h-6 w-6" />
@@ -434,8 +434,8 @@ export default function HomePage() {
           <div className="border-t border-border/40 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground">
             <p className="text-sm font-medium">{t("footer.copyright")}</p>
             <div className="flex gap-8 text-sm">
-              <Link href="#" className="hover:text-foreground transition-colors">Termos</Link>
-              <Link href="#" className="hover:text-foreground transition-colors">Privacidade</Link>
+              <Link href="#" className="hover:text-foreground transition-colors">{t("footer.terms")}</Link>
+              <Link href="#" className="hover:text-foreground transition-colors">{t("footer.privacy")}</Link>
             </div>
           </div>
         </div>
