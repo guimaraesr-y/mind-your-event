@@ -12,13 +12,15 @@ import { EventCard } from "./event-card";
 
 import { useTranslations } from "next-intl";
 
+import React from "react";
+
 interface CreatedEventsProps {
   events: any[];
   title: string;
   description: string;
 }
 
-export function CreatedEvents({ events, title, description }: CreatedEventsProps) {
+const CreatedEventsComponent = ({ events, title, description }: CreatedEventsProps) => {
   const t = useTranslations("CreatedEvents");
 
   return (
@@ -57,4 +59,6 @@ export function CreatedEvents({ events, title, description }: CreatedEventsProps
       </CardContent>
     </Card>
   );
-}
+};
+
+export const CreatedEvents = React.memo(CreatedEventsComponent);

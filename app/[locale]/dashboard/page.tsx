@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { Header } from "@/components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { CircleUserRound, Pencil } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
@@ -21,10 +21,8 @@ import { Onboarding } from "@/components/onboarding";
 export default function DashboardPage() {
   const t = useTranslations("DashboardPage");
   const { user, isLoading, updateUserStatus } = useAuth();
-  const [pendingCreatedEvents, setPendingCreatedEvents] = useState<EventInterface[]>([]);
-  const [finalizedCreatedEvents, setFinalizedCreatedEvents] = useState<EventInterface[]>([]);
-  const [pendingParticipatingEvents, setPendingParticipatingEvents] = useState<EventParticipantWithEvent[]>([]);
-  const [finalizedParticipatingEvents, setFinalizedParticipatingEvents] = useState<EventParticipantWithEvent[]>([]);
+  const [createdEvents, setCreatedEvents] = useState<EventInterface[]>([]);
+  const [participatingEvents, setParticipatingEvents] = useState<EventParticipantWithEvent[]>([]);
 
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [activeTab, setActiveTab] = useState("my-events");
@@ -45,13 +43,34 @@ export default function DashboardPage() {
     }
   }, []);
 
+  // Memoize filtered lists to prevent recalculation on every render
+  const pendingCreatedEvents = useMemo(() =>
+    createdEvents.filter(e => !e.is_finalized),
+    [createdEvents]
+  );
+
+  const finalizedCreatedEvents = useMemo(() =>
+    createdEvents.filter(e => e.is_finalized),
+    [createdEvents]
+  );
+
+  const pendingParticipatingEvents = useMemo(() =>
+    participatingEvents.filter(e => !e.event.is_finalized),
+    [participatingEvents]
+  );
+
+  const finalizedParticipatingEvents = useMemo(() =>
+    participatingEvents.filter(e => e.event.is_finalized),
+    [participatingEvents]
+  );
+
   useEffect(() => {
     if (!isLoading && user) {
       setEditableName(user.name || "");
     }
   }, [user, isLoading]);
 
-  const handleUpdateName = async () => {
+  const handleUpdateName = useCallback(async () => {
     if (!user || editableName.trim() === "" || editableName === user.name) {
       setIsEditingName(false);
       return;
@@ -73,12 +92,14 @@ export default function DashboardPage() {
         setIsUpdatingName(false);
         setIsEditingName(false);
       })
-  };
+  }, [user, editableName, updateUser, updateUserStatus]);
 
   useEffect(() => {
     if (isLoading || !user) {
       return;
     }
+
+    let isMounted = true;
 
     (async () => {
       const [created, participating] = await Promise.all([
@@ -86,29 +107,25 @@ export default function DashboardPage() {
         retrieveParticipatingEventsByUserId(user!.id),
       ]);
 
-      setPendingCreatedEvents(created.filter(e => !e.is_finalized));
-      setFinalizedCreatedEvents(created.filter(e => e.is_finalized));
-
-      setPendingParticipatingEvents(participating.filter(e => !e.event.is_finalized));
-      setFinalizedParticipatingEvents(participating.filter(e => e.event.is_finalized));
+      if (isMounted) {
+        setCreatedEvents(created);
+        setParticipatingEvents(participating);
+      }
     })();
 
     return () => {
-      setPendingCreatedEvents([]);
-      setFinalizedCreatedEvents([]);
-      setPendingParticipatingEvents([]);
-      setFinalizedParticipatingEvents([]);
+      isMounted = false;
     }
   }, [isLoading, user])
 
-  const eventHasAvailability = (participant: EventParticipantWithEvent): boolean => {
+  const eventHasAvailability = useCallback((participant: EventParticipantWithEvent): boolean => {
     const event = participant.event;
     return Boolean(event?.availabilities.length > 0)
-  }
+  }, []);
 
-  const participantWillAttend = (participant: EventParticipantWithEvent): boolean => {
+  const participantWillAttend = useCallback((participant: EventParticipantWithEvent): boolean => {
     return Boolean(participant.will_attend)
-  }
+  }, []);
 
   return (
     <AuthGuard>

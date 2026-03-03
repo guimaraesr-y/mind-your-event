@@ -3,7 +3,7 @@
 import { ArrowRight, Calendar, User, Users } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import React from "react";
+import React, { useCallback } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 interface EventCardProps {
@@ -17,7 +17,7 @@ interface EventCardProps {
     linkTextKey: "viewDetails" | "viewInvitation";
 }
 
-export function EventCard({
+const EventCardComponent = ({
     title,
     startDate,
     endDate,
@@ -26,17 +26,17 @@ export function EventCard({
     statusIcon,
     linkHref,
     linkTextKey,
-}: EventCardProps) {
+}: EventCardProps) => {
     const t = useTranslations("EventCard");
     const locale = useLocale();
 
-    const formatDate = (date: string) => {
+    const formatDate = useCallback((date: string) => {
         return new Date(date).toLocaleDateString(locale, {
             month: "short",
             day: "numeric",
             year: "numeric",
         });
-    };
+    }, [locale]);
 
     return (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-5 rounded-xl border bg-card gap-4 interactive-card-hover group">
@@ -76,4 +76,6 @@ export function EventCard({
             </Button>
         </div>
     );
-}
+};
+
+export const EventCard = React.memo(EventCardComponent);

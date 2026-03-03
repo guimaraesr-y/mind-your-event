@@ -13,6 +13,8 @@ import { EventCard } from "./event-card";
 
 import { useTranslations } from "next-intl";
 
+import React from "react";
+
 interface ParticipatingEventsProps {
   events: any[];
   title: string;
@@ -20,7 +22,7 @@ interface ParticipatingEventsProps {
   participationConfirmMethod: (participation: EventParticipantWithEvent) => boolean;
 }
 
-export function ParticipatingEvents({ events, title, description, participationConfirmMethod }: ParticipatingEventsProps) {
+const ParticipatingEventsComponent = ({ events, title, description, participationConfirmMethod }: ParticipatingEventsProps) => {
   const t = useTranslations("ParticipatingEvents");
 
   return (
@@ -67,4 +69,6 @@ export function ParticipatingEvents({ events, title, description, participationC
       </CardContent>
     </Card>
   );
-}
+};
+
+export const ParticipatingEvents = React.memo(ParticipatingEventsComponent);
