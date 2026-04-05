@@ -79,8 +79,15 @@ POST /api/events
 
 **Response (200):**
 ```typescript
-{ eventId: string; success: true }
+{
+  eventId: string;
+  success: true;
+  message?: string;
+  failedParticipants?: Array<{ email: string; reason: string }>;
+}
 ```
+
+> **Note:** If some invitation emails fail to send, `failedParticipants` will contain an array of failed email addresses with the reason. The event is still created successfully.
 
 ---
 
@@ -108,8 +115,15 @@ PATCH /api/events/[eventId]
 
 **Response (200):**
 ```typescript
-{ event: Event; success: true }
+{
+  event: Event;
+  success: true;
+  message?: string;
+  failedParticipants?: Array<{ email: string; reason: string }>;
+}
 ```
+
+> **Note:** If new participants fail to receive invitation emails, `failedParticipants` will contain an array of failed email addresses with the reason.
 
 ---
 
@@ -156,6 +170,13 @@ POST /api/events/[eventId]/rsvp
 ```typescript
 { success: true }
 ```
+
+**Errors:**
+- `400` - Missing required fields
+- `403` - Invalid invite token for this event
+- `404` - Participant not found
+
+> **Security:** The endpoint validates that the invite token belongs to the specified eventId (prevents IDOR attacks).
 
 ---
 

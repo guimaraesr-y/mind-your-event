@@ -92,6 +92,14 @@ mind-your-event/
 ├── lib/                        # Shared utilities
 │   ├── db.ts                  # Prisma client singleton
 │   ├── email.tsx              # Email service config
+│   ├── email/                 # Email services
+│   │   ├── email-service.ts   # Main email service
+│   │   ├── email-retry.service.ts # Retry with exponential backoff
+│   │   ├── email-strategy.ts  # Email provider interface
+│   │   ├── email-service.factory.ts # Strategy factory
+│   │   └── strategies/        # Email provider implementations
+│   │       ├── gmail-smtp.strategy.ts
+│   │       └── mock-email.strategy.ts
 │   ├── utils.ts              # Utility functions
 │   ├── types.ts              # TypeScript types
 │   └── exceptions/           # Custom exceptions

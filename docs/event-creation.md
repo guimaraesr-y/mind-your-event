@@ -45,7 +45,19 @@ interface CreateEventDto {
 
 ### Output
 
-Returns created `Event` object with all participants.
+Returns created `Event` object with all participants, plus any failed email notifications.
+
+```typescript
+interface CreateEventResult {
+  event: Event;
+  failedParticipants: Array<{
+    email: string;
+    reason: string;
+  }>;
+}
+```
+
+> If some invitation emails fail to send (e.g., due to temporary network issues), the event is still created successfully and `failedParticipants` contains the list of failed emails with reasons. The EmailRetryService handles retries with exponential backoff.
 
 ## Key Files
 
@@ -68,3 +80,5 @@ Returns created `Event` object with all participants.
 - Creator automatically becomes a participant
 - Each participant receives a unique invite token
 - Invitation emails are sent separately (via `sendEventInviteEmail` use case)
+- **Email Retry:** The `EmailRetryService` (in `lib/email/email-retry.service.ts`) handles failed email deliveries with exponential backoff (3 retries by default, 1s base delay)
+- **Partial Failures:** If some emails fail to send, the event is still created successfully and failed emails are reported in the response

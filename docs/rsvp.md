@@ -27,9 +27,14 @@ interface SaveRsvpDto {
 ### Process
 
 1. Validate invite token exists
-2. Update participant record:
+2. Validate invite token belongs to the specified eventId (IDOR protection)
+3. Update participant record:
    - `will_attend: boolean`
    - `rsvp_submitted_at: timestamp`
+
+## Security
+
+The RSVP endpoint validates that the provided `inviteToken` belongs to the specified `eventId`. This prevents IDOR (Insecure Direct Object Reference) attacks where someone could try to RSVP to an event using a token from a different event.
 
 ## RSVP Display
 
