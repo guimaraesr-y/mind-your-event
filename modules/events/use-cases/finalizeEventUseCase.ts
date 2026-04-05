@@ -5,12 +5,22 @@ import { IEventRepository } from "../interfaces/event-repository.interface";
 import { IParticipantRepository } from "../interfaces/participant-repository.interface";
 import EventRepository from "../repository";
 import ParticipantRepository from "../participant-repository";
+import { emailRetryService } from "@/lib/email/email-retry.service";
 
 interface FinalizeEventDto {
     eventId: string;
     finalizedDate: string;
     finalizedStartTime: string;
     finalizedEndTime: string;
+}
+
+interface EmailPayload {
+    email: string;
+    userName: string;
+    eventTitle: string;
+    eventLink: string;
+    finalizedDate: string;
+    finalizedTime: string;
 }
 
 export default class FinalizeEventUseCase {
@@ -20,6 +30,12 @@ export default class FinalizeEventUseCase {
         private participantRepository: IParticipantRepository = new ParticipantRepository(),
         private sendEventFinalizedEmail: SendEventFinalizedEmailUseCase = new SendEventFinalizedEmailUseCase()
     ) { }
+
+    private async sendEmailWithRetry(payload: EmailPayload): Promise<void> {
+        await emailRetryService.executeWithRetry(() =>
+            this.sendEventFinalizedEmail.execute(payload)
+        );
+    }
 
     private async updateFinalizedEvent(
         eventId: string,
@@ -47,12 +63,12 @@ export default class FinalizeEventUseCase {
             return;
         }
 
-        const emailPromises = participants.map(async (participant) => {
+        for (const participant of participants) {
             const email = participant.user.email;
             const finalizedTime = `${event.finalized_start_time} - ${event.finalized_end_time}`;
 
             try {
-                await this.sendEventFinalizedEmail.execute({
+                await this.sendEmailWithRetry({
                     email,
                     userName: participant.user.name,
                     eventTitle: event.title,
@@ -63,9 +79,7 @@ export default class FinalizeEventUseCase {
             } catch (error) {
                 console.error(`Failed to send finalization email to ${email}:`, error);
             }
-        });
-
-        await Promise.all(emailPromises);
+        }
     }
 
     public async execute(payload: FinalizeEventDto) {

@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { ApiException } from "@/lib/exceptions/api"
 import { SendVerificationEmailUseCase } from "@/modules/user/usecases/sendVerificationEmailUseCase"
+import { emailRetryService } from "@/lib/email/email-retry.service"
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const useCase = new SendVerificationEmailUseCase();
-    await useCase.execute(email);
+    await emailRetryService.executeWithRetry(() => useCase.execute(email));
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -83,3 +83,35 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## 🔮 Future Improvements
+
+As the project scales, consider implementing:
+
+### Email Queue with Inngest
+
+Currently, email notifications (event finalized, invites) are sent synchronously during API requests. For better reliability and scalability, integrate [Inngest](https://inngest.com/):
+
+```typescript
+// Benefits:
+// - Automatic retry with exponential backoff
+// - Background processing (faster API responses)
+// - Webhook delivery status tracking
+// - Dead letter queue for failed emails
+
+// Implementation:
+// 1. npm install inngest
+// 2. Create inngest client in lib/
+// 3. Replace Promise.all email sends with inngest.send()
+// 4. Deploy with Vercel (Inngest integrates natively)
+
+// See: https://inngest.com/docs/frameworks/nextjs
+```
+
+### Other Potential Improvements
+
+- **Rate limiting** on auth endpoints
+- **Event expiration** - auto-expire events after end_date + 7 days
+- **Reminder system** - notify participants 24h before deadline
+- **Participant visibility** - toggle to show invite list to participants
+- **Event deletion** by organizer
