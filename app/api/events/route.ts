@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       .filter((email: string) => email.length > 0);
 
     const createEventUseCase = new CreateEventUseCase();
-    const event = await createEventUseCase.execute({
+    const result = await createEventUseCase.execute({
       title,
       description: description || null,
       start_date: startDate,
@@ -57,7 +57,18 @@ export async function POST(request: NextRequest) {
       authenticatedUser: currentUser || undefined,
     });
 
-    return NextResponse.json({ eventId: event.id, success: true });
+    if (result.failedParticipants.length > 0) {
+      const failedEmails = result.failedParticipants.map(p => p.email);
+      return NextResponse.json({
+        eventId: result.event.id,
+        success: true,
+        partialFailure: true,
+        message: `Event created, but ${failedEmails.length} participant(s) could not be added`,
+        failedParticipants: result.failedParticipants,
+      });
+    }
+
+    return NextResponse.json({ eventId: result.event.id, success: true });
   } catch (error) {
     if (error instanceof ApiException) {
       return NextResponse.json({ error: error.message }, { status: error.httpCode });

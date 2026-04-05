@@ -6,6 +6,12 @@ import { IParticipantRepository } from "../interfaces/participant-repository.int
 import EventRepository from "../repository";
 import ParticipantRepository from "../participant-repository";
 import FindOrCreateUserUseCase from "@/modules/user/usecases/findOrCreateUserUseCase";
+import { FailedParticipant } from "./createEventUseCase";
+
+export interface UpdateEventResult {
+    event: EventInterface;
+    failedParticipants: FailedParticipant[];
+}
 
 export default class UpdateEventUseCase {
 
@@ -15,13 +21,20 @@ export default class UpdateEventUseCase {
         private findOrCreateUserUseCase: FindOrCreateUserUseCase = new FindOrCreateUserUseCase(),
     ) { }
 
-    private async createParticipant(eventId: string, email: string) {
-        const { user } = await this.findOrCreateUserUseCase.execute(email, email.split("@")[0]);
-        const inviteToken = randomBytes(32).toString("hex");
-        await this.participantRepository.createParticipant(eventId, user.id, inviteToken);
+    private async createParticipant(eventId: string, email: string): Promise<FailedParticipant | null> {
+        try {
+            const { user } = await this.findOrCreateUserUseCase.execute(email, email.split("@")[0]);
+            const inviteToken = randomBytes(32).toString("hex");
+            await this.participantRepository.createParticipant(eventId, user.id, inviteToken);
+            return null;
+        } catch (error) {
+            const reason = error instanceof Error ? error.message : "Unknown error";
+            console.error(`Failed to create participant ${email}:`, error);
+            return { email, reason };
+        }
     }
 
-    public async execute(eventId: string, userId: string, eventData: UpdateEventDto): Promise<EventInterface> {
+    public async execute(eventId: string, userId: string, eventData: UpdateEventDto): Promise<UpdateEventResult> {
         const validatedData = updateEventSchema.parse(eventData);
 
         const isOwner = await this.eventRepository.isEventOwner(userId, eventId);
@@ -35,6 +48,7 @@ export default class UpdateEventUseCase {
         }
 
         const { participantEmails, ...rest } = validatedData;
+        const failedParticipants: FailedParticipant[] = [];
 
         if (participantEmails) {
             const currentParticipants = await this.participantRepository.getParticipantsByEventId(eventId);
@@ -44,7 +58,10 @@ export default class UpdateEventUseCase {
             const participantsToRemove = currentParticipants.filter(p => !participantEmails.includes(p.user.email));
 
             for (const email of emailsToAdd) {
-                await this.createParticipant(eventId, email);
+                const failure = await this.createParticipant(eventId, email);
+                if (failure) {
+                    failedParticipants.push(failure);
+                }
             }
 
             for (const participant of participantsToRemove) {
@@ -54,7 +71,10 @@ export default class UpdateEventUseCase {
 
         const event = await this.eventRepository.updateEvent(eventId, rest);
 
-        return event;
+        return {
+            event,
+            failedParticipants,
+        };
     }
 
 }

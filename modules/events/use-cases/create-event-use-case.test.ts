@@ -50,7 +50,8 @@ describe('CreateEventUseCase', () => {
             'p1-id',
             expect.any(String)
         );
-        expect(result.id).toBe('event-id');
+        expect(result.event.id).toBe('event-id');
+        expect(result.failedParticipants).toHaveLength(0);
     });
 
     it('should throw error if user exists and no authenticatedUser is provided', async () => {
@@ -99,5 +100,108 @@ describe('CreateEventUseCase', () => {
             'new-user-id',
             expect.any(String)
         );
+    });
+
+    it('should collect failures when participant creation fails', async () => {
+        const eventData: CreateEventDto = {
+            title: 'Test Event',
+            description: 'Test Description',
+            start_date: '2026-02-01',
+            end_date: '2026-02-05',
+            participantEmails: ['valid@test.com', 'invalid@test.com'],
+            creatorEmail: 'creator@test.com',
+            creatorName: 'Creator',
+        };
+
+        const mockCreator = { id: 'creator-id', email: 'creator@test.com', name: 'Creator' };
+        const mockValidParticipant = { id: 'valid-id', email: 'valid@test.com', name: 'valid' };
+        const mockEvent = { id: 'event-id', ...eventData };
+
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: mockCreator, created: true });
+        mockEventRepo.createEvent.mockResolvedValue(mockEvent);
+        
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: mockValidParticipant, created: true });
+        mockParticipantRepo.createParticipant.mockResolvedValueOnce(undefined);
+        
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: { id: 'invalid-id' }, created: false });
+        mockParticipantRepo.createParticipant.mockRejectedValueOnce(
+            new Error('Database constraint violation')
+        );
+
+        const result = await useCase.execute(eventData);
+
+        expect(result.event.id).toBe('event-id');
+        expect(result.failedParticipants).toHaveLength(1);
+        expect(result.failedParticipants[0]).toEqual({
+            email: 'invalid@test.com',
+            reason: 'Database constraint violation',
+        });
+    });
+
+    it('should return empty failedParticipants when all participants succeed', async () => {
+        const eventData: CreateEventDto = {
+            title: 'Test Event',
+            start_date: '2026-02-01',
+            end_date: '2026-02-05',
+            participantEmails: ['p1@test.com', 'p2@test.com'],
+            creatorEmail: 'creator@test.com',
+            creatorName: 'Creator',
+        };
+
+        const mockCreator = { id: 'creator-id', email: 'creator@test.com', name: 'Creator' };
+        const mockEvent = { id: 'event-id', ...eventData };
+
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: mockCreator, created: true });
+        mockEventRepo.createEvent.mockResolvedValue(mockEvent);
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: { id: 'p1-id' }, created: true });
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: { id: 'p2-id' }, created: true });
+        mockParticipantRepo.createParticipant
+            .mockResolvedValueOnce(undefined)
+            .mockResolvedValueOnce(undefined);
+
+        const result = await useCase.execute(eventData);
+
+        expect(result.failedParticipants).toHaveLength(0);
+    });
+
+    it('should handle all participants failing gracefully', async () => {
+        const eventData: CreateEventDto = {
+            title: 'Test Event',
+            start_date: '2026-02-01',
+            end_date: '2026-02-05',
+            participantEmails: ['fail1@test.com', 'fail2@test.com'],
+            creatorEmail: 'creator@test.com',
+            creatorName: 'Creator',
+        };
+
+        const mockCreator = { id: 'creator-id', email: 'creator@test.com', name: 'Creator' };
+        const mockEvent = { id: 'event-id', ...eventData };
+
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: mockCreator, created: true });
+        mockEventRepo.createEvent.mockResolvedValue(mockEvent);
+
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: { id: 'fail1-id' }, created: false });
+        mockParticipantRepo.createParticipant.mockRejectedValueOnce(
+            new Error('Connection error')
+        );
+
+        mockFindOrCreateUserUseCase.execute
+            .mockResolvedValueOnce({ user: { id: 'fail2-id' }, created: false });
+        mockParticipantRepo.createParticipant.mockRejectedValueOnce(
+            new Error('Connection error')
+        );
+
+        const result = await useCase.execute(eventData);
+
+        expect(result.event.id).toBe('event-id');
+        expect(result.failedParticipants).toHaveLength(2);
     });
 });

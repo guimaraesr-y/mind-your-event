@@ -48,7 +48,8 @@ describe('UpdateEventUseCase', () => {
 
         expect(mockEventRepo.isEventOwner).toHaveBeenCalledWith(userId, eventId);
         expect(mockEventRepo.updateEvent).toHaveBeenCalledWith(eventId, eventData);
-        expect(result.title).toBe('Updated Event');
+        expect(result.event.title).toBe('Updated Event');
+        expect(result.failedParticipants).toHaveLength(0);
     });
 
     it('should throw forbidden exception if user is not the owner', async () => {

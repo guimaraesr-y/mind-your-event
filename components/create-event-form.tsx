@@ -144,7 +144,28 @@ export function CreateEventForm({ initialData }: CreateEventFormProps) {
       }
 
       const result = await response.json()
-      toast.success(initialData ? t("toast.updateSuccess") : t("toast.createSuccess"))
+
+      if (result.partialFailure) {
+        const failedCount = result.failedParticipants?.length || 0
+        toast.success(
+          <div className="flex flex-col gap-1">
+            <span>{initialData ? t("toast.updateSuccess") : t("toast.createSuccess")}</span>
+            <span className="text-sm text-yellow-600 font-medium">
+              ⚠️ {result.message || `${failedCount} participant(s) could not be added`}
+            </span>
+            {result.failedParticipants && result.failedParticipants.length > 0 && (
+              <ul className="text-xs text-muted-foreground list-disc pl-4 mt-1">
+                {result.failedParticipants.map((p: { email: string; reason: string }) => (
+                  <li key={p.email}>{p.email}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )
+      } else {
+        toast.success(initialData ? t("toast.updateSuccess") : t("toast.createSuccess"))
+      }
+
       router.push(`/events/${initialData?.id || result.eventId}`)
       router.refresh()
     } catch (error) {

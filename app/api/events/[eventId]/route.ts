@@ -31,7 +31,7 @@ export async function PATCH(
         } = body;
 
         const updateEventUseCase = new UpdateEventUseCase();
-        const event = await updateEventUseCase.execute(eventId, currentUser.id, {
+        const result = await updateEventUseCase.execute(eventId, currentUser.id, {
             title,
             description,
             start_date: startDate,
@@ -41,7 +41,18 @@ export async function PATCH(
             participantEmails: Array.isArray(participantEmails) ? participantEmails : undefined
         });
 
-        return NextResponse.json({ event, success: true });
+        if (result.failedParticipants && result.failedParticipants.length > 0) {
+            const failedEmails = result.failedParticipants.map(p => p.email);
+            return NextResponse.json({
+                event: result.event,
+                success: true,
+                partialFailure: true,
+                message: `Event updated, but ${failedEmails.length} participant(s) could not be added`,
+                failedParticipants: result.failedParticipants,
+            });
+        }
+
+        return NextResponse.json({ event: result.event, success: true });
     } catch (error) {
         if (error instanceof ZodError) {
             return NextResponse.json({ error: error.errors[0].message, details: error.errors }, { status: 400 });
