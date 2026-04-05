@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { IParticipantRepository } from "./interfaces/participant-repository.interface";
+import { ApiException } from "@/lib/exceptions/api";
 
 export default class ParticipantRepository implements IParticipantRepository {
 
@@ -56,6 +57,19 @@ export default class ParticipantRepository implements IParticipantRepository {
     }
 
     async updateRsvp(eventId: string, inviteToken: string, willAttend: boolean): Promise<void> {
+        const participant = await prisma.eventParticipant.findUnique({
+            where: { invite_token: inviteToken },
+            select: { event_id: true }
+        });
+
+        if (!participant) {
+            throw new ApiException("Participant not found", 404);
+        }
+
+        if (participant.event_id !== eventId) {
+            throw new ApiException("Invalid invite token for this event", 403);
+        }
+
         await prisma.eventParticipant.update({
             where: { invite_token: inviteToken },
             data: { will_attend: willAttend }
