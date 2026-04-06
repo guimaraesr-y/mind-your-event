@@ -103,16 +103,73 @@ model AuthToken {
 }
 ```
 
+### Notification
+
+```prisma
+enum NotificationType {
+  AVAILABILITY_SUBMITTED
+  EVENT_FINALIZED
+  RSVP_SUBMITTED
+  PRODUCT_ANNOUNCEMENT
+  SYSTEM_UPDATE
+  USER_ONBOARDING
+  JOIN_EVENT_CONFIRMATION
+  NEW_EVENT_INVITE
+}
+
+model Notification {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String           @db.Uuid
+  type       NotificationType
+  title      String
+  message    String
+  data       Json?
+  is_read    Boolean          @default(false)
+  created_at DateTime         @default(now()) @db.Timestamptz(6)
+  
+  user       User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@index([user_id, is_read])
+  @@index([user_id, created_at])
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Primary key |
+| user_id | UUID | Foreign key to User |
+| type | Enum | Notification type (see values above) |
+| title | String | Notification title |
+| message | String | Notification body text |
+| data | JSON? | Additional context (eventId, link, etc.) |
+| is_read | Boolean | Read status |
+| created_at | Timestamp | Creation time |
+
+### NotificationType Values
+
+| Value | Description |
+|-------|-------------|
+| `AVAILABILITY_SUBMITTED` | Participant submitted availability |
+| `EVENT_FINALIZED` | Event was finalized |
+| `RSVP_SUBMITTED` | Participant responded to RSVP |
+| `JOIN_EVENT_CONFIRMATION` | User successfully joined event |
+| `NEW_EVENT_INVITE` | User was invited to event |
+| `PRODUCT_ANNOUNCEMENT` | Product update (future) |
+| `SYSTEM_UPDATE` | System notice (future) |
+| `USER_ONBOARDING` | Welcome tips (future) |
+
 ## Relationships
 
 ```
 User 1──* Event (creator)
 User 1──* EventParticipant
 User 1──* AvailabilitySlot
+User 1──* Notification
 Event 1──* EventParticipant
 Event 1──* AvailabilitySlot
 EventParticipant *──1 User
 AvailabilitySlot *──1 User
+Notification *──1 User
 ```
 
 ## Key Files

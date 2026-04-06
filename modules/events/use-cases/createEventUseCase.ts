@@ -6,6 +6,7 @@ import { IParticipantRepository } from "../interfaces/participant-repository.int
 import EventRepository from "../repository";
 import ParticipantRepository from "../participant-repository";
 import FindOrCreateUserUseCase from "@/modules/user/usecases/findOrCreateUserUseCase";
+import { eventBus, DomainEventType } from "@/lib/events";
 
 export interface CreateEventResult {
     event: EventInterface;
@@ -25,7 +26,7 @@ export default class CreateEventUseCase {
         private findOrCreateUserUseCase: FindOrCreateUserUseCase = new FindOrCreateUserUseCase(),
     ) { }
 
-    private async createEventParticipants(eventId: string, emails: string[]): Promise<FailedParticipant[]> {
+    private async createEventParticipants(eventId: string, eventTitle: string, creatorName: string, emails: string[]): Promise<FailedParticipant[]> {
         const failedParticipants: FailedParticipant[] = [];
 
         for (const email of emails) {
@@ -33,6 +34,17 @@ export default class CreateEventUseCase {
                 const { user } = await this.findOrCreateUserUseCase.execute(email, email.split("@")[0]);
                 const inviteToken = randomBytes(32).toString("hex");
                 await this.participantRepository.createParticipant(eventId, user.id, inviteToken);
+
+                await eventBus.publish({
+                    type: DomainEventType.NEW_EVENT_INVITE,
+                    payload: {
+                        eventId,
+                        eventTitle,
+                        userId: user.id,
+                        organizerName: creatorName,
+                    },
+                    timestamp: new Date()
+                });
             } catch (error) {
                 const reason = error instanceof Error ? error.message : "Unknown error";
                 console.error(`Failed to create event participant for ${email}:`, error);
@@ -62,7 +74,7 @@ export default class CreateEventUseCase {
             creator_id: creator.id,
         });
 
-        const failedParticipants = await this.createEventParticipants(event.id, participantEmails);
+        const failedParticipants = await this.createEventParticipants(event.id, event.title, creatorName, participantEmails);
 
         return {
             event,

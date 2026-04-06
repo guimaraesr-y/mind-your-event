@@ -224,6 +224,114 @@ See `actions/user/` for Server Actions that handle user operations.
 
 ---
 
+## Notifications
+
+### Get Notifications
+
+```
+GET /api/notifications
+```
+
+**Headers:**
+- `Cookie: session_token=<token>`
+
+**Query Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| cursor | string | - | ISO timestamp for pagination |
+| limit | number | 20 | Max items (max: 100) |
+| includeRead | boolean | false | Include read notifications |
+
+**Response (200):**
+```typescript
+{
+  items: Array<{
+    id: string;
+    userId: string;
+    type: "AVAILABILITY_SUBMITTED" | "EVENT_FINALIZED" | "RSVP_SUBMITTED" | "JOIN_EVENT_CONFIRMATION" | "NEW_EVENT_INVITE";
+    title: string;
+    message: string;
+    data: object | null;
+    isRead: boolean;
+    createdAt: string;
+  }>;
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+```
+
+---
+
+### Get Unread Count
+
+```
+GET /api/notifications/unread-count
+```
+
+**Headers:**
+- `Cookie: session_token=<token>`
+
+**Response (200):**
+```typescript
+{ unreadCount: number }
+```
+
+---
+
+### Mark Notification as Read
+
+```
+PATCH /api/notifications/[id]
+```
+
+**Headers:**
+- `Cookie: session_token=<token>`
+
+**Response (200):**
+```typescript
+{ success: boolean }
+```
+
+---
+
+### Delete Notification
+
+```
+DELETE /api/notifications/[id]
+```
+
+**Headers:**
+- `Cookie: session_token=<token>`
+
+**Response (200):**
+```typescript
+{ success: boolean }
+```
+
+---
+
+### Mark All as Read
+
+```
+PATCH /api/notifications
+```
+
+**Headers:**
+- `Cookie: session_token=<token>`
+
+**Request:**
+```typescript
+{ action: "markAllRead" }
+```
+
+**Response (200):**
+```typescript
+{ success: boolean }
+```
+
+---
+
 ## Key Files
 
 | File | Description |
@@ -236,3 +344,6 @@ See `actions/user/` for Server Actions that handle user operations.
 | `app/api/events/[eventId]/rsvp/route.ts` | Submit RSVP |
 | `app/api/availability/route.ts` | Submit availability |
 | `app/api/user/route.ts` | User operations |
+| `app/api/notifications/route.ts` | Get notifications, mark all read |
+| `app/api/notifications/unread-count/route.ts` | Get unread count |
+| `app/api/notifications/[id]/route.ts` | Mark read, delete notification |
