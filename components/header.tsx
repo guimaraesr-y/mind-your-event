@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 import { Logo } from "./logo"
 import { Info } from "lucide-react"
 import { Button } from "./ui/button"
+import { NotificationDropdown } from "@/components/notifications"
 
 interface HeaderProps {
   onShowTutorial?: () => void
@@ -21,6 +22,7 @@ export function Header({ onShowTutorial }: HeaderProps) {
           <Logo />
         </Link>
         <div className="flex items-center gap-2">
+          <NotificationDropdown />
           {onShowTutorial && (
             <Button
               variant="ghost"

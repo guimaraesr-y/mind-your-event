@@ -15,6 +15,7 @@ Welcome to the MindYourEvent documentation. This application helps small teams s
 | [RSVP](./rsvp.md) | Confirm attendance after finalization | `SaveRsvpUseCase.ts` |
 | [Authentication](./authentication.md) | Email-based passwordless authentication | API routes |
 | [Dashboard](./dashboard.md) | User's events overview | `dashboard/page.tsx` |
+| [Notifications](./notifications.md) | In-app notification system | `modules/notifications/` |
 
 ## Architecture
 

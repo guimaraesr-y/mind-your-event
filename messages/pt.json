@@ -484,5 +484,46 @@
     "description": "Ops! Parece que este evento não está no calendário. Talvez ele tenha sido movido, excluído ou nunca existiu nesta linha do tempo.",
     "goBack": "Voltar para a Realidade",
     "home": "Início"
+  },
+  "Notifications": {
+    "title": "Notificações",
+    "noNotifications": "Sem notificações",
+    "allCaughtUp": "Você está em dia!",
+    "markAllRead": "Marcar todas como lidas",
+    "unread": "{count, plural, one {# notificação não lida} other {# notificações não lidas}}",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "earlier": "Anterior",
+    "deleteAria": "Excluir notificação",
+    "closeAria": "Fechar notificações",
+    "notificationAria": "Notificação: {title}",
+    "types": {
+      "AVAILABILITY_SUBMITTED": {
+        "title": "Disponibilidade Enviada",
+        "message": "{participantName} enviou sua disponibilidade para \"{eventTitle}\""
+      },
+      "EVENT_FINALIZED": {
+        "title": "Evento Confirmado",
+        "message": "O evento \"{eventTitle}\" foi confirmado"
+      },
+      "RSVP_SUBMITTED": {
+        "attending": {
+          "title": "Participante Confirmado",
+          "message": "{participantName} confirmou presença em \"{eventTitle}\""
+        },
+        "declined": {
+          "title": "Participante Recusou",
+          "message": "{participantName} recusou o convite para \"{eventTitle}\""
+        }
+      },
+      "JOIN_EVENT_CONFIRMATION": {
+        "title": "Evento Participado",
+        "message": "Você entrou com sucesso em \"{eventTitle}\""
+      },
+      "NEW_EVENT_INVITE": {
+        "title": "Novo Convite de Evento",
+        "message": "{organizerName} convidou você para \"{eventTitle}\""
+      }
+    }
   }
 }
