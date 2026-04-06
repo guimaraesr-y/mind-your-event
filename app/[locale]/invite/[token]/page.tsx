@@ -91,6 +91,16 @@ export default async function InvitePage({ params }: PageProps) {
     })
   }
 
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(":")
+    const date = new Date()
+    date.setHours(parseInt(hours), parseInt(minutes))
+    return date.toLocaleTimeString(locale, {
+      hour: "numeric",
+      minute: "2-digit",
+    })
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -126,7 +136,7 @@ export default async function InvitePage({ params }: PageProps) {
                   <div>
                     <p className="text-sm font-medium text-foreground">{t("confirmed.timeLabel")}</p>
                     <p className="text-lg font-semibold text-foreground">
-                      {event.finalized_start_time} - {event.finalized_end_time}
+                      {formatTime(event.finalized_start_time)} - {formatTime(event.finalized_end_time)}
                     </p>
                   </div>
                 </div>
