@@ -9,12 +9,18 @@ import { NewEventInviteHandler } from './handlers/new-event-invite-handler';
 const repository = new NotificationRepository();
 const notificationService = new NotificationService(repository);
 
+let handlersRegistered = false;
+
 export function registerNotificationHandlers(): void {
+    if (handlersRegistered) return;
+    
     new AvailabilitySubmittedHandler(notificationService);
     new EventFinalizedHandler(notificationService);
     new RsvpSubmittedHandler(notificationService);
     new JoinEventHandler(notificationService);
     new NewEventInviteHandler(notificationService);
+    
+    handlersRegistered = true;
 }
 
 export { notificationService, NotificationRepository, NotificationService };

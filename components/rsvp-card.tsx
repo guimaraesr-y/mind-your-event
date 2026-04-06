@@ -3,10 +3,10 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Check, X, Loader2 } from "lucide-react"
+import { Check, X, Loader2, Calendar, Clock } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 
 interface RsvpCardProps {
   eventId: string
@@ -15,7 +15,7 @@ interface RsvpCardProps {
 }
 
 export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
-  const t = useTranslations("RsvpCard");
+  const t = useTranslations("RsvpCard")
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -58,7 +58,7 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
             onClick={() => handleRsvp(true)}
             disabled={isLoading}
             variant={currentRsvp === true ? "default" : "outline"}
-            className="flex-1"
+            className="flex-1 text-xs md:text-sm"
           >
             {isLoading && currentRsvp !== true ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -71,7 +71,7 @@ export function RsvpCard({ eventId, inviteToken, currentRsvp }: RsvpCardProps) {
             onClick={() => handleRsvp(false)}
             disabled={isLoading}
             variant={currentRsvp === false ? "destructive" : "outline"}
-            className="flex-1"
+            className="flex-1 text-xs md:text-sm"
           >
             {isLoading && currentRsvp !== false ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
