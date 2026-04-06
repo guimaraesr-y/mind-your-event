@@ -9,6 +9,7 @@ import { ApiException } from "@/lib/exceptions/api";
 import { EventParticipant } from "../eventParticipants";
 import { UserInterface } from "@/modules/user/user";
 import { getTranslations } from "next-intl/server";
+import { eventBus, DomainEventType } from "@/lib/events";
 
 interface JoinEventRequest {
     token: string;
@@ -39,6 +40,16 @@ export default class JoinEventUseCase {
 
         const inviteToken = this.generateInviteToken();
         const participant = await this.participantRepository.createParticipant(event.id, user.id, inviteToken);
+
+        await eventBus.publish({
+            type: DomainEventType.JOIN_EVENT,
+            payload: {
+                eventId: event.id,
+                eventTitle: event.title,
+                userId: user.id
+            },
+            timestamp: new Date()
+        });
 
         return participant;
     }

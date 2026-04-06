@@ -18,7 +18,11 @@ mind-your-event/
 │   │   ├── auth/                # Authentication endpoints
 │   │   ├── events/              # Event CRUD
 │   │   ├── availability/        # Availability submission
-│   │   └── user/                # User operations
+│   │   ├── user/                # User operations
+│   │   └── notifications/        # Notification endpoints
+│   │       ├── route.ts         # Get notifications, mark all read
+│   │       ├── [id]/route.ts   # Mark read, delete
+│   │       └── unread-count/    # Get unread count
 │   ├── layout.tsx              # Root layout
 │   └── globals.css             # Global styles
 │
@@ -79,6 +83,24 @@ mind-your-event/
 │       ├── repository.ts
 │       ├── interfaces/
 │       └── retrieve-user.usecase.ts
+│   │
+│   └── notifications/          # Notification system
+│       ├── index.ts            # Module entry + handler registration
+│       ├── types/
+│       │   └── notification.types.ts
+│       ├── interfaces/
+│       │   ├── notification-repository.interface.ts
+│       │   └── notification-service.interface.ts
+│       ├── repository/
+│       │   └── notification-repository.ts
+│       ├── services/
+│       │   └── notification-service.ts
+│       └── handlers/            # Domain event handlers
+│           ├── availability-submitted-handler.ts
+│           ├── event-finalized-handler.ts
+│           ├── rsvp-submitted-handler.ts
+│           ├── join-event-handler.ts
+│           └── new-event-invite-handler.ts
 │
 ├── actions/                    # Server Actions (RPC)
 │   ├── user/
@@ -100,6 +122,10 @@ mind-your-event/
 │   │   └── strategies/        # Email provider implementations
 │   │       ├── gmail-smtp.strategy.ts
 │   │       └── mock-email.strategy.ts
+│   ├── events/                # Domain events (Event Bus)
+│   │   ├── index.ts
+│   │   ├── domain-events.ts  # Event types and interfaces
+│   │   └── event-bus.ts      # Pub/sub implementation
 │   ├── utils.ts              # Utility functions
 │   ├── types.ts              # TypeScript types
 │   └── exceptions/           # Custom exceptions
@@ -124,6 +150,7 @@ mind-your-event/
 │
 └── docs/                       # Documentation
     ├── README.md
+    ├── notifications.md         # Notification system
     ├── event-creation.md
     ├── event-invitation.md
     ├── availability-submission.md

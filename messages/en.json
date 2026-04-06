@@ -483,5 +483,46 @@
     "description": "Oops! It seems this event isn't on the calendar. Maybe it was moved, deleted, or never existed in this timeline.",
     "goBack": "Back to Reality",
     "home": "Dashboard"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "noNotifications": "No notifications",
+    "allCaughtUp": "You're all caught up!",
+    "markAllRead": "Mark all read",
+    "unread": "{count, plural, one {# unread notification} other {# unread notifications}}",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "earlier": "Earlier",
+    "deleteAria": "Delete notification",
+    "closeAria": "Close notifications",
+    "notificationAria": "Notification: {title}",
+    "types": {
+      "AVAILABILITY_SUBMITTED": {
+        "title": "Availability Submitted",
+        "message": "{participantName} has submitted their availability for \"{eventTitle}\""
+      },
+      "EVENT_FINALIZED": {
+        "title": "Event Finalized",
+        "message": "The event \"{eventTitle}\" has been finalized"
+      },
+      "RSVP_SUBMITTED": {
+        "attending": {
+          "title": "Participant Attending",
+          "message": "{participantName} has confirmed their attendance for \"{eventTitle}\""
+        },
+        "declined": {
+          "title": "Participant Declined",
+          "message": "{participantName} has declined their attendance for \"{eventTitle}\""
+        }
+      },
+      "JOIN_EVENT_CONFIRMATION": {
+        "title": "Event Joined",
+        "message": "You have successfully joined \"{eventTitle}\""
+      },
+      "NEW_EVENT_INVITE": {
+        "title": "New Event Invitation",
+        "message": "{organizerName} invited you to \"{eventTitle}\""
+      }
+    }
   }
 }

@@ -16,6 +16,7 @@ model User {
   events        Event[]
   participants  EventParticipant[]
   availabilities AvailabilitySlot[]
+  notifications Notification[]
 
   @@map("users")
 }
@@ -81,4 +82,31 @@ model AuthToken {
   created_at DateTime? @default(now()) @db.Timestamptz(6)
 
   @@map("auth_tokens")
+}
+
+enum NotificationType {
+  AVAILABILITY_SUBMITTED
+  EVENT_FINALIZED
+  RSVP_SUBMITTED
+  PRODUCT_ANNOUNCEMENT
+  SYSTEM_UPDATE
+  USER_ONBOARDING
+  JOIN_EVENT_CONFIRMATION
+  NEW_EVENT_INVITE
+}
+
+model Notification {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String           @db.Uuid
+  type       NotificationType
+  title      String
+  message    String
+  data       Json?
+  is_read    Boolean          @default(false)
+  created_at DateTime         @default(now()) @db.Timestamptz(6)
+  user       User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, is_read])
+  @@index([user_id, created_at])
+  @@map("notifications")
 }

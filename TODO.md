@@ -61,9 +61,9 @@
   - Arquivo: `app/api/availability/route.ts`
   - Buscar evento e validar cada slot dentro de start_date/end_date e start_time/end_time
 
-- [ ] **6.2** Verificar se evento está finalizado antes de aceitar RSVP
+- [ ] **6.2** Verificar se evento está finalized antes de aceitar RSVP
   - Arquivo: `app/api/events/[eventId]/rsvp/route.ts`
-  - Se evento não finalizado, rejeitar ou redirecionar para availability
+  - Se evento não finalized, rejeitar ou redirecionar para availability
 
 - [ ] **6.3** Prevenir emails duplicados ao adicionar participantes
   - Arquivo: `modules/events/use-cases/updateEventUseCase.ts`
@@ -75,7 +75,7 @@
   - Mostrar alerta: "Tem certeza? Isso não pode ser desfeito"
   
 - [ ] **7.2** Adicionar indicador visual em página de convite após finalização
-  - Mostrar banner: "Este evento foi finalizado"
+  - Mostrar banner: "Este evento foi finalized"
 
 - [ ] **7.3** Adicionar botão "Reenviar convite" no dashboard
 
@@ -100,13 +100,13 @@
   - 24h antes do end_date, enviar email para quem não respondeu
   
 - [ ] **9.3** Expiração de eventos
-  - Auto-expire 7 dias após end_date se não finalizado
+  - Auto-expire 7 dias após end_date se não finalized
   
 - [ ] **9.4** Deletion de evento pelo organizador
 
 - [ ] **9.5** Deletion de conta (GDPR)
 
-- [ ] **9.6** Reopen de evento finalizado
+- [ ] **9.6** Reopen de evento finalized
 
 ### 10. Melhorias
 
@@ -115,6 +115,47 @@
 - [ ] **10.2** Validar que event start_date não está no passado
 
 - [ ] **10.3** Multiple session handling
+
+---
+
+## ✅ Sistema de Notificações Implementado
+
+O sistema de notificações in-app foi completamente implementado:
+
+### Documentação
+- ✅ `docs/notifications.md` - Documentação completa do sistema
+- ✅ `docs/README.md` - Adicionado link para documentação
+- ✅ `docs/database-schema.md` - Adicionado modelo Notification
+- ✅ `docs/api-endpoints.md` - Adicionados endpoints de notificações
+- ✅ `docs/project-structure.md` - Adicionada estrutura do módulo
+
+### Backend Implementado
+- ✅ Prisma schema (Notification + NotificationType enum)
+- ✅ Event Bus infrastructure (lib/events/)
+- ✅ Notification module (modules/notifications/)
+- ✅ API routes (app/api/notifications/)
+- ✅ Domain Events integration em 5 use cases
+
+### Features
+- ✅ 8 tipos de notificação
+- ✅ Cursor-based pagination
+- ✅ Transaction support para batch operations
+- ✅ ISP-compliant interfaces
+- ✅ Error handling: handlers nunca jogam exceções
+
+### API Endpoints
+- ✅ GET /api/notifications (list com cursor pagination)
+- ✅ GET /api/notifications/unread-count
+- ✅ PATCH /api/notifications/:id (mark read)
+- ✅ DELETE /api/notifications/:id
+- ✅ PATCH /api/notifications (mark all read)
+
+### Integração de Eventos
+- ✅ addUserAvailabilityUseCase → AVAILABILITY_SUBMITTED
+- ✅ finalizeEventUseCase → EVENT_FINALIZED
+- ✅ SaveRsvpUseCase → RSVP_SUBMITTED
+- ✅ JoinEventUseCase → JOIN_EVENT
+- ✅ createEventUseCase → NEW_EVENT_INVITE
 
 ---
 

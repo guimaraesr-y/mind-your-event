@@ -6,6 +6,7 @@ import { IParticipantRepository } from "../interfaces/participant-repository.int
 import EventRepository from "../repository";
 import ParticipantRepository from "../participant-repository";
 import { emailRetryService } from "@/lib/email/email-retry.service";
+import { eventBus, DomainEventType } from "@/lib/events";
 
 interface FinalizeEventDto {
     eventId: string;
@@ -95,6 +96,20 @@ export default class FinalizeEventUseCase {
         )
 
         await this.notificateParticipants(event);
+
+        const participants = await this.participantRepository.getParticipantsByEventId(event.id);
+        const participantIds = participants?.map(p => p.user_id) || [];
+        
+        await eventBus.publish({
+            type: DomainEventType.EVENT_FINALIZED,
+            payload: {
+                eventId: event.id,
+                eventTitle: event.title,
+                participantIds
+            },
+            timestamp: new Date()
+        });
+
         return event;
     }
 
