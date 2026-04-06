@@ -119,11 +119,33 @@ export function formatNotificationTime(dateString: string): string {
   if (notificationDate.getTime() === today.getTime()) {
     return time;
   } else if (notificationDate.getTime() === yesterday.getTime()) {
-    return `Yesterday, ${time}`;
+    return time;
   } else {
     return date.toLocaleDateString([], {
       month: "short",
       day: "numeric",
     });
+  }
+}
+
+export function getNotificationDateGroup(dateString: string): "today" | "yesterday" | "earlier" {
+  const date = new Date(dateString);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const notificationDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  if (notificationDate.getTime() === today.getTime()) {
+    return "today";
+  } else if (notificationDate.getTime() === yesterday.getTime()) {
+    return "yesterday";
+  } else {
+    return "earlier";
   }
 }

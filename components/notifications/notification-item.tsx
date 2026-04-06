@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -22,6 +23,7 @@ export function NotificationItemComponent({
   onDelete,
   compact = false,
 }: NotificationItemComponentProps) {
+  const t = useTranslations("Notifications");
   const Icon = NOTIFICATION_ICONS[notification.type];
   const colorClass = NOTIFICATION_COLORS[notification.type];
 
@@ -44,7 +46,7 @@ export function NotificationItemComponent({
           onClick(notification);
         }
       }}
-      aria-label={`Notification: ${notification.title}`}
+      aria-label={t("notificationAria", { title: notification.title })}
     >
       <div className={cn("mt-0.5 shrink-0", colorClass)}>
         <Icon className="h-5 w-5" />
@@ -78,7 +80,7 @@ export function NotificationItemComponent({
           "focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           "transition-opacity duration-150"
         )}
-        aria-label={`Delete ${notification.title} notification`}
+        aria-label={t("deleteAria")}
       >
         <X className="h-4 w-4" />
       </button>

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "./notification-bell";
 import { NotificationList } from "./notification-list";
@@ -19,6 +20,7 @@ import {
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export function NotificationDropdown() {
+  const t = useTranslations("Notifications");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -127,7 +129,7 @@ export function NotificationDropdown() {
             <DialogHeader className="px-4 py-3 border-b shrink-0">
               <div className="flex items-center justify-between">
                 <DialogTitle className="text-sm font-semibold">
-                  Notifications
+                  {t("title")}
                 </DialogTitle>
               </div>
             </DialogHeader>
@@ -166,14 +168,14 @@ export function NotificationDropdown() {
           )}
           role="dialog"
           aria-modal="true"
-          aria-label="Notifications"
+          aria-label={t("title")}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-            <h2 className="text-sm font-semibold">Notifications</h2>
+            <h2 className="text-sm font-semibold">{t("title")}</h2>
             <button
               onClick={closeDropdown}
               className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Close notifications"
+              aria-label={t("closeAria")}
             >
               <X className="h-4 w-4" />
             </button>
