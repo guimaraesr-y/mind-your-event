@@ -12,7 +12,9 @@ interface UseSWRState<T> {
 }
 
 async function fetcher<T>(url: string): Promise<T> {
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    cache: 'no-store',
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }
@@ -93,7 +95,9 @@ export function useNotifications(cursor?: string, limit: number = 20) {
     ? `/api/notifications?cursor=${cursor}&limit=${limit}&includeRead=true`
     : `/api/notifications?limit=${limit}&includeRead=true`;
 
-  const { data, isLoading, error, mutate } = useSWR<PaginatedNotifications>(url);
+  const { data, isLoading, error, mutate } = useSWR<PaginatedNotifications>(url, {
+    refreshInterval: 30000,
+  });
 
   return {
     notifications: data?.items ?? [],
