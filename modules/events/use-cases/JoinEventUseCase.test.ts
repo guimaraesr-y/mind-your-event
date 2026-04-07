@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import JoinEventUseCase from './JoinEventUseCase';
+import { SendParticipantConfirmationEmailUseCase } from './email/sendParticipantConfirmationEmail';
 import { ApiException } from '@/lib/exceptions/api';
 
 describe('JoinEventUseCase', () => {
@@ -7,6 +8,7 @@ describe('JoinEventUseCase', () => {
     let mockUserRepo: any;
     let mockEventRepo: any;
     let mockParticipantRepo: any;
+    let mockSendParticipantConfirmationEmail: any;
     let mockT: any;
 
     beforeEach(() => {
@@ -21,13 +23,18 @@ describe('JoinEventUseCase', () => {
             createParticipant: vi.fn(),
             getParticipantByEventAndUser: vi.fn(),
         };
+        mockSendParticipantConfirmationEmail = {
+            execute: vi.fn().mockResolvedValue(undefined),
+            executeWithRetry: vi.fn().mockResolvedValue(undefined),
+        };
         mockT = vi.fn((key: string) => key);
 
         useCase = new JoinEventUseCase(
             mockUserRepo,
             mockEventRepo,
             mockParticipantRepo,
-            Promise.resolve(mockT)
+            mockSendParticipantConfirmationEmail as unknown as SendParticipantConfirmationEmailUseCase,
+            mockT
         );
     });
 

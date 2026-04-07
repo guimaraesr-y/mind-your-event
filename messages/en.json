@@ -423,6 +423,19 @@
         "viewEventButton": "View Event Details",
         "linkNotWorking": "If the button above doesn't work,",
         "clickHere": "click here."
+      },
+      "ParticipantConfirmationEmail": {
+        "title": "You're In!",
+        "subtitle": "Event confirmation from MindYourEvent",
+        "greeting": "Hello, {userName}!",
+        "youJoined": "You have successfully joined {eventTitle}",
+        "eventDetails": "Event Details",
+        "dateRange": "Date",
+        "organizer": "Organizer",
+        "submitAvailability": "Click the button below to submit your availability.",
+        "submitAvailabilityButton": "Submit My Availability",
+        "linkNotWorking": "If the button above doesn't work,",
+        "clickHere": "click here."
       }
     },
     "User": {

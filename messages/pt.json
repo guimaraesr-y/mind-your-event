@@ -424,6 +424,19 @@
         "viewEventButton": "Ver Detalhes do Evento",
         "linkNotWorking": "Se o botão acima não funcionar,",
         "clickHere": "clique aqui."
+      },
+      "ParticipantConfirmationEmail": {
+        "title": "Você Participou!",
+        "subtitle": "Confirmação de participação do MindYourEvent",
+        "greeting": "Olá, {userName}!",
+        "youJoined": "Você entrou com sucesso no evento {eventTitle}",
+        "eventDetails": "Detalhes do Evento",
+        "dateRange": "Data",
+        "organizer": "Organizador",
+        "submitAvailability": "Clique no botão abaixo para enviar sua disponibilidade.",
+        "submitAvailabilityButton": "Enviar Minha Disponibilidade",
+        "linkNotWorking": "Se o botão acima não funcionar,",
+        "clickHere": "clique aqui."
       }
     },
     "User": {

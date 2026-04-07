@@ -10,6 +10,8 @@ import { EventParticipant } from "../eventParticipants";
 import { UserInterface } from "@/modules/user/user";
 import { getTranslations } from "next-intl/server";
 import { eventBus, DomainEventType } from "@/lib/events";
+import { SendParticipantConfirmationEmailUseCase } from "./email/sendParticipantConfirmationEmail";
+import { emailRetryService } from "@/lib/email/email-retry.service";
 
 interface JoinEventRequest {
     token: string;
@@ -23,6 +25,7 @@ export default class JoinEventUseCase {
         private userRepository: IUserRepository = new UserRepository(),
         private eventRepository: IEventRepository = new EventRepository(),
         private participantRepository: IParticipantRepository = new ParticipantRepository(),
+        private sendParticipantConfirmationEmail: SendParticipantConfirmationEmailUseCase = new SendParticipantConfirmationEmailUseCase(),
         private translations = getTranslations("JoinEvent")
     ) { }
 
@@ -49,6 +52,11 @@ export default class JoinEventUseCase {
                 userId: user.id
             },
             timestamp: new Date()
+        });
+
+        // Send confirmation email (non-blocking, with retry)
+        this.sendConfirmationEmail(user, event, inviteToken).catch(error => {
+            console.error("Failed to send confirmation email:", error);
         });
 
         return participant;
@@ -83,5 +91,27 @@ export default class JoinEventUseCase {
 
     private generateInviteToken(): string {
         return randomBytes(32).toString("hex");
+    }
+
+    private async sendConfirmationEmail(user: UserInterface, event: any, inviteToken: string): Promise<void> {
+        const organizerName = event.creator?.name || "Event Organizer";
+        
+        await emailRetryService.executeWithRetry(() =>
+            this.sendParticipantConfirmationEmail.execute({
+                email: user.email,
+                userName: user.name,
+                eventTitle: event.title,
+                eventDescription: event.description || "",
+                eventStartDate: event.start_date,
+                eventEndDate: event.end_date,
+                organizerName,
+                availabilityLink: this.getParticipantUrl(inviteToken),
+            })
+        );
+    }
+
+    private getParticipantUrl(token: string): string {
+        const baseUrl = process.env.API_BASE_URL || "http://localhost:3000";
+        return `${baseUrl}/invite/${token}`;
     }
 }

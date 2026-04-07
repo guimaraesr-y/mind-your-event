@@ -1,59 +1,75 @@
-# Notification System
+# Notifications & Confirmations
 
-The MindYourEvent notification system provides real-time in-app notifications for event-related activities. This document covers the complete architecture, API endpoints, and integration details.
-
-## Overview
-
-The notification system is built on a **Domain Events pattern** that decouples notification triggering from business logic. When domain events occur (like a user submitting availability), the event is published to an event bus, and notification handlers process these events asynchronously to create notifications for users.
-
-### Key Features
-
-| Feature | Description |
-|---------|-------------|
-| Domain Events | Decoupled architecture using pub/sub pattern |
-| 8 Notification Types | Event, product, and system notifications |
-| Cursor Pagination | Efficient pagination for large notification lists |
-| Transaction Support | Atomic batch operations |
-| ISP-Compliant | Split interfaces for clean dependencies |
-| Error Resilient | Handlers never throw - best-effort notifications |
+Este documento descreve o sistema completo de notificações e confirmações do MindYourEvent, cobrindo notificações in-app e emails transacionais.
 
 ---
 
-## Architecture
+## 1. Visão Geral
 
-### Data Flow
+O sistema de notificações e confirmações do MindYourEvent fornece comunicação em tempo real para atividades relacionadas a eventos. Este documento abrange a arquitetura completa, endpoints de API, emails transacionais e detalhes de integração.
+
+### 1.1 O Sistema de Notificações
+
+O sistema de notificações é construído sobre um padrão de **Domain Events** que desacopla o acionamento de notificações da lógica de negócio. Quando eventos de domínio ocorrem (como um usuário submetendo disponibilidade), o evento é publicado em um barramento de eventos, e os manipuladores de notificações processam esses eventos de forma assíncrona para criar notificações para os usuários.
+
+### 1.2 Canais de Notificação
+
+O sistema utiliza dois canais complementares para confirmar ações do usuário:
+
+| Canal | Descrição | Status |
+|-------|-----------|--------|
+| **In-App Notification** | Notificação em tempo real no aplicativo | Implementado |
+| **Email Confirmation** | Email detalhado com informações do evento | Implementado |
+
+Esta abordagem dual garante que o participante receba confirmação mesmo que não verifique o aplicativo imediatamente, proporcionando fechamento completo da experiência.
+
+### 1.3 Objetivos do Sistema
+
+1. **Confirmação imediata**: Notificação in-app fornece feedback instantâneo
+2. **Informação detalhada**: Email inclui todos os detalhes do evento
+3. **Ação**: Links para submeter disponibilidade nos emails
+4. **Resiliência**: Falha em um canal não afeta o outro
+5. **Internacionalização**: Suporte a múltiplos idiomas
+
+---
+
+## 2. Arquitetura
+
+### 2.1 Padrão Domain Events
+
+A arquitetura segue o padrão de Domain Events para desacoplamento:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                          Use Cases                                  │
-│  (AddUserAvailability, FinalizeEvent, SaveRsvp, JoinEvent,        │
-│   CreateEvent)                                                       │
+│  (AddUserAvailability, FinalizeEvent, SaveRsvp, JoinEvent,          │
+│   CreateEvent)                                                      │
 └─────────────────────────────┬───────────────────────────────────────┘
                               │ emits domain event
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        Event Bus                                    │
 │                      (lib/events/event-bus.ts)                      │
-│         ┌─────────────────────────────────────────┐                  │
-│         │  Handlers Map                            │                  │
-│         │  AVAILABILITY_SUBMITTED → [handler]     │                  │
-│         │  EVENT_FINALIZED → [handler]            │                  │
-│         │  RSVP_SUBMITTED → [handler]             │                  │
-│         │  JOIN_EVENT → [handler]                 │                  │
-│         │  NEW_EVENT_INVITE → [handler]           │                  │
-│         └─────────────────────────────────────────┘                  │
+│         ┌─────────────────────────────────────────┐                 │
+│         │  Handlers Map                           │                 │
+│         │  AVAILABILITY_SUBMITTED → [handler]     │                 │
+│         │  EVENT_FINALIZED → [handler]            │                 │
+│         │  RSVP_SUBMITTED → [handler]             │                 │
+│         │  JOIN_EVENT → [handler]                 │                 │
+│         │  NEW_EVENT_INVITE → [handler]           │                 │
+│         └─────────────────────────────────────────┘                 │
 └─────────────────────────────┬───────────────────────────────────────┘
                               │ subscribes
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    Notification Handlers                            │
-│  - AvailabilitySubmittedHandler                                      │
+│  - AvailabilitySubmittedHandler                                     │
 │  - EventFinalizedHandler                                            │
-│  - RsvpSubmittedHandler                                            │
+│  - RsvpSubmittedHandler                                             │
 │  - JoinEventHandler                                                 │
-│  - NewEventInviteHandler                                           │
+│  - NewEventInviteHandler                                            │
 └─────────────────────────────┬───────────────────────────────────────┘
-                              │ creates notification
+                              │ creates notification / sends email
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    Notification Module                              │
@@ -61,16 +77,52 @@ The notification system is built on a **Domain Events pattern** that decouples n
 │  │ Repository      │  │ Service          │                          │
 │  │ (CRUD)          │  │ (Domain Logic)   │                          │
 │  └─────────────────┘  └──────────────────┘                          │
+│                                                                     │
+│                    Email Module                                     │
+│  ┌─────────────────┐  ┌──────────────────┐                          │
+│  │ Template        │  │ Retry Service    │                          │
+│  └─────────────────┘  └──────────────────┘                          │
 └─────────────────────────────┬───────────────────────────────────────┘
-                              │ persists
+                              │ persists / sends
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                       Database                                      │
-│                 (PostgreSQL via Prisma)                              │
+│                       Database + Email Provider                     │
+│                 (PostgreSQL via Prisma + SMTP)                      │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Module Structure
+### 2.2 Fluxo de Dados
+
+**Para Notificações In-App:**
+
+```typescript
+// 1. Use case executa operação principal
+const participant = await joinEventUseCase.execute({
+    token: inviteToken,
+    name: "John Doe",
+    email: "john@example.com"
+});
+
+// 2. Emite domain event para notificação in-app
+await eventBus.publish({
+    type: DomainEventType.JOIN_EVENT,
+    payload: { eventId, eventTitle, userId },
+    timestamp: new Date()
+});
+
+// 3. Handler processa evento e cria notificação
+// Notification created in database
+```
+
+**Para Email de Confirmação:**
+
+```typescript
+// Email enviado de forma não-bloqueante
+this.sendConfirmationEmail(user, event, inviteToken)
+    .catch(error => console.error("Email failed:", error));
+```
+
+### 2.3 Estrutura de Módulos
 
 ```
 lib/events/                          # Event Bus Infrastructure
@@ -96,6 +148,14 @@ modules/notifications/
     ├── join-event-handler.ts
     └── new-event-invite-handler.ts
 
+modules/events/
+├── emails/
+│   └── participant-confirmation-email.tsx  # Email template
+└── use-cases/
+    ├── JoinEventUseCase.ts         # Orchestrates notification + email
+    └── email/
+        └── sendParticipantConfirmationEmail.ts  # Email use case
+
 app/api/notifications/
 ├── route.ts                         # GET (list), PATCH (mark all read)
 ├── unread-count/
@@ -106,9 +166,42 @@ app/api/notifications/
 
 ---
 
-## Database Schema
+## 3. Tipos de Notificação
 
-### Prisma Models
+### 3.1 Notificações In-App
+
+| Type | Trigger | Recipient | Description |
+|------|---------|-----------|-------------|
+| `AVAILABILITY_SUBMITTED` | Participant submits availability | Organizer | Notifies when participant submits their availability |
+| `EVENT_FINALIZED` | Organizer finalizes event | All participants | Notifies when event date/time is confirmed |
+| `RSVP_SUBMITTED` | Participant responds to RSVP | Organizer | Notifies when participant confirms/declines attendance |
+| `JOIN_EVENT_CONFIRMATION` | User joins event | Participant | Confirmation that user has successfully joined |
+| `NEW_EVENT_INVITE` | Organizer creates event | Invitee | Notifies when user is invited to an event |
+| `PRODUCT_ANNOUNCEMENT` | Admin trigger | All users | New feature releases (future) |
+| `SYSTEM_UPDATE` | Admin trigger | All users | System maintenance/notices (future) |
+| `USER_ONBOARDING` | Auto-trigger | New users | Welcome tips for new users (future) |
+
+### 3.2 Emails Transacionais
+
+| Email | Trigger | Recipient | Description |
+|-------|---------|-----------|-------------|
+| **Participant Confirmation** | User joins event | Participant | Confirmation email with event details and availability link |
+
+### 3.3 Mapeamento: Evento → Notificação → Email
+
+| Use Case | Domain Event | In-App Notification | Email |
+|----------|--------------|---------------------|-------|
+| `addUserAvailabilityUseCase.ts` | `AVAILABILITY_SUBMITTED` | ✅ (organizer receives) | ❌ |
+| `finalizeEventUseCase.ts` | `EVENT_FINALIZED` | ✅ (all participants) | ❌ |
+| `SaveRsvpUseCase.ts` | `RSVP_SUBMITTED` | ✅ (organizer receives) | ❌ |
+| `JoinEventUseCase.ts` | `JOIN_EVENT` | ✅ (participant receives) | ✅ (participant receives) |
+| `createEventUseCase.ts` | `NEW_EVENT_INVITE` | ✅ (invitee receives) | ❌ |
+
+---
+
+## 4. Banco de Dados
+
+### 4.1 Schema Prisma
 
 ```prisma
 // prisma/schema.prisma
@@ -139,18 +232,7 @@ model Notification {
   @@index([user_id, created_at])
   @@map("notifications")
 }
-```
 
-### Migration
-
-The notification system was added via migration:
-- `prisma/migrations/20260405000000_add_notifications/migration.sql`
-
-### User Relation
-
-The existing `User` model was updated with the notifications relation:
-
-```prisma
 model User {
   id            String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email         String             @unique
@@ -160,32 +242,41 @@ model User {
   events        Event[]
   participants  EventParticipant[]
   availabilities AvailabilitySlot[]
-  notifications Notification[]     // Added relation
+  notifications Notification[]
 
   @@map("users")
 }
 ```
 
+### 4.2 Modelo Notification
+
+O modelo `Notification` contém os seguintes campos:
+
+| Campo | Tipo | Descrição |
+|-------|------|------------|
+| `id` | UUID | Identificador único |
+| `user_id` | UUID | Usuário que recebe a notificação |
+| `type` | Enum | Tipo da notificação |
+| `title` | String | Título da notificação |
+| `message` | String | Corpo da mensagem |
+| `data` | JSON | Dados adicionais (eventId, link, etc.) |
+| `is_read` | Boolean | Status de leitura |
+| `created_at` | Timestamp | Data de criação |
+
+### 4.3 Índices e Performance
+
+Os índices criados otimizam as consultas mais comuns:
+
+```prisma
+@@index([user_id, is_read])    // Para busca de não lidas por usuário
+@@index([user_id, created_at]) // Para paginação por cursor
+```
+
 ---
 
-## Notification Types
+## 5. API de Notificações In-App
 
-| Type | Trigger | Recipient | Description |
-|------|---------|-----------|-------------|
-| `AVAILABILITY_SUBMITTED` | Participant submits availability | Organizer | Notifies when participant submits their availability |
-| `EVENT_FINALIZED` | Organizer finalizes event | All participants | Notifies when event date/time is confirmed |
-| `RSVP_SUBMITTED` | Participant responds to RSVP | Organizer | Notifies when participant confirms/declines attendance |
-| `JOIN_EVENT_CONFIRMATION` | User joins event | Participant | Confirmation that user has successfully joined |
-| `NEW_EVENT_INVITE` | Organizer creates event | Invitee | Notifies when user is invited to an event |
-| `PRODUCT_ANNOUNCEMENT` | Admin trigger | All users | New feature releases (future) |
-| `SYSTEM_UPDATE` | Admin trigger | All users | System maintenance/notices (future) |
-| `USER_ONBOARDING` | Auto-trigger | New users | Welcome tips for new users (future) |
-
----
-
-## API Endpoints
-
-### GET /api/notifications
+### 5.1 GET /api/notifications
 
 Get paginated notifications for the authenticated user.
 
@@ -257,7 +348,7 @@ curl -H "Cookie: session_token=..." \
 
 ---
 
-### GET /api/notifications/unread-count
+### 5.2 GET /api/notifications/unread-count
 
 Get the count of unread notifications for the badge display.
 
@@ -286,7 +377,7 @@ curl -H "Cookie: session_token=..." \
 
 ---
 
-### PATCH /api/notifications/:id
+### 5.3 PATCH /api/notifications/:id
 
 Mark a single notification as read.
 
@@ -321,7 +412,7 @@ curl -X PATCH -H "Cookie: session_token=..." \
 
 ---
 
-### DELETE /api/notifications/:id
+### 5.4 DELETE /api/notifications/:id
 
 Delete a notification.
 
@@ -356,7 +447,7 @@ curl -X DELETE -H "Cookie: session_token=..." \
 
 ---
 
-### PATCH /api/notifications (Bulk)
+### 5.5 PATCH /api/notifications (Bulk)
 
 Mark all notifications as read.
 
@@ -394,7 +485,7 @@ curl -X PATCH -H "Cookie: session_token=..." -H "Content-Type: application/json"
 
 ---
 
-## Error Responses
+### 5.6 Respostas de Erro
 
 All endpoints return consistent error responses:
 
@@ -414,11 +505,202 @@ All endpoints return consistent error responses:
 
 ---
 
-## Domain Events Integration
+## 6. Email de Confirmação de Evento
 
-### Event Types
+### 6.1 Quando é enviado
 
-The system defines five domain event types in `lib/events/domain-events.ts`:
+O email de confirmação é enviado quando um participante entra em um evento via link de convite ou acesso compartilhado. O envio é **não-bloqueante**, ou seja, não atrasa a resposta ao usuário.
+
+**Fluxo de execução:**
+
+```typescript
+// 1. Participante entra no evento via link de convite
+const participant = await joinEventUseCase.execute({
+    token: inviteToken,
+    name: "John Doe",
+    email: "john@example.com"
+});
+
+// 2. JoinEventUseCase executa duas operações em paralelo:
+//    a) Emite domínio de evento para notificação in-app
+await eventBus.publish({
+    type: DomainEventType.JOIN_EVENT,
+    payload: { eventId, eventTitle, userId },
+    timestamp: new Date()
+});
+
+//    b) Envia email de confirmação (não-bloqueante)
+this.sendConfirmationEmail(user, event, inviteToken)
+    .catch(error => console.error("Email failed:", error));
+```
+
+### 6.2 Template do Email
+
+**Arquivo**: `modules/events/emails/participant-confirmation-email.tsx`
+
+Este componente React server-side rendering que gera o HTML do email de confirmação.
+
+```typescript
+interface ParticipantConfirmationEmailTemplateProps {
+    userName: string;          // Nome do participante
+    eventTitle: string;        // Título do evento
+    eventDescription: string;  // Descrição do evento
+    eventStartDate: string;    // Data de início (ISO 8601)
+    eventEndDate: string;      // Data de término (ISO 8601)
+    organizerName: string;     // Nome do organizador
+    availabilityLink: string; // URL para submeter disponibilidade
+}
+```
+
+**Features do template**:
+
+- Suporte a internacionalização (i18n) via `next-intl`
+- Formatação de datas localizada
+- Estilos inline para compatibilidade máxima
+- Design responsivo
+- Botão de chamada para ação (CTA)
+- Fallback para link alternativo
+
+**Exemplo de traduções** (en.json):
+
+```json
+{
+  "Email": {
+    "Event": {
+      "ParticipantConfirmationEmail": {
+        "title": "You're In!",
+        "subtitle": "Event confirmation from MindYourEvent",
+        "greeting": "Hello, {userName}!",
+        "youJoined": "You have successfully joined {eventTitle}",
+        "eventDetails": "Event Details",
+        "dateRange": "Date",
+        "organizer": "Organizer",
+        "submitAvailability": "Click the button below to submit your availability.",
+        "submitAvailabilityButton": "Submit My Availability",
+        "linkNotWorking": "If the button above doesn't work,",
+        "clickHere": "click here."
+      }
+    }
+  }
+}
+```
+
+### 6.3 Uso em Código
+
+**Use Case de Envio de Email:**
+
+**Arquivo**: `modules/events/use-cases/email/sendParticipantConfirmationEmail.ts`
+
+```typescript
+export class SendParticipantConfirmationEmailUseCase {
+    constructor(
+        private emailService: EmailService = EmailServiceFactory.create(),
+        private translations = getTranslations("Email.Event.ParticipantConfirmationEmail"),
+        private template = ParticipantConfirmationEmailTemplate,
+    ) {}
+
+    // Envio básico (sem retry)
+    public async execute(params: SendParticipantConfirmationEmailParams)
+
+    // Envio com retry automático
+    public async executeWithRetry(params: SendParticipantConfirmationEmailParams)
+}
+```
+
+**Parâmetros de entrada**:
+
+```typescript
+interface SendParticipantConfirmationEmailParams {
+    email: string;            // Email do participante
+    userName: string;         // Nome do participante
+    eventTitle: string;       // Título do evento
+    eventDescription: string; // Descrição do evento
+    eventStartDate: string;  // Data de início
+    eventEndDate: string;    // Data de término
+    organizerName: string;   // Nome do organizador
+    availabilityLink: string; // Link para disponibilidade
+}
+```
+
+**Serviço de Retry:**
+
+**Arquivo**: `lib/email/email-retry.service.ts`
+
+```typescript
+export class EmailRetryService {
+    private readonly DEFAULT_MAX_RETRIES = 3;
+    private readonly DEFAULT_BASE_DELAY = 1000; // 1 segundo
+
+    async executeWithRetry<T>(fn: () => Promise<T>): Promise<T>
+}
+```
+
+**Estratégia de retry**:
+
+- **Máximo de tentativas**: 3 (configurável)
+- **Delay entre tentativas**: 1000ms, 2000ms, 4000ms (exponencial)
+- **Tratamento de erros**: Apenas falha após todas as tentativas
+
+**Exemplo de integração em novo código:**
+
+```typescript
+import { SendParticipantConfirmationEmailUseCase } from "./email/sendParticipantConfirmationEmail";
+import { emailRetryService } from "@/lib/email/email-retry.service";
+
+class MyNewUseCase {
+    private sendConfirmationEmail = new SendParticipantConfirmationEmailUseCase();
+
+    async myMethod() {
+        // Enviar email com retry automático
+        await emailRetryService.executeWithRetry(() =>
+            this.sendConfirmationEmail.execute({
+                email: "user@example.com",
+                userName: "John",
+                eventTitle: "My Event",
+                eventDescription: "Event description",
+                eventStartDate: "2024-01-01",
+                eventEndDate: "2024-01-02",
+                organizerName: "Organizer",
+                availabilityLink: "https://app.example.com/invite/abc123"
+            })
+        );
+    }
+}
+```
+
+### 6.4 Adicionar Novas Traduções
+
+Para adicionar suporte a um novo idioma, adicione as traduções em `messages/{locale}.json`:
+
+```json
+{
+  "Email": {
+    "Event": {
+      "ParticipantConfirmationEmail": {
+        "title": "Você entrou!",
+        "subtitle": "Confirmação de evento do MindYourEvent",
+        "greeting": "Olá, {userName}!",
+        "youJoined": "Você entrou com sucesso em {eventTitle}",
+        "eventDetails": "Detalhes do Evento",
+        "dateRange": "Data",
+        "organizer": "Organizador",
+        "submitAvailability": "Clique no botão abaixo para enviar sua disponibilidade.",
+        "submitAvailabilityButton": "Enviar Minha Disponibilidade",
+        "linkNotWorking": "Se o botão acima não funcionar,",
+        "clickHere": "clique aqui."
+      }
+    }
+  }
+}
+```
+
+---
+
+## 7. Domain Events
+
+### 7.1 Tipos de Evento
+
+O sistema define cinco tipos de eventos de domínio em `lib/events/domain-events.ts`:
 
 ```typescript
 export enum DomainEventType {
@@ -430,9 +712,9 @@ export enum DomainEventType {
 }
 ```
 
-### Event Payloads
+### 7.2 Payloads
 
-Each event type has a specific payload structure:
+Cada tipo de evento possui uma estrutura de payload específica:
 
 ```typescript
 // AVAILABILITY_SUBMITTED
@@ -497,41 +779,9 @@ Each event type has a specific payload structure:
 }
 ```
 
-### Use Case Integration
+### 7.3 Handler Registration
 
-Each use case emits domain events instead of calling notification services directly:
-
-| Use Case | Event Emitted |
-|----------|---------------|
-| `addUserAvailabilityUseCase.ts` | `AVAILABILITY_SUBMITTED` |
-| `finalizeEventUseCase.ts` | `EVENT_FINALIZED` |
-| `SaveRsvpUseCase.ts` | `RSVP_SUBMITTED` |
-| `JoinEventUseCase.ts` | `JOIN_EVENT` |
-| `createEventUseCase.ts` | `NEW_EVENT_INVITE` |
-
-**Example: Adding availability emits event**
-
-```typescript
-// modules/availability/use-cases/addUserAvailabilityUseCase.ts
-const event = await this.eventRepository.getEventById(payload.eventId);
-if (event && event.creator_id !== user.id) {
-  await eventBus.publish({
-    type: DomainEventType.AVAILABILITY_SUBMITTED,
-    payload: {
-      eventId: payload.eventId,
-      eventTitle: event.title,
-      participantId: user.id,
-      participantName: user.name,
-      organizerId: event.creator_id
-    },
-    timestamp: new Date()
-  });
-}
-```
-
-### Handler Registration
-
-Handlers are registered when the notification module is loaded:
+Os manipuladores são registrados quando o módulo de notificações é carregado:
 
 ```typescript
 // modules/notifications/index.ts
@@ -544,7 +794,7 @@ export function registerNotificationHandlers(): void {
 }
 ```
 
-Handlers are initialized in each API route:
+Os manipuladores são inicializados em cada rota de API:
 
 ```typescript
 // app/api/notifications/route.ts
@@ -553,9 +803,9 @@ import { registerNotificationHandlers } from "@/modules/notifications";
 registerNotificationHandlers();
 ```
 
-### Error Handling
+### 7.4 Tratamento de Erros
 
-**Critical Rule:** Event handlers must NEVER throw. Notifications are best-effort, and the main operation must always succeed.
+**Regra Crítica:** Os manipuladores de eventos devem **NUNCA** lançar exceções. Notificações são "best-effort", e a operação principal deve sempre ter sucesso.
 
 ```typescript
 // modules/notifications/handlers/availability-submitted-handler.ts
@@ -571,146 +821,216 @@ async handle(event: AvailabilitySubmittedEvent): Promise<void> {
 
 ---
 
-## Implementation Phases
+## 8. Decisões de Design
 
-### Phase 1: Core Infrastructure
+### 8.1 Por que Domain Events?
 
-| Step | Description | Status |
-|------|-------------|--------|
-| 1.1 | Add Prisma schema (Notification model + enum) | Complete |
-| 1.2 | Create database migration | Complete |
-| 1.3 | Create notification types (`types/notification.types.ts`) | Complete |
-| 1.4 | Create event bus infrastructure (`lib/events/`) | Complete |
-| 1.5 | Define domain events (`domain-events.ts`) | Complete |
+1. **Desacoplamento:** Use cases não precisam conhecer notificações. Eles apenas emitem eventos.
+2. **Extensibilidade:** Adicionar novos manipuladores sem modificar código existente.
+3. **Testabilidade:** Testar lógica de negócio sem efeitos colaterais de notificações.
+4. **Isolamento de Erros:** Falhas de notificação não afetam operações core.
 
-### Phase 2: Repository + Service
+### 8.2 Por que Cursor Pagination?
 
-| Step | Description | Status |
-|------|-------------|--------|
-| 2.1 | Create repository interface (`notification-repository.interface.ts`) | Complete |
-| 2.2 | Create service interface (`notification-service.interface.ts`) | Complete |
-| 2.3 | Implement repository with cursor pagination + transactions | Complete |
-| 2.4 | Implement notification service with domain methods | Complete |
+- **Performance:** Lookup O(1) vs O(n) offset para grandes datasets
+- **Estabilidade:** Resultados não se alteram quando novas notificações chegam
+- **Escalabilidade:** Funciona eficientemente com milhões de notificações
 
-### Phase 3: Event Handlers
+### 8.3 Por que ISP-Compliant?
 
-| Step | Description | Status |
-|------|-------------|--------|
-| 3.1 | Create AvailabilitySubmittedHandler | Complete |
-| 3.2 | Create EventFinalizedHandler | Complete |
-| 3.3 | Create RsvpSubmittedHandler | Complete |
-| 3.4 | Create JoinEventHandler | Complete |
-| 3.5 | Create NewEventInviteHandler | Complete |
-| 3.6 | Create module entry point with handler registration | Complete |
+- **Dependencies Limpas:** Use cases importam apenas o que precisam
+- **Flexibilidade:** Trocar implementações sem alterar consumidores
+- **Testagem:** Fácil criar mocks de interfaces específicas
 
-### Phase 4: API Routes
+### 8.4 Email Não-Bloqueante
 
-| Step | Description | Status |
-|------|-------------|--------|
-| 4.1 | Create GET /notifications (cursor pagination) | Complete |
-| 4.2 | Create GET /notifications/unread-count | Complete |
-| 4.3 | Create PATCH /notifications/:id (mark read) | Complete |
-| 4.4 | Create DELETE /notifications/:id | Complete |
-| 4.5 | Create PATCH /notifications (bulk mark all read) | Complete |
-
-### Phase 5: Use Case Integration
-
-| Step | Description | Status |
-|------|-------------|--------|
-| 5.1 | Update AddUserAvailabilityUseCase to emit event | Complete |
-| 5.2 | Update FinalizeEventUseCase to emit event | Complete |
-| 5.3 | Update SaveRsvpUseCase to emit event | Complete |
-| 5.4 | Update JoinEventUseCase to emit event | Complete |
-| 5.5 | Update CreateEventUseCase to emit event | Complete |
-
-### Phase 6: Frontend (Future)
-
-| Step | Description |
-|------|-------------|
-| 6.1 | Create NotificationBell component with badge |
-| 6.2 | Create NotificationDropdown/Panel component |
-| 6.3 | Add to header layout |
-| 6.4 | Implement polling or SWR for real-time updates |
-
-### Phase 7: Product Notifications (Future)
-
-| Step | Description |
-|------|-------------|
-| 7.1 | Create admin endpoint for bulk notifications |
-| 7.2 | Add admin UI for creating announcements |
+- **Resposta rápida:** Usuário recebe confirmação imediatamente
+- **Resiliência:** Falha no email não afeta a experiência do usuário
+- **Melhor esforço:** Tentativas de retry sem bloquear operação principal
 
 ---
 
-## Design Decisions
+## 9. Testes
 
-### Why Domain Events?
+### 9.1 Unit Tests
 
-1. **Decoupling:** Use cases don't need to know about notifications. They just emit events.
-2. **Extensibility:** Add new handlers without modifying existing code.
-3. **Testability:** Test business logic without notification side effects.
-4. **Error Isolation:** Notification failures don't affect core operations.
+**Teste Unitário do Template de Email:**
 
-### Why Cursor Pagination?
+```typescript
+import { ParticipantConfirmationEmailTemplate } from './participant-confirmation-email';
 
-- **Performance:** O(1) lookup vs O(n) offset for large datasets
-- **Stability:** Results don't shift when new notifications arrive
-- **Scalability:** Works efficiently with millions of notifications
+describe('ParticipantConfirmationEmailTemplate', () => {
+    it('renders correctly with all props', async () => {
+        const html = await renderComponent(
+            <ParticipantConfirmationEmailTemplate
+                userName="John"
+                eventTitle="Team Meeting"
+                eventDescription="Monthly sync"
+                eventStartDate="2024-01-15"
+                eventEndDate="2024-01-15"
+                organizerName="Jane"
+                availabilityLink="https://app.com/invite/abc"
+            />
+        );
 
-### Why ISP-Compliant Interfaces?
+        expect(html).toContain('John');
+        expect(html).toContain('Team Meeting');
+        expect(html).toContain('Submit My Availability');
+    });
+});
+```
 
-- **Clean Dependencies:** Use cases import only what they need
-- **Flexibility:** Swap implementations without changing consumers
-- **Testing:** Easy to mock specific interfaces
+**Teste de Repository (Notificações):**
 
-### Why Transaction Support?
+```typescript
+describe('NotificationRepository', () => {
+    it('creates notification with correct data', async () => {
+        const notification = await repository.create({
+            userId: 'user-123',
+            type: NotificationType.EVENT_FINALIZED,
+            title: 'Event Finalized',
+            message: 'Your event has been confirmed',
+            data: { eventId: 'event-456' }
+        });
 
-- **Atomicity:** Batch notifications all succeed or all fail
-- **Data Integrity:** Prevents partial state during failures
+        expect(notification.id).toBeDefined();
+        expect(notification.type).toBe(NotificationType.EVENT_FINALIZED);
+    });
+});
+```
+
+### 9.2 Integration Tests
+
+**Teste de Integração do Use Case de Email:**
+
+```typescript
+describe('SendParticipantConfirmationEmailUseCase', () => {
+    it('sends email with correct parameters', async () => {
+        const mockEmailService = {
+            sendMail: jest.fn().mockResolvedValue(undefined)
+        };
+
+        const useCase = new SendParticipantConfirmationEmailUseCase(
+            mockEmailService as any
+        );
+
+        await useCase.execute({
+            email: 'test@example.com',
+            userName: 'John',
+            eventTitle: 'Event',
+            eventDescription: 'Desc',
+            eventStartDate: '2024-01-01',
+            eventEndDate: '2024-01-02',
+            organizerName: 'Organizer',
+            availabilityLink: 'https://app.com/invite/abc'
+        });
+
+        expect(mockEmailService.sendMail).toHaveBeenCalledWith(
+            'test@example.com',
+            expect.any(String),
+            expect.any(String)
+        );
+    });
+});
+```
+
+**Teste de API de Notificações:**
+
+```typescript
+describe('GET /api/notifications', () => {
+    it('returns paginated notifications', async () => {
+        const response = await request(app)
+            .get('/api/notifications?limit=10')
+            .set('Cookie', 'session_token=valid-token');
+
+        expect(response.status).toBe(200);
+        expect(response.body.items).toBeDefined();
+        expect(response.body.hasMore).toBeDefined();
+    });
+});
+```
+
+### 9.3 E2E Tests
+
+**Teste de Retry:**
+
+```typescript
+describe('EmailRetryService', () => {
+    it('retries failed operations', async () => {
+        const mockFn = jest.fn()
+            .mockRejectedValueOnce(new Error('First attempt'))
+            .mockResolvedValueOnce('success');
+
+        const result = await emailRetryService.executeWithRetry(mockFn);
+
+        expect(mockFn).toHaveBeenCalledTimes(2);
+        expect(result).toBe('success');
+    });
+
+    it('throws after max retries', async () => {
+        const mockFn = jest.fn().mockRejectedValue(new Error('Always fails'));
+
+        await expect(
+            emailRetryService.executeWithRetry(mockFn)
+        ).rejects.toThrow();
+
+        expect(mockFn).toHaveBeenCalledTimes(3);
+    });
+});
+```
+
+**Fluxo Completo de Notificação:**
+
+```typescript
+describe('Notification Flow E2E', () => {
+    it('complete flow: trigger -> create -> view -> mark read', async () => {
+        // 1. User joins event
+        const participant = await joinEventUseCase.execute({
+            token: 'valid-token',
+            name: 'John',
+            email: 'john@example.com'
+        });
+
+        // 2. Notification should be created
+        const notifications = await notificationService.getByUserId(participant.user_id);
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0].type).toBe(NotificationType.JOIN_EVENT_CONFIRMATION);
+
+        // 3. User views notification via API
+        const response = await request(app)
+            .get('/api/notifications')
+            .set('Cookie', sessionCookie);
+
+        expect(response.body.items).toHaveLength(1);
+
+        // 4. User marks as read
+        const markReadResponse = await request(app)
+            .patch(`/api/notifications/${notifications[0].id}`)
+            .set('Cookie', sessionCookie);
+
+        expect(markReadResponse.body.success).toBe(true);
+    });
+});
+```
 
 ---
 
-## Security Considerations
+## 10. Futuras Melhorias
 
-1. **Ownership Validation:** All endpoints validate that the notification belongs to the authenticated user
-2. **Session-Based Auth:** Uses existing session cookie authentication
-3. **Input Sanitization:** Data is stored as JSON, not executed
-
----
-
-## Testing Strategy
-
-### Unit Tests
-- Repository methods (CRUD operations)
-- Service methods (notification creation logic)
-- Event handlers (event processing)
-
-### Integration Tests
-- API endpoint responses
-- Database CRUD operations
-- Event publishing and handling
-
-### E2E Tests
-- Complete notification flow (trigger → create → view → mark read)
+| Melhoria | Descrição | Prioridade |
+|----------|-----------|------------|
+| **WebSocket em Tempo Real** | Push notifications instantaneamente ao invés de polling | Alta |
+| **Email Digest** | Resumo diário/semanal de notificações por email | Média |
+| **Push Notifications Mobile** | Notificações push para app mobile | Média |
+| **Admin UI** | Dashboard para criar anúncios de produtos | Baixa |
+| **Preferências de Notificação** | Configurações de usuário por tipo de notificação | Média |
+| **Composição de Emails** | Usar @react-email para templates mais robustos | Média |
+| **Template Transacional** | Sistema de templates flexíveis | Alta |
+| **Estatísticas de Entrega** | Dashboard de entrega de emails | Média |
 
 ---
 
-## Dependencies
+## Referências
 
-### Existing Dependencies Used
-- `lucide-react` - Bell icon for UI
-- `shadcn/ui` - Button, Dropdown, Badge components
-
-### No New Dependencies
-The notification system uses only existing infrastructure.
-
----
-
-## Future Enhancements
-
-| Enhancement | Description |
-|-------------|-------------|
-| Real-time WebSocket | Push notifications instantly instead of polling |
-| Email Digest | Daily/weekly email summary of notifications |
-| Push Notifications | Mobile app push notifications |
-| Admin UI | Dashboard for creating product announcements |
-| Notification Preferences | User settings for notification types |
+- [TODO.md da Task 06](./tasks/06-confirmation/TODO.md) - Especificação original
+- [UX Roadmap](./ux-roadmap.md) - Contexto do produto
